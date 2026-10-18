@@ -1,0 +1,345 @@
+// Generated from dedicated Supabase dev project qorlygdcfwnrrzvzulcz through MCP.
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: '14.18';
+  };
+  public: {
+    Tables: {
+      ai_recommendations: {
+        Row: {
+          content: Json;
+          created_at: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          content: Json;
+          created_at?: string;
+          id?: string;
+          user_id: string;
+        };
+        Update: {
+          content?: Json;
+          created_at?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_recommendations_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      attempts: {
+        Row: {
+          accuracy: number;
+          challenge_id: string;
+          created_at: string;
+          duration_ms: number | null;
+          id: string;
+          is_validated: boolean;
+          metadata: Json | null;
+          submitted_code: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          accuracy: number;
+          challenge_id: string;
+          created_at?: string;
+          duration_ms?: number | null;
+          id?: string;
+          is_validated?: boolean;
+          metadata?: Json | null;
+          submitted_code?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          accuracy?: number;
+          challenge_id?: string;
+          created_at?: string;
+          duration_ms?: number | null;
+          id?: string;
+          is_validated?: boolean;
+          metadata?: Json | null;
+          submitted_code?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'attempts_challenge_id_fkey';
+            columns: ['challenge_id'];
+            isOneToOne: false;
+            referencedRelation: 'challenges';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'attempts_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      audit_log: {
+        Row: {
+          action: string;
+          actor_id: string | null;
+          after: Json | null;
+          before: Json | null;
+          created_at: string;
+          id: string;
+          target_id: string | null;
+        };
+        Insert: {
+          action: string;
+          actor_id?: string | null;
+          after?: Json | null;
+          before?: Json | null;
+          created_at?: string;
+          id?: string;
+          target_id?: string | null;
+        };
+        Update: {
+          action?: string;
+          actor_id?: string | null;
+          after?: Json | null;
+          before?: Json | null;
+          created_at?: string;
+          id?: string;
+          target_id?: string | null;
+        };
+        Relationships: [];
+      };
+      challenges: {
+        Row: {
+          difficulty: string;
+          duration_seconds: number | null;
+          id: string;
+          title: string;
+        };
+        Insert: {
+          difficulty: string;
+          duration_seconds?: number | null;
+          id?: string;
+          title: string;
+        };
+        Update: {
+          difficulty?: string;
+          duration_seconds?: number | null;
+          id?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
+      profiles: {
+        Row: {
+          avatar_url: string | null;
+          bio: string | null;
+          country: string | null;
+          created_at: string;
+          email: string;
+          id: string;
+          institution: string | null;
+          institution_key: string | null;
+          role: string;
+          status: string;
+          updated_at: string;
+          username: string;
+          visibility: string;
+        };
+        Insert: {
+          avatar_url?: string | null;
+          bio?: string | null;
+          country?: string | null;
+          created_at?: string;
+          email: string;
+          id: string;
+          institution?: string | null;
+          institution_key?: string | null;
+          role?: string;
+          status?: string;
+          updated_at?: string;
+          username: string;
+          visibility?: string;
+        };
+        Update: {
+          avatar_url?: string | null;
+          bio?: string | null;
+          country?: string | null;
+          created_at?: string;
+          email?: string;
+          id?: string;
+          institution?: string | null;
+          institution_key?: string | null;
+          role?: string;
+          status?: string;
+          updated_at?: string;
+          username?: string;
+          visibility?: string;
+        };
+        Relationships: [];
+      };
+      skills: {
+        Row: {
+          id: string;
+          is_active: boolean;
+          name: string;
+          technology_id: string | null;
+        };
+        Insert: {
+          id?: string;
+          is_active?: boolean;
+          name: string;
+          technology_id?: string | null;
+        };
+        Update: {
+          id?: string;
+          is_active?: boolean;
+          name?: string;
+          technology_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'skills_technology_id_fkey';
+            columns: ['technology_id'];
+            isOneToOne: false;
+            referencedRelation: 'technologies';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      technologies: {
+        Row: {
+          id: string;
+          is_active: boolean;
+          name: string;
+        };
+        Insert: {
+          id?: string;
+          is_active?: boolean;
+          name: string;
+        };
+        Update: {
+          id?: string;
+          is_active?: boolean;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      user_skill_history: {
+        Row: {
+          id: string;
+          level_score: number;
+          recorded_at: string;
+          skill_id: string;
+          user_id: string;
+          validated_attempts: number;
+        };
+        Insert: {
+          id?: string;
+          level_score: number;
+          recorded_at?: string;
+          skill_id: string;
+          user_id: string;
+          validated_attempts: number;
+        };
+        Update: {
+          id?: string;
+          level_score?: number;
+          recorded_at?: string;
+          skill_id?: string;
+          user_id?: string;
+          validated_attempts?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_skill_history_skill_id_fkey';
+            columns: ['skill_id'];
+            isOneToOne: false;
+            referencedRelation: 'skills';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'user_skill_history_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      user_skill_progress: {
+        Row: {
+          level_score: number;
+          scoring_version: string | null;
+          skill_id: string;
+          status: string;
+          updated_at: string;
+          user_id: string;
+          validated_attempts: number;
+        };
+        Insert: {
+          level_score?: number;
+          scoring_version?: string | null;
+          skill_id: string;
+          status?: string;
+          updated_at?: string;
+          user_id: string;
+          validated_attempts?: number;
+        };
+        Update: {
+          level_score?: number;
+          scoring_version?: string | null;
+          skill_id?: string;
+          status?: string;
+          updated_at?: string;
+          user_id?: string;
+          validated_attempts?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_skill_progress_skill_id_fkey';
+            columns: ['skill_id'];
+            isOneToOne: false;
+            referencedRelation: 'skills';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'user_skill_progress_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
+};
