@@ -22,7 +22,8 @@ export async function GET(request: Request) {
       // Keep credentials and provider errors out of the redirect URL.
     }
   }
-  const destination = success ? safeNext(url.searchParams.get('next')) : '/login?error=callback_failed';
+  const defaultNext = type === 'recovery' ? '/reset-password' : '/';
+  const destination = success ? safeNext(url.searchParams.get('next') ?? defaultNext) : '/login?error=callback_failed';
   const response = NextResponse.redirect(new URL(destination, url.origin));
   response.headers.set('Cache-Control', 'private, no-store');
   return response;

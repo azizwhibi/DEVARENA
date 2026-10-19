@@ -58,17 +58,17 @@ export function AuthHeader() {
 
   const current = account?.id === userId ? account : null;
   const message = failure?.id === userId ? failure?.message : undefined;
-  const linkClass = 'rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400';
+  const linkClass = 'rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary';
   return (
     <header className="border-b border-zinc-800 bg-zinc-950 px-5 py-4">
       <nav aria-label="Main navigation" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 text-sm">
-        <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-emerald-300`}>DevArena</Link>
+        <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-primary`}>DevArena</Link>
         {loading ? <span role="status" className="text-zinc-400">Checking session…</span> : user ? (
           <div className="flex flex-wrap items-center gap-4">
             {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
             {current?.role === 'admin' && <Link href="/admin" className={linkClass}>Administration</Link>}
-            <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400 disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
+            <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
             {message && <p role="alert" className="w-full text-red-200">{message}</p>}
           </div>
         ) : <Link href="/login" className={`${linkClass} inline-flex min-h-11 items-center px-2`}>Sign in</Link>}

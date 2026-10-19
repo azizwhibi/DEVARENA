@@ -59,3 +59,26 @@ node scripts/check-login-http.mjs
 ```
 
 The registration checker verifies the rendered labels, constraints, default visibility and the template's callback URL. The login checker keeps T6's existing redirect/callback assertions covered. T9 OAuth and T10 password recovery are separate tasks.
+
+# GitHub + Google OAuth (T9)
+
+Callback for both providers: `https://qorlygdcfwnrrzvzulcz.supabase.co/auth/v1/callback`.
+
+1. GitHub: Settings → Developer settings → OAuth Apps → New. Homepage `http://localhost:3001`, callback as above. Paste Client ID/secret into DEV Auth → Providers → GitHub.
+2. Google: Cloud Console → Credentials → OAuth client (Web). Authorized redirect URI as above. Paste Client ID/secret into Auth → Providers → Google.
+3. Auth → URL configuration: Site URL `http://localhost:3001`, allow `http://localhost:3001/auth/callback`.
+4. Keep "Confirm email" on; Supabase links identities that share a verified email into one account.
+
+Verify (manual):
+
+- [ ] GitHub and Google signups each create one `developer` profile with the provider avatar.
+- [ ] Same verified email via both providers → one user: `select provider from auth.identities where user_id = '<id>';` returns both.
+
+`OAuthButtons` (login + register) sends `redirectTo=/auth/callback?next=<safe path>`; the callback exchanges the PKCE `code`.
+
+# Forgot / reset password (T10)
+
+Paste [recovery.html](../supabase/templates/recovery.html) into Auth → Email templates → **Reset password**. It links to `{{ .RedirectTo }}?token_hash=…&type=recovery&next=/reset-password`; `/auth/callback` verifies the hash, then `/reset-password` (login-gated by `proxy.ts`) calls `updateUser({password})`, signs out and goes to `/login`.
+
+- [ ] Full flow works; old password fails, new works.
+- [ ] Unknown and known emails show the identical message (the form never surfaces the SDK result).
