@@ -44,6 +44,8 @@ Desktop.ini
 .vercel
 .turbo
 .local/
+.temp/
+supabase/.temp/
 
 # Graphify machine-specific paths and caches
 graphify-out/cache/

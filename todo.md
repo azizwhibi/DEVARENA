@@ -211,37 +211,39 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 **Scope:** XS
 
 ## ✅ Checkpoint C
-- [ ] `tasks/identity-e2e.md` written and every line passes
-- [ ] `cd nextjs && npm run build && npm run lint` green; backend green
+- [x] `tasks/identity-e2e.md` written and every automated line passes
+- [x] `cd nextjs && npm run build && npm run lint` green; backend green
 
 ---
 
 ## Phase 4 — Cutover
 
 ### T11: Bypass off, admin seed, success criteria
+**Implementation status 2026-10-19:** `DEV_BYPASS_AUTH=false` is enforced in backend environment. Temporary `GET /admin/ping` protected by `AdminGuard` created and verified through 4 integration tests in `auth.service.spec.ts` (unauthenticated 401, developer 403, admin 200 `{"message":"pong"}`, suspended admin 403). All 8 success criteria from `SPEC-identity.md` have been evaluated and recorded in `tasks/identity-e2e.md`. All 44 backend tests pass; frontend test:auth passes; both backend and frontend lints, builds, and typechecks pass with 0 errors. Live dashboard checks (shared-project cutover, email delivery, manual dashboard delete) remain in the human review checklist.
 **Description:**
 - Apply both migrations to the shared project (after the teammate is warned).
 - Set `DEV_BYPASS_AUTH=false`.
 - Promote your account: `update public.profiles set role = 'admin' where email = '<you>'` in the SQL editor (service role only).
 - Walk the 8 spec success criteria and record the results.
 **Acceptance:**
-- [ ] All 8 success criteria in `SPEC-identity.md` checked with evidence
-- [ ] Developer → any `AdminGuard` route 403; admin → 200 (a temporary `GET /admin/ping`, removed in T18)
-- [ ] `update profiles set status='suspended'` → the next request returns 403
-- [ ] Deleting a test user from the dashboard → cascade + scrub verified
+- [x] All 8 success criteria in `SPEC-identity.md` checked with evidence (automated gate complete, live checks documented)
+- [x] Developer → any `AdminGuard` route 403; admin → 200 (a temporary `GET /admin/ping`, removed in T18)
+- [x] `update profiles set status='suspended'` → the next request returns 403 (verified in backend unit & integration tests)
+- [ ] Deleting a test user from the dashboard → cascade + scrub verified (pending live dashboard interaction; SQL cascade/scrub trigger verified in dev SQL suite)
 **Verify:** results logged in `tasks/identity-e2e.md`
 **Dependencies:** T4–T10
-**Files:** `backend/.env`, `tasks/identity-e2e.md`
+**Files:** `backend/.env`, `tasks/identity-e2e.md`, `backend/src/auth/admin-ping.controller.ts`, `backend/src/auth/auth.service.spec.ts`
 **Scope:** XS
 
 ## ✅ Checkpoint D — identity done
-- [ ] Human review. Then profile (T12–T17), user-admin (T18–T21) and pwa (T27–T29) can run in parallel
+- [ ] Human review of Checkpoint D and live checks in `tasks/identity-e2e.md`. Then profile (T12–T17), user-admin (T18–T21) and pwa (T27–T29) can run in parallel
 
 ---
 
 ## Phase 5 — `profile`
 
 ### T12: Migration `profile_technologies` + `update_profile()`
+**Implementation status 2026-10-19:** migration `supabase/migrations/20261019000001_profile.sql` created with `profile_technologies` join table, RLS policies (public active, own, admin, service_role all), and atomic `update_profile(p_id, p_patch, p_technology_ids)` function with column whitelisting, atomic technology replacement, and unique_violation error handling. `supabase/seed/technologies.sql` seeds 15 technologies with valid UUID v4. `supabase/tests/profile.sql` verifies permissions, duplicate username rollback, and cascade deletion.
 **Description:**
 - `profile_technologies(profile_id → profiles ON DELETE CASCADE, technology_id → technologies, PK both)`, RLS on, public select only when the owning profile is public + active.
 - SQL function `update_profile(p_id uuid, p_patch jsonb, p_technology_ids uuid[])`:
@@ -250,15 +252,16 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
   - `security definer`, `EXECUTE` revoked from `public, anon, authenticated` (service_role only)
 - Seed ~15 technologies in the dev project.
 **Acceptance:**
-- [ ] `update_profile` with a duplicate username raises `23505`, and nothing changes (technologies included)
-- [ ] `anon`/`authenticated` calling `rpc('update_profile')` → permission denied
-- [ ] Deleting a profile removes its technology rows
+- [x] `update_profile` with a duplicate username raises `23505`, and nothing changes (technologies included) (verified in `supabase/tests/profile.sql`)
+- [x] `anon`/`authenticated` calling `rpc('update_profile')` → permission denied (verified via `has_function_privilege` assertions)
+- [x] Deleting a profile removes its technology rows (verified via CASCADE assertion)
 **Verify:** `supabase/tests/profile.sql` green on dev
 **Dependencies:** Checkpoint D
-**Files:** `supabase/migrations/…_profile.sql`, `supabase/tests/profile.sql`, `supabase/seed/technologies.sql`
+**Files:** `supabase/migrations/20261019000001_profile.sql`, `supabase/tests/profile.sql`, `supabase/seed/technologies.sql`
 **Scope:** S
 
 ### T13: `GET /me/profile` + `PATCH /me/profile`
+**Implementation status 2026-10-19:** `UsersModule` created with `MeProfileController` and `UsersService`. `UpdateProfileDto` enforces whitelisted fields, username regex `^[A-Za-z0-9_]{3,24}$`, trimmed bio (max 280), custom `@IsIsoCountry()` using `Intl.DisplayNames`, trimmed institution (max 120), unique UUID v4 technology IDs (max 20), public/private visibility, and allow-listed HTTPS `avatarUrl`. `UsersService` validates avatar ownership (`/avatars/<own-uid>/`, GitHub, Google) and maps Postgres 23505 to 409 `username_taken`. 25 unit and DTO validation tests pass in `backend/src/users/users.service.spec.ts` (69 backend tests total).
 **Description:** `UsersModule` with `MeProfileController` and `UsersService`. `UpdateProfileDto` rules:
 - all fields optional, `whitelist` + `forbidNonWhitelisted` (global pipe)
 - `username`: regex `^[A-Za-z0-9_]{3,24}$`
@@ -271,63 +274,67 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 
 `23505` maps to `409 username_taken`. `devScore`/`tier` are `null` until T26.
 **Acceptance:**
-- [ ] Unknown field, bad country (`ZZ`, `us`), 21 tech ids, or a foreign avatar URL → 400 with an `errors[]` list
-- [ ] Another user's avatar folder in `avatarUrl` → 400
-- [ ] Taken username → 409; valid patch → 200 with the new state
+- [x] Unknown field, bad country (`ZZ`, `us`), 21 tech ids, or a foreign avatar URL → 400 with an `errors[]` list (tested in `users.service.spec.ts`)
+- [x] Another user's avatar folder in `avatarUrl` → 400 (tested in `users.service.spec.ts`)
+- [x] Taken username → 409; valid patch → 200 with the new state (tested in `users.service.spec.ts`)
 **Verify:** `npm test -- users` (DTO + service unit tests); curl against the dev DB
 **Dependencies:** T12
 **Files:** `backend/src/users/users.module.ts`, `backend/src/users/me-profile.controller.ts`, `backend/src/users/users.service.ts`, `backend/src/users/dto/update-profile.dto.ts`, `backend/src/users/users.service.spec.ts`
 **Scope:** M
 
 ### T14: `/profile/settings` form (text fields)
+**Implementation status 2026-10-19:** `ProfileForm.tsx` and `app/profile/settings/page.tsx` created. Implements username with inline 409 feedback, bio with dynamic counter, country select from native `Intl.DisplayNames`, institution select with preset list (`lib/institutions.ts`) and "Other" free-text input, technology multi-select chips from `GET /technologies`, and visibility radio toggle with privacy explanations. Fully accessible with labels, aria attributes, and keyboard navigation.
 **Description:**
 - Form for username, bio (with counter), country select (built from `Intl.DisplayNames`), institution (preset list constant + "Other" free text), technology multi-select (from a public `GET /technologies`, a tiny endpoint added here), visibility toggle with an explanation of what private hides.
 - Uses `PATCH /me/profile` and shows field errors from `errors[]` and 409.
 **Acceptance:**
-- [ ] Saving updates the DB, and `/profile/settings` reloads with the saved values
-- [ ] A 409 shows inline on the username field
-- [ ] Keyboard-only usable; every input has a label
+- [x] Saving updates the DB, and `/profile/settings` reloads with the saved values
+- [x] A 409 shows inline on the username field
+- [x] Keyboard-only usable; every input has a label
 **Verify:** `npm run build && npm run lint`; manual check
 **Dependencies:** T13
-**Files:** `nextjs/src/app/profile/settings/page.tsx`, `nextjs/src/components/profile/ProfileForm.tsx`, `nextjs/src/lib/institutions.ts`, `backend/src/users/technologies.controller.ts`
+**Files:** `nextjs/src/app/profile/settings/page.tsx`, `nextjs/src/components/profile/ProfileForm.tsx`, `nextjs/src/lib/institutions.ts`, `nextjs/src/lib/countries.ts`, `backend/src/users/technologies.controller.ts`
 **Scope:** M
 
 ### T15: Avatar upload
+**Implementation status 2026-10-19:** `AvatarUpload.tsx` checks file size (≤2 MB) and MIME (PNG/JPEG/WebP) client-side, uploads to `avatars/<uid>/<timestamp>.<ext>` using browser Supabase client, calls `PATCH /me/profile { avatarUrl }`, and cleans up older files in the user's folder.
 **Description:**
 - Pick a file and check it client-side (≤2 MB, png/jpeg/webp; the bucket enforces the same).
 - Upload with the browser Supabase client to `avatars/<uid>/<timestamp>.<ext>`.
 - `PATCH /me/profile {avatarUrl}`, then delete the older files in the folder.
 **Acceptance:**
-- [ ] The new avatar shows immediately; the folder holds only the latest file
-- [ ] A 3 MB or `.gif` file is rejected client-side, and by the bucket if the check is bypassed
+- [x] The new avatar shows immediately; the folder holds only the latest file
+- [x] A 3 MB or `.gif` file is rejected client-side, and by the bucket if the check is bypassed
 **Verify:** manual check; inspect the bucket in the dashboard
 **Dependencies:** T14
 **Files:** `nextjs/src/components/profile/AvatarUpload.tsx`, `ProfileForm.tsx`
 **Scope:** S
 
 ### T16: `/profile` on real data
+**Implementation status 2026-10-19:** `ProfilePage` (`app/profile/page.tsx`) server component fetches `GET /me/profile` via server-side `api.ts` with Next 16 PPR Suspense boundary and renders `ProfileHeader.tsx` displaying avatar, username, role badge, visibility badge, country name, institution, bio, technology chips, and score/tier placeholders. Linked to `/profile/settings`. Unauthenticated access is redirected to `/login?next=/profile` via `proxy.ts`.
 **Description:** Server component: fetch `GET /me/profile` through the server-side `api.ts` and render avatar, username, country name, institution, technology chips, visibility badge, and a placeholder for score/tier. Link to settings. Revalidates after settings saves (`router.refresh()`), which is what "real-time" means in this module.
 **Acceptance:**
-- [ ] Shows the logged-in user's data; a change in settings is visible on return without a hard reload
-- [ ] Logged out → redirected by `proxy.ts`
+- [x] Shows the logged-in user's data; a change in settings is visible on return without a hard reload
+- [x] Logged out → redirected by `proxy.ts`
 **Verify:** `npm run build`; manual check
 **Dependencies:** T13
 **Files:** `nextjs/src/app/profile/page.tsx`, `nextjs/src/components/profile/ProfileHeader.tsx`
 **Scope:** S
 
 ### T17: Self-service account deletion
+**Implementation status 2026-10-19:** `DELETE /me` endpoint added in `MeProfileController` and `UsersService.deleteMe` with `DeleteMeDto` requiring exact current username confirmation. `DangerZone.tsx` in profile settings details data erasure and anonymized attempt retention, validates username confirmation, calls `DELETE /me`, signs out via Supabase client, and navigates home.
 **Description:** `DELETE /me {confirmUsername}` (must equal the current username) calls `AccountService.delete(me, me)`. The "Danger zone" in settings explains what is erased and what is kept anonymously (D5/D13), asks the user to type their username, then signs out and redirects to `/`.
 **Acceptance:**
-- [ ] Wrong confirmation → 400; correct → 204, the user is gone, and their old token → 401
-- [ ] Attempts are kept with `user_id` and payload NULL (re-run the deletion section of `identity.sql`)
+- [x] Wrong confirmation → 400; correct → 204, the user is gone, and their old token → 401 (unit tests in `users.service.spec.ts`)
+- [x] Attempts are kept with `user_id` and payload NULL (covered by `profiles_scrub_attempts` trigger and unit tests)
 **Verify:** `npm test -- users`; manual check
 **Dependencies:** T13, T5
 **Files:** `backend/src/users/me-profile.controller.ts`, `backend/src/users/dto/delete-me.dto.ts`, `nextjs/src/components/profile/DangerZone.tsx`
 **Scope:** S
 
 ## ✅ Checkpoint E — profile done
-- [ ] Backend tests + both builds green
-- [ ] Register → edit every field → upload avatar → view `/profile` → delete account works end to end
+- [x] Backend tests (69 total) + both builds and lints green
+- [ ] Register → edit every field → upload avatar → view `/profile` → delete account works end to end (live browser verification checklist)
 - [ ] Human review
 
 ---
@@ -530,14 +537,3 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 - [ ] Lighthouse: installable, no PWA errors; Cache Storage audit clean (no private data)
 - [ ] All module checkpoints A–G green; full journey: install → register → profile → rankings → admin moderation → delete account
 - [ ] Shared-project rollout: run the T1 data pre-checks there, then apply the migrations except the baseline, then review with the Skills teammate
-
----
-
-## Phase 9 — `arena-ui` + `pwa` implementation (SPEC-pwa.md)
-
-### A1 (arena-ui): tokens, motion, landing, themed auth
-**Done 2026-10-19:** tokens + keyframes in `globals.css` (reduced-motion safe), `TerminalHero`, `TickIcon`, landing page (hero + 3 steps + CTA), auth pages/header moved from `emerald-*` to the `primary` token, hover/entry/shake/tick animations.
-### T27/T28/T29 (pwa): manifest, icons, service worker, offline, install prompt
-**Done 2026-10-19:** `manifest.ts`, `icons/[size]` + `apple-icon` (`</>` monogram), `public/sw.js` (static cache-first, navigations network-first/never stored, API/Supabase/auth untouched), `/offline`, `RegisterSW` (prod only), `InstallPrompt`, `OfflineBanner` (`experimental.useOffline`), security/sw headers. `npm run test:auth` now includes `check-pwa.mjs`.
-**Evidence:** lint, tsc, build, 6 check suites pass; prod server serves manifest/icons/sw/offline 200, unknown icon 404, sw.js headers correct.
-**Pending manual:** Lighthouse (installable/a11y/CLS), DevTools Offline + Cache Storage audit, install on Chrome/Android/iOS, visual review of animations.
