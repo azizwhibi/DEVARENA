@@ -285,3 +285,75 @@ describe('GET /me problem details integration', () => {
     );
   });
 });
+
+describe('GET /admin/ping integration (T11 temporary endpoint)', () => {
+  let app: INestApplication<Server>;
+  let s: ReturnType<typeof setup>;
+
+  beforeAll(async () => {
+    s = setup();
+    const module = await Test.createTestingModule({ imports: [AuthModule] })
+      .overrideProvider(SupabaseService)
+      .useValue(s.supabase)
+      .overrideProvider(ConfigService)
+      .useValue(s.config)
+      .compile();
+    app = module.createNestApplication<INestApplication<Server>>();
+    app.useGlobalFilters(new ProblemDetailsFilter());
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app?.close();
+  });
+
+  it('returns 401 problem+json without token', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/admin/ping')
+      .expect(401)
+      .expect('Content-Type', /application\/problem\+json/)
+      .expect('WWW-Authenticate', 'Bearer');
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        instance: '/admin/ping',
+      }),
+    );
+  });
+
+  it('returns 403 problem+json for developer role', async () => {
+    s.maybeSingle.mockResolvedValueOnce({ data: user, error: null });
+    await request(app.getHttpServer())
+      .get('/admin/ping')
+      .set('Authorization', 'Bearer dev.jwt.token')
+      .expect(403)
+      .expect('Content-Type', /application\/problem\+json/);
+  });
+
+  it('returns 200 { message: "pong" } for admin role', async () => {
+    s.maybeSingle.mockResolvedValueOnce({
+      data: { ...user, role: 'admin' },
+      error: null,
+    });
+    const res = await request(app.getHttpServer())
+      .get('/admin/ping')
+      .set('Authorization', 'Bearer admin.jwt.token')
+      .expect(200);
+    expect(res.body).toEqual({ message: 'pong' });
+  });
+
+  it('returns 403 problem+json for suspended user even if admin', async () => {
+    s.maybeSingle.mockResolvedValueOnce({
+      data: { ...user, role: 'admin', status: 'suspended' },
+      error: null,
+    });
+    const res = await request(app.getHttpServer())
+      .get('/admin/ping')
+      .set('Authorization', 'Bearer admin.jwt.token')
+      .expect(403);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        detail: 'Account suspended',
+      }),
+    );
+  });
+});

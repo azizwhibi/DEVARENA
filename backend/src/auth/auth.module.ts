@@ -5,10 +5,11 @@ import { AuthService } from './auth.service';
 import { AdminGuard, OptionalAuthGuard, UserGuard } from './guards';
 import { MeController } from './me.controller';
 import { AccountService } from './account.service';
+import { AdminPingController } from './admin-ping.controller';
 
 @Module({
   imports: [ConfigModule, SupabaseModule],
-  controllers: [MeController],
+  controllers: [MeController, AdminPingController],
   providers: [
     AuthService,
     AccountService,
