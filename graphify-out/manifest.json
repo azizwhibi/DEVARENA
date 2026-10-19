@@ -144,16 +144,16 @@
     "semantic_hash": "dfa1f5f6a7037bf39dc510f30b180002"
   },
   "nextjs/next.config.ts": {
-    "mtime": 1792353794.991382,
-    "seen": 1792362480.3929806,
-    "ast_hash": "59ace8843cd0f04a4328b2189aead87b",
-    "semantic_hash": "59ace8843cd0f04a4328b2189aead87b"
+    "mtime": 1792369193.5637681,
+    "seen": 1792369252.2888875,
+    "ast_hash": "2cd34639bf28760d6199826ca698f9f2",
+    "semantic_hash": ""
   },
   "nextjs/package.json": {
-    "mtime": 1792364053.1759439,
-    "seen": 1792364339.758923,
-    "ast_hash": "35d3b87f77915b55ad9e83d093edaee4",
-    "semantic_hash": "35d3b87f77915b55ad9e83d093edaee4"
+    "mtime": 1792369225.9922621,
+    "seen": 1792369252.2888875,
+    "ast_hash": "84d48f43d33e1f61b4fe3f9d32959402",
+    "semantic_hash": ""
   },
   "nextjs/scripts/check-safe-next.mjs": {
     "mtime": 1792359670.6333146,
@@ -162,22 +162,22 @@
     "semantic_hash": "fab2e4fff18cc5cf72fdb7352506c50c"
   },
   "nextjs/src/app/auth/callback/route.ts": {
-    "mtime": 1792359733.7721364,
-    "seen": 1792362480.3929806,
-    "ast_hash": "0c30f050d7ff23836dd771147b5bf01a",
-    "semantic_hash": "0c30f050d7ff23836dd771147b5bf01a"
+    "mtime": 1792365911.1643493,
+    "seen": 1792366022.9160597,
+    "ast_hash": "832850ce3441d763d81289f1aa54410d",
+    "semantic_hash": ""
   },
   "nextjs/src/app/layout.tsx": {
-    "mtime": 1792362791.6426127,
-    "seen": 1792363162.8259296,
-    "ast_hash": "fcb64e39255d9ad17b3240d2324f7ae5",
-    "semantic_hash": "fcb64e39255d9ad17b3240d2324f7ae5"
+    "mtime": 1792369193.4143908,
+    "seen": 1792369252.290882,
+    "ast_hash": "2cf1d1888c66e623dbed5d527c0809ae",
+    "semantic_hash": ""
   },
   "nextjs/src/app/page.tsx": {
-    "mtime": 1792353795.0112393,
-    "seen": 1792362480.3929806,
-    "ast_hash": "7960d56e7fc48ecd789e2fd32155fa90",
-    "semantic_hash": "7960d56e7fc48ecd789e2fd32155fa90"
+    "mtime": 1792370267.0032802,
+    "seen": 1792370318.757161,
+    "ast_hash": "3e5a5115d9604a5184e05fd7549e51d8",
+    "semantic_hash": ""
   },
   "nextjs/src/lib/safe-next.ts": {
     "mtime": 1792359716.4176602,
@@ -198,10 +198,10 @@
     "semantic_hash": "03a50f8c69c4fb4f545f6ee2097260fe"
   },
   "nextjs/src/proxy.ts": {
-    "mtime": 1792359726.8104305,
-    "seen": 1792362480.3929806,
-    "ast_hash": "888968679792f70ca4028c4806cb629a",
-    "semantic_hash": "888968679792f70ca4028c4806cb629a"
+    "mtime": 1792365389.4887273,
+    "seen": 1792366022.9180596,
+    "ast_hash": "bc02ada36b06d470c5dbb071fad72863",
+    "semantic_hash": ""
   },
   "nextjs/tsconfig.json": {
     "mtime": 1792353795.000283,
@@ -218,50 +218,50 @@
   "supabase/migrations/20261018000000_baseline_skills_tables.sql": {
     "mtime": 1792354164.304002,
     "seen": 1792362480.3929806,
-    "ast_hash": "b0c6110d4601200ed0bbb8f9f5e8c31a",
-    "semantic_hash": "b0c6110d4601200ed0bbb8f9f5e8c31a"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/20261018000001_identity_profiles.sql": {
     "mtime": 1792355211.5309072,
     "seen": 1792362480.3929806,
-    "ast_hash": "333e06f23a44cf02d8287c4748b987eb",
-    "semantic_hash": "333e06f23a44cf02d8287c4748b987eb"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/20261018000002_identity_deletion.sql": {
     "mtime": 1792355214.6606624,
     "seen": 1792362480.3929806,
-    "ast_hash": "0f48a358d93f9a795196a2b71f2cf786",
-    "semantic_hash": "0f48a358d93f9a795196a2b71f2cf786"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/migrations/20261018000003_identity_hardening.sql": {
     "mtime": 1792358990.270961,
     "seen": 1792362480.3929806,
-    "ast_hash": "1cbeaa7f77614ab9d5583629fd5d3e42",
-    "semantic_hash": "1cbeaa7f77614ab9d5583629fd5d3e42"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/precheck.sql": {
     "mtime": 1792355106.5937948,
     "seen": 1792362480.3929806,
-    "ast_hash": "4c9b2036436e0e1b05cb4632f5107adb",
-    "semantic_hash": "4c9b2036436e0e1b05cb4632f5107adb"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/schema-snapshot.sql": {
     "mtime": 1792357023.5461328,
     "seen": 1792362480.3929806,
-    "ast_hash": "327c5fe19d7100fb12678e17e3481af5",
-    "semantic_hash": "327c5fe19d7100fb12678e17e3481af5"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/tests/identity.sql": {
     "mtime": 1792358966.6460397,
     "seen": 1792362480.3929806,
-    "ast_hash": "a38a019c9b28acfe4696bff8cca13254",
-    "semantic_hash": "a38a019c9b28acfe4696bff8cca13254"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/tests/schema-fingerprint.sql": {
     "mtime": 1792357298.8390827,
     "seen": 1792362480.3929806,
-    "ast_hash": "7b12fae908fa6f7d78fbab5934d11a3d",
-    "semantic_hash": "7b12fae908fa6f7d78fbab5934d11a3d"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/tests/storage-smoke.mjs": {
     "mtime": 1792355545.6887307,
@@ -272,8 +272,8 @@
   "supabase/tests/support/local-supabase.sql": {
     "mtime": 1792355297.4094608,
     "seen": 1792362480.3929806,
-    "ast_hash": "0b474cb34077080aa2194b3702fa7383",
-    "semantic_hash": "0b474cb34077080aa2194b3702fa7383"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "supabase/tests/verify.mjs": {
     "mtime": 1792359011.8256967,
@@ -360,16 +360,16 @@
     "semantic_hash": "40d41a8f54a0ced00eb510adac790814"
   },
   "nextjs/src/components/AuthHeader.tsx": {
-    "mtime": 1792362790.8789856,
-    "seen": 1792363162.8259296,
-    "ast_hash": "d68afbf8d11ff88e45807feab6e43aec",
-    "semantic_hash": "d68afbf8d11ff88e45807feab6e43aec"
+    "mtime": 1792369139.9762754,
+    "seen": 1792369252.290882,
+    "ast_hash": "beb19bfbf899c13d175e2c8638501df8",
+    "semantic_hash": ""
   },
   "nextjs/src/components/auth/LoginForm.tsx": {
-    "mtime": 1792362632.5000834,
-    "seen": 1792363162.8259296,
-    "ast_hash": "709b49f9f6c9d14e56d6c164f3281f69",
-    "semantic_hash": "709b49f9f6c9d14e56d6c164f3281f69"
+    "mtime": 1792369140.250381,
+    "seen": 1792369252.290882,
+    "ast_hash": "73ad09cca34f55b551a93a283783aaf3",
+    "semantic_hash": ""
   },
   "nextjs/src/hooks/useAuth.ts": {
     "mtime": 1792362790.05194,
@@ -420,10 +420,10 @@
     "semantic_hash": "a4575a54b1c6b2001985736973524288"
   },
   "nextjs/src/components/auth/RegisterForm.tsx": {
-    "mtime": 1792364113.80646,
-    "seen": 1792364339.758923,
-    "ast_hash": "1bd27f9c1bc17a8786bb549fd94a595a",
-    "semantic_hash": "1bd27f9c1bc17a8786bb549fd94a595a"
+    "mtime": 1792369194.3800414,
+    "seen": 1792369252.290882,
+    "ast_hash": "6c03f30a0e8e78719bab08c5fee0aa65",
+    "semantic_hash": ""
   },
   "nextjs/src/lib/register.ts": {
     "mtime": 1792364046.9001653,
@@ -432,10 +432,10 @@
     "semantic_hash": "51c47720869de34e9778c8468ac16699"
   },
   "docs/supabase-auth-setup.md": {
-    "mtime": 1792364211.6217124,
-    "seen": 1792364339.758923,
-    "ast_hash": "0a4d2a5d56ec94b939697440a8e4619e",
-    "semantic_hash": "0a4d2a5d56ec94b939697440a8e4619e"
+    "mtime": 1792365396.8041368,
+    "seen": 1792366022.9190598,
+    "ast_hash": "0f909d1057b783f2d27b282f543ed00b",
+    "semantic_hash": ""
   },
   "graphify-out/memory/query_20261018_222933_fd86a294_which_existing_files_should_the_login_slice_reuse.md": {
     "mtime": 1792362573.0930884,
@@ -454,5 +454,149 @@
     "seen": 1792364339.758923,
     "ast_hash": "5919b690fcad5153a4fc295d1de7f3ae",
     "semantic_hash": "5919b690fcad5153a4fc295d1de7f3ae"
+  },
+  "nextjs/scripts/check-oauth.mjs": {
+    "mtime": 1792365967.613709,
+    "seen": 1792366022.9160597,
+    "ast_hash": "60d24d57bac99dc9863af00b16c59f74",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-recovery.mjs": {
+    "mtime": 1792366425.891991,
+    "seen": 1792366466.7245514,
+    "ast_hash": "516cf816ef966358cba660f47b7b3635",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/(auth)/forgot-password/page.tsx": {
+    "mtime": 1792365387.8381732,
+    "seen": 1792366022.9160597,
+    "ast_hash": "2c45b54a05e688a47e60d77702677d2e",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/(auth)/reset-password/page.tsx": {
+    "mtime": 1792365388.037237,
+    "seen": 1792366022.9160597,
+    "ast_hash": "750ff4491850261e7ca30ef73084ed0e",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/auth/ForgotPasswordForm.tsx": {
+    "mtime": 1792369194.9402604,
+    "seen": 1792369252.290882,
+    "ast_hash": "5eeb2a09c896a0296ece9c43c4b599f1",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/auth/OAuthButtons.tsx": {
+    "mtime": 1792369598.3693118,
+    "seen": 1792370318.7579362,
+    "ast_hash": "98ca6b6126329ea2d5e1c4647aca64f1",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/auth/ResetPasswordForm.tsx": {
+    "mtime": 1792369140.2995732,
+    "seen": 1792369252.290882,
+    "ast_hash": "297d049c606cd58e5e13bd66614df4f6",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/oauth.ts": {
+    "mtime": 1792365955.0001116,
+    "seen": 1792366022.9170597,
+    "ast_hash": "8de0e38a029e308e5c97ee7d86b60040",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/recovery.ts": {
+    "mtime": 1792366388.6098242,
+    "seen": 1792366466.7270784,
+    "ast_hash": "710f8e366c42207943faf35973154898",
+    "semantic_hash": ""
+  },
+  "supabase/templates/recovery.html": {
+    "mtime": 1792365388.2424674,
+    "seen": 1792366022.9200594,
+    "ast_hash": "3bf13e8d692aa1cc5147c180abe525e6",
+    "semantic_hash": ""
+  },
+  "todo.md": {
+    "mtime": 1792369248.0445826,
+    "seen": 1792369252.295765,
+    "ast_hash": "1ba46c5a467bd99492838e8195e5b220",
+    "semantic_hash": ""
+  },
+  "nextjs/public/sw.js": {
+    "mtime": 1792369192.1169267,
+    "seen": 1792369252.2888875,
+    "ast_hash": "bbff0d19c7233dc061e0552258e645fb",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-pwa.mjs": {
+    "mtime": 1792369203.4403355,
+    "seen": 1792369252.2888875,
+    "ast_hash": "416d37b63660d8173185403ace8242fc",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/apple-icon.tsx": {
+    "mtime": 1792369191.31316,
+    "seen": 1792369252.290882,
+    "ast_hash": "e28140c7074dffb1a33da7885bfc0431",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/icons/[size]/route.tsx": {
+    "mtime": 1792369190.9767098,
+    "seen": 1792369252.290882,
+    "ast_hash": "aea7d30be80e40025281987dbacc87b2",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/manifest.ts": {
+    "mtime": 1792369191.4686449,
+    "seen": 1792369252.290882,
+    "ast_hash": "bf9670d5cd4ff6c572849e64e76362e4",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/offline/page.tsx": {
+    "mtime": 1792369191.6211128,
+    "seen": 1792369252.290882,
+    "ast_hash": "a5bf0798baa72bef79361a36c5721398",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/arena/TerminalHero.tsx": {
+    "mtime": 1792369139.2629242,
+    "seen": 1792369252.290882,
+    "ast_hash": "0684d53ad90b43acfc8c106fc939062c",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/arena/TickIcon.tsx": {
+    "mtime": 1792369139.4451416,
+    "seen": 1792369252.290882,
+    "ast_hash": "2e592c1334f0fc30acb2add951985d26",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/pwa/InstallPrompt.tsx": {
+    "mtime": 1792369192.6051047,
+    "seen": 1792369252.290882,
+    "ast_hash": "9e921adde8995634a94b1f688bb75711",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/pwa/OfflineBanner.tsx": {
+    "mtime": 1792369192.4587996,
+    "seen": 1792369252.290882,
+    "ast_hash": "48f3fd3cbab5ba1d8976cdf6eda43d35",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/pwa/RegisterSW.tsx": {
+    "mtime": 1792369192.2745137,
+    "seen": 1792369252.290882,
+    "ast_hash": "d99394e760f4d516e067b0a0b8be0bed",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/icon.tsx": {
+    "mtime": 1792369190.791604,
+    "seen": 1792369252.2917724,
+    "ast_hash": "e107fe4b27979f524722b3487d5e5d88",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/(auth)/layout.tsx": {
+    "mtime": 1792369468.131287,
+    "seen": 1792370318.7546587,
+    "ast_hash": "30a832c09a89577b249480b289d679e1",
+    "semantic_hash": ""
   }
 }
