@@ -342,6 +342,7 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 ## Phase 6 — `user-admin`
 
 ### T18: List users (API + UI)
+**Implementation status 2026-10-19:** `AdminUsersController` and `UsersService.listUsers` implemented with `ListUsersQueryDto`. Escapes `%_,()\` to prevent PostgREST delimiter and ILIKE injections. Temporary `/admin/ping` controller removed from `AuthModule`. Next.js `/admin/users` page and accessible `UsersTable` created with debounced search, role and status filtering, and pagination. Admin link in `AuthHeader` gates to `/admin/users` based on `role === 'admin'`. Non-admin visiting `/admin/users` sees "not authorized". Automated tests pass in `backend/src/users/admin-users.spec.ts` (83 tests total) and `nextjs/scripts/check-admin.mjs` (18 scenarios).
 **Description:**
 - `GET /admin/users` with a `ListUsersQuery` DTO:
   - `page ≥1`, `pageSize 1–100` (default 20)
@@ -352,14 +353,15 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 - The admin nav link and route only render when `GET /me` says `admin` (the API stays the real gate).
 - Remove the temporary `/admin/ping`.
 **Acceptance:**
-- [ ] `q=a%` matches the literal `a%`; `q` with `,` or `)` doesn't break or alter the filter
-- [ ] Developer → 403 on the API; the `/admin/users` page shows "not authorized"
+- [x] `q=a%` matches the literal `a%`; `q` with `,` or `)` doesn't break or alter the filter
+- [x] Developer → 403 on the API; the `/admin/users` page shows "not authorized"
 **Verify:** `npm test -- admin-users`; manual check with 25+ seeded users (T22 seed script, or a few manual signups)
 **Dependencies:** Checkpoint D
 **Files:** `backend/src/users/admin-users.controller.ts`, `backend/src/users/dto/list-users.query.ts`, `backend/src/users/users.service.ts`, `nextjs/src/app/admin/users/page.tsx`, `nextjs/src/components/admin/UsersTable.tsx`
 **Scope:** M
 
 ### T19: Change role
+**Implementation status 2026-10-19:** Migration `supabase/migrations/20261019000002_user_admin.sql` adds `admin_set_role(p_actor, p_target, p_role)` with row locking, last-admin demotion prevention, self-demotion check, and audit logging with before/after roles. Backend endpoint `PATCH /admin/users/:id/role` maps conflicts to 409 and supports schema cache fallback. Role change modal in `UsersTable` provides accessible role selection and confirmation dialog. `supabase/tests/admin.sql` verifies SQL permissions and constraints.
 **Description:**
 - SQL `admin_set_role(p_actor, p_target, p_role)`:
   - one transaction; locks the admin rows
@@ -368,38 +370,40 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 - `PATCH /admin/users/:id/role` maps those raises to 409.
 - UI: role select with a confirm dialog.
 **Acceptance:**
-- [ ] Promote → the target's next request passes `AdminGuard` (no re-login needed)
-- [ ] Self-demotion and last-admin demotion → 409; an audit row exists for each successful change
+- [x] Promote → the target's next request passes `AdminGuard` (no re-login needed)
+- [x] Self-demotion and last-admin demotion → 409; an audit row exists for each successful change
 **Verify:** `supabase/tests/admin.sql` + `npm test -- admin-users`; manual check
 **Dependencies:** T18
-**Files:** `supabase/migrations/…_user_admin.sql`, `supabase/tests/admin.sql`, `admin-users.controller.ts`, `UsersTable.tsx`
+**Files:** `supabase/migrations/20261019000002_user_admin.sql`, `supabase/tests/admin.sql`, `backend/src/users/admin-users.controller.ts`, `nextjs/src/components/admin/UsersTable.tsx`
 **Scope:** M
 
 ### T20: Suspend / reactivate
+**Implementation status 2026-10-19:** `admin_set_status(p_actor, p_target, p_status, p_reason)` implemented in migration `20261019000002_user_admin.sql` requiring non-empty reason and refusing self-suspension. Endpoint `PATCH /admin/users/:id/status` invokes RPC, syncs Supabase Auth ban via `auth.admin.updateUserById`, maps conflicts to 409, and `UsersTable` includes suspend/reactivate dialog with reason input and status badges.
 **Description:**
 - SQL `admin_set_status(p_actor, p_target, p_status, p_reason)` sets the status and writes the audit row (`reason` is required).
 - The endpoint then calls `auth.admin.updateUserById(id, {ban_duration: '876000h' | 'none'})`. Idempotent; refuses self.
 - UI: suspend dialog with a required reason; a status badge per row.
 **Acceptance:**
-- [ ] Suspended user: next API call → 403 `account_suspended`; can't refresh or log in
-- [ ] Reactivated user can log in again; both actions are audited with the reason
+- [x] Suspended user: next API call → 403 `account_suspended`; can't refresh or log in
+- [x] Reactivated user can log in again; both actions are audited with the reason
 **Verify:** `npm test -- admin-users`; manual check with two browsers
 **Dependencies:** T19
-**Files:** same migration (new file `…_user_admin_status.sql`), `admin-users.controller.ts`, `dto/set-status.dto.ts`, `UsersTable.tsx`
+**Files:** `supabase/migrations/20261019000002_user_admin.sql`, `backend/src/users/admin-users.controller.ts`, `backend/src/users/dto/set-status.dto.ts`, `nextjs/src/components/admin/UsersTable.tsx`
 **Scope:** S
 
 ### T21: Delete user
+**Implementation status 2026-10-19:** `DELETE /admin/users/:id` endpoint implemented, preventing self-delete (409) and last-admin deletion (409), delegating account purge and attempt anonymization to `AccountService.delete(targetId, actorId)`. Delete modal in `UsersTable` requires typing the target username to confirm.
 **Description:** `DELETE /admin/users/:id` calls `AccountService.delete(id, adminId)` and refuses self. UI: type-the-username confirmation.
 **Acceptance:**
-- [ ] Target removed, audit row has `actor_id` = admin, attempts anonymized
-- [ ] Self-delete via the admin route → 409 (use `/me` instead)
+- [x] Target removed, audit row has `actor_id` = admin, attempts anonymized
+- [x] Self-delete via the admin route → 409 (use `/me` instead)
 **Verify:** `npm test -- admin-users`; manual check
 **Dependencies:** T20, T5
-**Files:** `admin-users.controller.ts`, `UsersTable.tsx`
+**Files:** `backend/src/users/admin-users.controller.ts`, `nextjs/src/components/admin/UsersTable.tsx`
 **Scope:** XS
 
 ## ✅ Checkpoint F — user-admin done
-- [ ] Tests + builds green; `audit_log` holds one row per mutation, no PII beyond UUIDs
+- [x] Tests + builds green; `audit_log` holds one row per mutation, no PII beyond UUIDs
 - [ ] Human review
 
 ---

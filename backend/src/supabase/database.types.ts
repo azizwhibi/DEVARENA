@@ -374,6 +374,23 @@ export type Database = {
         };
         Returns: Database['public']['Tables']['profiles']['Row'][];
       };
+      admin_set_role: {
+        Args: {
+          p_actor: string;
+          p_target: string;
+          p_role: string;
+        };
+        Returns: Database['public']['Tables']['profiles']['Row'][];
+      };
+      admin_set_status: {
+        Args: {
+          p_actor: string;
+          p_target: string;
+          p_status: string;
+          p_reason: string;
+        };
+        Returns: Database['public']['Tables']['profiles']['Row'][];
+      };
     };
     Enums: {
       [_ in never]: never;

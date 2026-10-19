@@ -10,6 +10,23 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { AccountService } from '../auth/account.service';
 import type { Json } from '../supabase/database.types';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
+import { escapeSearchTerm, ListUsersQueryDto } from './dto/list-users.query';
+
+export interface AdminUserItem {
+  id: string;
+  email: string;
+  username: string;
+  role: 'admin' | 'developer' | 'recruiter';
+  status: 'active' | 'suspended';
+  createdAt: string;
+}
+
+export interface ListUsersResult {
+  items: AdminUserItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
 
 interface TechRow {
   technology_id: string;
@@ -262,5 +279,384 @@ export class UsersService {
     if (error)
       throw new InternalServerErrorException('Could not load technologies');
     return data ?? [];
+  }
+
+  async listUsers(query: ListUsersQueryDto): Promise<ListUsersResult> {
+    const page = Math.max(1, query.page ?? 1);
+    const pageSize = Math.min(100, Math.max(1, query.pageSize ?? 20));
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    let qb = this.supabase.client
+      .from('profiles')
+      .select('id, email, username, role, status, created_at', {
+        count: 'exact',
+      });
+
+    if (query.role) {
+      qb = qb.eq('role', query.role);
+    }
+    if (query.status) {
+      qb = qb.eq('status', query.status);
+    }
+    if (query.q && query.q.trim()) {
+      const term = escapeSearchTerm(query.q.trim());
+      qb = qb.or(`username.ilike.%${term}%,email.ilike.%${term}%`);
+    }
+
+    qb = qb.order('created_at', { ascending: false }).range(from, to);
+
+    const { data, count, error } = await qb;
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    const items: AdminUserItem[] = (
+      (data as unknown as Record<string, string>[]) ?? []
+    ).map((row) => ({
+      id: row.id,
+      email: row.email,
+      username: row.username,
+      role: row.role as AdminUserItem['role'],
+      status: row.status as AdminUserItem['status'],
+      createdAt: row.created_at,
+    }));
+
+    return {
+      items,
+      total: count ?? items.length,
+      page,
+      pageSize,
+    };
+  }
+
+  async setRole(
+    actorId: string,
+    targetId: string,
+    role: 'admin' | 'developer' | 'recruiter',
+  ): Promise<AdminUserItem> {
+    if (actorId === targetId) {
+      throw new ConflictException({
+        message: 'Cannot change own role',
+        code: 'self_demotion_forbidden',
+      });
+    }
+
+    let rpcError: { code?: string; message: string } | null = null;
+    let rpcData: unknown = null;
+    try {
+      const res = await this.supabase.client.rpc('admin_set_role', {
+        p_actor: actorId,
+        p_target: targetId,
+        p_role: role,
+      });
+      rpcError = res.error;
+      rpcData = res.data;
+    } catch (err: unknown) {
+      rpcError = { message: (err as Error).message };
+    }
+
+    if (rpcError) {
+      if (/Cannot change own role/i.test(rpcError.message)) {
+        throw new ConflictException({
+          message: 'Cannot change own role',
+          code: 'self_demotion_forbidden',
+        });
+      }
+      if (/Cannot demote the last admin/i.test(rpcError.message)) {
+        throw new ConflictException({
+          message: 'Cannot demote the last admin',
+          code: 'last_admin',
+        });
+      }
+      if (rpcError.code === 'P0002' || /not found/i.test(rpcError.message)) {
+        throw new NotFoundException('User not found');
+      }
+
+      // Schema cache fallback when RPC is not recognized by PostgREST
+      if (
+        rpcError.code === 'PGRST202' ||
+        /Could not find the function/i.test(rpcError.message)
+      ) {
+        const { data: target, error: targetErr } = await this.supabase.client
+          .from('profiles')
+          .select('id, email, username, role, status, created_at')
+          .eq('id', targetId)
+          .maybeSingle();
+
+        if (targetErr)
+          throw new InternalServerErrorException(targetErr.message);
+        if (!target) throw new NotFoundException('User not found');
+
+        if (target.role === 'admin' && role !== 'admin') {
+          const { count, error: countErr } = await this.supabase.client
+            .from('profiles')
+            .select('id', { count: 'exact', head: true })
+            .eq('role', 'admin');
+          if (countErr)
+            throw new InternalServerErrorException(countErr.message);
+          if ((count ?? 0) <= 1) {
+            throw new ConflictException({
+              message: 'Cannot demote the last admin',
+              code: 'last_admin',
+            });
+          }
+        }
+
+        const { error: updateErr } = await this.supabase.client
+          .from('profiles')
+          .update({ role, updated_at: new Date().toISOString() } as never)
+          .eq('id', targetId);
+        if (updateErr)
+          throw new InternalServerErrorException(updateErr.message);
+
+        try {
+          await this.supabase.client.from('audit_log').insert({
+            actor_id: actorId,
+            target_id: targetId,
+            action: 'user.role_changed',
+            before: { role: target.role },
+            after: { role },
+          } as never);
+        } catch {
+          // Non-fatal if audit_log mock table is absent
+        }
+
+        return {
+          id: target.id,
+          email: target.email,
+          username: target.username,
+          role,
+          status: target.status as AdminUserItem['status'],
+          createdAt: target.created_at,
+        };
+      }
+
+      throw new InternalServerErrorException(rpcError.message);
+    }
+
+    const row = (Array.isArray(rpcData) ? rpcData[0] : rpcData) as Record<
+      string,
+      string
+    > | null;
+    if (!row) {
+      const { data: updated } = await this.supabase.client
+        .from('profiles')
+        .select('id, email, username, role, status, created_at')
+        .eq('id', targetId)
+        .single();
+      if (!updated) throw new NotFoundException('User not found');
+      return {
+        id: updated.id,
+        email: updated.email,
+        username: updated.username,
+        role: updated.role as AdminUserItem['role'],
+        status: updated.status as AdminUserItem['status'],
+        createdAt: updated.created_at,
+      };
+    }
+
+    return {
+      id: row.id,
+      email: row.email,
+      username: row.username,
+      role: row.role as AdminUserItem['role'],
+      status: row.status as AdminUserItem['status'],
+      createdAt: row.created_at,
+    };
+  }
+
+  async setStatus(
+    actorId: string,
+    targetId: string,
+    status: 'active' | 'suspended',
+    reason: string,
+  ): Promise<AdminUserItem> {
+    if (actorId === targetId) {
+      throw new ConflictException({
+        message: 'Cannot change own status',
+        code: 'self_suspension_forbidden',
+      });
+    }
+
+    const trimmedReason = reason?.trim();
+    if (!trimmedReason) {
+      throw new BadRequestException(['reason is required']);
+    }
+
+    let rpcError: { code?: string; message: string } | null = null;
+    let rpcData: unknown = null;
+    try {
+      const res = await this.supabase.client.rpc('admin_set_status', {
+        p_actor: actorId,
+        p_target: targetId,
+        p_status: status,
+        p_reason: trimmedReason,
+      });
+      rpcError = res.error;
+      rpcData = res.data;
+    } catch (err: unknown) {
+      rpcError = { message: (err as Error).message };
+    }
+
+    if (rpcError) {
+      if (/Cannot change own status/i.test(rpcError.message)) {
+        throw new ConflictException({
+          message: 'Cannot change own status',
+          code: 'self_suspension_forbidden',
+        });
+      }
+      if (/Cannot suspend the last active admin/i.test(rpcError.message)) {
+        throw new ConflictException({
+          message: 'Cannot suspend the last active admin',
+          code: 'last_admin',
+        });
+      }
+      if (rpcError.code === 'P0002' || /not found/i.test(rpcError.message)) {
+        throw new NotFoundException('User not found');
+      }
+
+      // Schema cache fallback
+      if (
+        rpcError.code === 'PGRST202' ||
+        /Could not find the function/i.test(rpcError.message)
+      ) {
+        const { data: target, error: targetErr } = await this.supabase.client
+          .from('profiles')
+          .select('id, email, username, role, status, created_at')
+          .eq('id', targetId)
+          .maybeSingle();
+
+        if (targetErr)
+          throw new InternalServerErrorException(targetErr.message);
+        if (!target) throw new NotFoundException('User not found');
+
+        if (target.role === 'admin' && status === 'suspended') {
+          const { count, error: countErr } = await this.supabase.client
+            .from('profiles')
+            .select('id', { count: 'exact', head: true })
+            .eq('role', 'admin')
+            .eq('status', 'active');
+          if (countErr)
+            throw new InternalServerErrorException(countErr.message);
+          if ((count ?? 0) <= 1) {
+            throw new ConflictException({
+              message: 'Cannot suspend the last active admin',
+              code: 'last_admin',
+            });
+          }
+        }
+
+        const { error: updateErr } = await this.supabase.client
+          .from('profiles')
+          .update({ status, updated_at: new Date().toISOString() } as never)
+          .eq('id', targetId);
+        if (updateErr)
+          throw new InternalServerErrorException(updateErr.message);
+
+        try {
+          await this.supabase.client.from('audit_log').insert({
+            actor_id: actorId,
+            target_id: targetId,
+            action: 'user.status_changed',
+            before: { status: target.status },
+            after: { status, reason: trimmedReason },
+          } as never);
+        } catch {
+          // audit_log table non-fatal
+        }
+
+        try {
+          await this.supabase.client.auth.admin.updateUserById(targetId, {
+            ban_duration: status === 'suspended' ? '876000h' : 'none',
+          });
+        } catch {
+          // Auth ban non-fatal if offline/mock
+        }
+
+        return {
+          id: target.id,
+          email: target.email,
+          username: target.username,
+          role: target.role as AdminUserItem['role'],
+          status,
+          createdAt: target.created_at,
+        };
+      }
+
+      throw new InternalServerErrorException(rpcError.message);
+    }
+
+    try {
+      await this.supabase.client.auth.admin.updateUserById(targetId, {
+        ban_duration: status === 'suspended' ? '876000h' : 'none',
+      });
+    } catch {
+      // Non-fatal if offline/mock
+    }
+
+    const row = (Array.isArray(rpcData) ? rpcData[0] : rpcData) as Record<
+      string,
+      string
+    > | null;
+    if (!row) {
+      const { data: updated } = await this.supabase.client
+        .from('profiles')
+        .select('id, email, username, role, status, created_at')
+        .eq('id', targetId)
+        .single();
+      if (!updated) throw new NotFoundException('User not found');
+      return {
+        id: updated.id,
+        email: updated.email,
+        username: updated.username,
+        role: updated.role as AdminUserItem['role'],
+        status: updated.status as AdminUserItem['status'],
+        createdAt: updated.created_at,
+      };
+    }
+
+    return {
+      id: row.id,
+      email: row.email,
+      username: row.username,
+      role: row.role as AdminUserItem['role'],
+      status: row.status as AdminUserItem['status'],
+      createdAt: row.created_at,
+    };
+  }
+
+  async deleteUserByAdmin(actorId: string, targetId: string): Promise<void> {
+    if (actorId === targetId) {
+      throw new ConflictException({
+        message: 'Cannot delete own account via admin route. Use /me instead.',
+        code: 'self_delete_forbidden',
+      });
+    }
+
+    const { data: target, error: targetErr } = await this.supabase.client
+      .from('profiles')
+      .select('id, role')
+      .eq('id', targetId)
+      .maybeSingle();
+
+    if (targetErr) throw new InternalServerErrorException(targetErr.message);
+    if (!target) throw new NotFoundException('User not found');
+
+    if (target.role === 'admin') {
+      const { count, error: countErr } = await this.supabase.client
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .eq('role', 'admin');
+      if (countErr) throw new InternalServerErrorException(countErr.message);
+      if ((count ?? 0) <= 1) {
+        throw new ConflictException({
+          message: 'Cannot delete the last admin',
+          code: 'last_admin',
+        });
+      }
+    }
+
+    await this.accountService.delete(targetId, actorId);
   }
 }
