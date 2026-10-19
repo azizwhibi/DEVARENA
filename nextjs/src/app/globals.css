@@ -2,15 +2,25 @@
 
 :root {
   color-scheme: dark;
-  --background: #09090b;
+  --background: #0f172a;
   --foreground: #fafafa;
-  --font-geist-sans: Arial, Helvetica, sans-serif;
-  --font-geist-mono: Consolas, monospace;
+  --card: #192134;
+  --primary: #22c55e;
+  --accent: #d97706;
+  --danger: #dc2626;
+  --muted-foreground: #94a3b8;
+  --font-geist-sans: Inter, Arial, Helvetica, sans-serif;
+  --font-geist-mono: ui-monospace, Consolas, monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-muted-foreground: var(--muted-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -18,5 +28,50 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans);
+}
+
+/* ---- Arena motion: transform/opacity only; static final state under reduced motion ---- */
+
+@keyframes arena-fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes arena-type { from { width: 0; } to { width: var(--ch); } }
+@keyframes arena-caret { 50% { opacity: 0; } }
+@keyframes arena-tick { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+@keyframes arena-shake { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
+@keyframes arena-grid { to { transform: translateY(32px); } }
+@keyframes arena-rise { to { transform: translateY(-120vh) rotate(8deg); } }
+@keyframes arena-glow { 50% { box-shadow: 0 0 24px rgb(34 197 94 / 0.35); } }
+
+.arena-grid {
+  position: fixed; inset: -32px 0 0; z-index: -1; pointer-events: none; opacity: 0.08;
+  background-image: linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+}
+.arena-glyphs { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; font-family: var(--font-mono); color: var(--primary); }
+.arena-glyphs span {
+  position: absolute; bottom: -10%; left: calc(6% + var(--i) * 12%); font-size: calc(1rem + (var(--i) % 3) * 0.6rem); opacity: 0.12;
+}
+.arena-term-line { display: block; white-space: nowrap; overflow: hidden; width: var(--ch); }
+.arena-card { transition: transform 200ms, box-shadow 200ms, border-color 200ms; }
+.arena-card:hover, .arena-card:focus-within { transform: translateY(-2px); border-color: rgb(34 197 94 / 0.5); box-shadow: 0 0 24px rgb(34 197 94 / 0.15); }
+.arena-btn { transition: transform 150ms, box-shadow 150ms, filter 150ms; }
+.arena-btn:hover { box-shadow: 0 0 20px rgb(34 197 94 / 0.4); filter: brightness(1.08); }
+.arena-btn:active { transform: scale(0.98); }
+.arena-caret { display: inline-block; width: 0.6ch; height: 1.1em; vertical-align: text-bottom; background: var(--primary); }
+.arena-tick { stroke-dasharray: 24; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .arena-grid { animation: arena-grid 6s linear infinite; }
+  .arena-glyphs span { animation: arena-rise calc(14s + var(--i) * 2s) linear calc(var(--i) * -3s) infinite; }
+  .arena-enter { animation: arena-fade-up 400ms ease-out both; animation-delay: calc(var(--i, 0) * 80ms); }
+  .arena-term-line { width: 0; animation: arena-type var(--dur, 1s) steps(var(--n, 20), end) var(--delay, 0s) forwards; }
+  .arena-term-out { opacity: 0; animation: arena-fade-up 300ms ease-out var(--delay, 0s) forwards; }
+  .arena-caret { animation: arena-caret 1s steps(1) infinite; }
+  .arena-tick { stroke-dashoffset: 24; animation: arena-tick 500ms ease-out 100ms forwards; }
+  [role="alert"] { animation: arena-shake 300ms ease-in-out 1; }
+  .arena-pulse { animation: arena-glow 2.4s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arena-tick { stroke-dashoffset: 0; }
 }
