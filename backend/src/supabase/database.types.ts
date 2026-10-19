@@ -194,6 +194,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      profile_technologies: {
+        Row: {
+          created_at: string;
+          profile_id: string;
+          technology_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          profile_id: string;
+          technology_id: string;
+        };
+        Update: {
+          created_at?: string;
+          profile_id?: string;
+          technology_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'profile_technologies_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'profile_technologies_technology_id_fkey';
+            columns: ['technology_id'];
+            isOneToOne: false;
+            referencedRelation: 'technologies';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       skills: {
         Row: {
           id: string;
@@ -333,7 +366,14 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      update_profile: {
+        Args: {
+          p_id: string;
+          p_patch?: Json;
+          p_technology_ids?: string[] | null;
+        };
+        Returns: Database['public']['Tables']['profiles']['Row'][];
+      };
     };
     Enums: {
       [_ in never]: never;
