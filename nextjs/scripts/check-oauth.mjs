@@ -24,14 +24,15 @@ const hooks = registerHooks({
 });
 
 try {
-  const { OAUTH_PROVIDERS, getOAuthRedirectUrl, signInWithProvider } = await import('../src/lib/oauth.ts');
+  const { OAUTH_PROVIDERS, OAUTH_SCOPES, getOAuthRedirectUrl, signInWithProvider } = await import('../src/lib/oauth.ts');
 
   let scenarios = 0;
 
   // 1. Providers definition
   assert.equal(OAUTH_PROVIDERS.length, 2);
   assert.deepEqual(OAUTH_PROVIDERS.map(p => p.id), ['github', 'google']);
-  scenarios++;
+  assert.equal(OAUTH_SCOPES.github, 'read:user user:email');
+  scenarios += 2;
 
   // 2. Redirect URL generation and sanitization
   const base = 'http://localhost:3001';
@@ -58,7 +59,10 @@ try {
   assert.deepEqual(resGithub, {});
   assert.deepEqual(calls.pop(), {
     provider: 'github',
-    options: { redirectTo: 'http://localhost:3001/auth/callback?next=%2Fprofile' },
+    options: {
+      redirectTo: 'http://localhost:3001/auth/callback?next=%2Fprofile',
+      scopes: 'read:user user:email',
+    },
   });
   scenarios++;
 
