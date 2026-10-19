@@ -11,7 +11,7 @@ interface AvatarUploadProps {
 }
 
 const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2 MB
-const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+const VALID_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 export function AvatarUpload({
   currentAvatarUrl,
@@ -28,14 +28,28 @@ export function AvatarUpload({
 
     setError(null);
 
-    // Client-side validation: size and MIME
+    // Client-side validation: size
     if (file.size > MAX_SIZE_BYTES) {
       setError('File size must be 2 MB or smaller.');
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
-    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+    // Determine and normalize MIME type
+    const ext = file.name.split('.').pop()?.toLowerCase() || '';
+    let mimeType = file.type?.toLowerCase();
+    if (!mimeType || mimeType === 'application/octet-stream') {
+      if (ext === 'png') mimeType = 'image/png';
+      else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
+      else if (ext === 'webp') mimeType = 'image/webp';
+    } else if (mimeType === 'image/jpg' || mimeType === 'image/pjpeg') {
+      mimeType = 'image/jpeg';
+    }
+
+    const isValidMime = ['image/png', 'image/jpeg', 'image/webp'].includes(mimeType);
+    const isValidExt = VALID_EXTENSIONS.includes(ext);
+
+    if (!isValidMime || !isValidExt) {
       setError('Only PNG, JPEG, and WebP images are allowed.');
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
@@ -44,16 +58,16 @@ export function AvatarUpload({
     setLoading(true);
     try {
       const supabase = createClient();
-      const ext = file.name.split('.').pop()?.toLowerCase() || 'png';
-      const fileName = `${Date.now()}.${ext}`;
+      const normalizedExt = ext === 'jpg' ? 'jpeg' : ext;
+      const fileName = `${Date.now()}.${normalizedExt}`;
       const filePath = `${userId}/${fileName}`;
 
       // 1. Upload to Supabase Storage avatars bucket
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, {
-          contentType: file.type,
-          upsert: false,
+          contentType: mimeType,
+          upsert: true,
         });
 
       if (uploadError) {
@@ -67,8 +81,9 @@ export function AvatarUpload({
       const newAvatarUrl = urlData.publicUrl;
 
       // 3. Update profile via PATCH /me/profile
-      await apiRequest('/me/profile', {
+      const updated = await apiRequest<{ avatarUrl: string | null }>('/me/profile', {
         method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ avatarUrl: newAvatarUrl }),
       });
 
@@ -91,7 +106,7 @@ export function AvatarUpload({
         // Cleanup of older avatars is best-effort and non-fatal
       }
 
-      onAvatarUpdated(newAvatarUrl);
+      onAvatarUpdated(updated?.avatarUrl ?? newAvatarUrl);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to upload avatar';
       setError(msg);
@@ -119,12 +134,19 @@ export function AvatarUpload({
             ?
           </div>
         )}
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs font-medium text-white">
+            ...
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
         <label
           htmlFor="avatar-upload-input"
-          className="cursor-pointer inline-flex items-center justify-center rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+          className={`cursor-pointer inline-flex items-center justify-center rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            loading ? 'opacity-50 pointer-events-none' : ''
+          }`}
         >
           {loading ? 'Uploading...' : 'Change avatar'}
         </label>
@@ -132,7 +154,7 @@ export function AvatarUpload({
           id="avatar-upload-input"
           ref={fileInputRef}
           type="file"
-          accept="image/png,image/jpeg,image/webp"
+          accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
           disabled={loading}
           onChange={handleFileChange}
           className="sr-only"

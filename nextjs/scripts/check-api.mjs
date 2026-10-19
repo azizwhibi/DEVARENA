@@ -7,6 +7,7 @@ const hooks = registerHooks({
     if (specifier === '@/lib/supabase/client') return { url: 'mock:supabase-client', shortCircuit: true };
     if (specifier === '@/lib/supabase/server') return { url: 'mock:supabase-server', shortCircuit: true };
     if (specifier === 'server-only') return { url: 'mock:server-only', shortCircuit: true };
+    if (specifier === 'next/server') return { url: 'mock:next-server', shortCircuit: true };
     if (specifier.startsWith('@/')) return nextResolve(new URL(`../src/${specifier.slice(2)}.ts`, import.meta.url).href, context);
     return nextResolve(specifier, context);
   },
@@ -20,6 +21,7 @@ const hooks = registerHooks({
       source: 'export async function createClient() { return globalThis.authTestClient; }',
     };
     if (url === 'mock:server-only') return { format: 'module', source: '', shortCircuit: true };
+    if (url === 'mock:next-server') return { format: 'module', source: 'export async function connection() {}', shortCircuit: true };
     return nextLoad(url, context);
   },
 });
@@ -40,6 +42,18 @@ try {
     return Response.json({ id: 'user-a' });
   };
   assert.deepEqual(await request('/me', 'access-a'), { id: 'user-a' });
+  scenarios++;
+
+  // Request with body automatically sets Content-Type: application/json
+  globalThis.fetch = async (url, init) => {
+    assert.equal(String(url), 'http://localhost:3000/me/profile');
+    const h = new Headers(init.headers);
+    assert.equal(h.get('Content-Type'), 'application/json');
+    assert.equal(h.get('Accept'), 'application/json');
+    assert.equal(init.body, '{"bio":"hello"}');
+    return Response.json({ bio: 'hello' });
+  };
+  assert.deepEqual(await request('/me/profile', 'access-a', { method: 'PATCH', body: JSON.stringify({ bio: 'hello' }) }), { bio: 'hello' });
   scenarios++;
 
   globalThis.fetch = async (_url, init) => {

@@ -1,17 +1,17 @@
 # Graph Report - DEVARENA  (2026-10-19)
 
 ## Corpus Check
-- 119 files · ~41,702 words
+- 119 files · ~42,945 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 9 file(s) not represented in the graph (top: (none) 4, .example 3, .ico 1)
+- Unclassified: 8 file(s) not represented in the graph (top: (none) 3, .example 3, .ico 1)
 
 ## Summary
-- 708 nodes · 1122 edges · 50 communities (33 shown, 17 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 52 edges (avg confidence: 0.93)
+- 707 nodes · 1117 edges · 45 communities (30 shown, 15 thin omitted)
+- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 56 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f9adb2cf`
+- Built from commit: `b5424200`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,7 +30,7 @@
 - dependencies
 - scripts
 - verify.mjs
-- layout.tsx
+- app/layout.tsx
 - backend/README.md
 - nest-cli.json
 - apple-icon.tsx
@@ -50,34 +50,29 @@
 - sw.js
 - offline/page.tsx
 - (auth)/layout.tsx
-- Spec: `identity` — Accounts, Sessions & Access Control
+- Phase 5 — `profile`
 - Spec: `pwa` + `arena-ui` (installable DevArena with a coding-arena look)
-- Implementation Plan: DevArena User & Auth initiative
+- MeController
 - AdminPingController
-- DevArena identity checks: T3a–T8
+- Implementation Plan: DevArena User & Auth initiative
 - UpdateProfileDto
 - MeProfileController
 - .deleteMe
 - update-profile.dto.ts
-- TechnologiesController
-- .updateProfile
 - UsersService
-- check-register-http.mjs
-- check-register.mjs
-- check-pwa.mjs
-- Identity precheck results — 2026-10-18
+- app/page.tsx
 
 ## God Nodes (most connected - your core abstractions)
-1. `createClient()` - 24 edges
-2. `compilerOptions` - 22 edges
+1. `compilerOptions` - 22 edges
+2. `next` - 22 edges
 3. `@nestjs/common` - 21 edges
-4. `next` - 21 edges
-5. `Tasks: `identity` module` - 19 edges
-6. `UpdateProfileDto` - 18 edges
+4. `createClient()` - 21 edges
+5. `UpdateProfileDto` - 18 edges
+6. `Tasks: `identity` module` - 18 edges
 7. `SupabaseService` - 17 edges
 8. `react` - 17 edges
 9. `compilerOptions` - 16 edges
-10. `UsersService` - 15 edges
+10. `AdminGuard` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Objective` --references--> `AdminGuard`  [INFERRED]
@@ -94,23 +89,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (50 total, 17 thin omitted)
+## Communities (45 total, 15 thin omitted)
 
 ### Community 0 - "Tasks: `identity` module"
-Cohesion: 0.06
-Nodes (32): ✅ Checkpoint A, ✅ Checkpoint B, ✅ Checkpoint C, ✅ Checkpoint D — identity done, ✅ Checkpoint E — profile done, ✅ Checkpoint F — user-admin done, ✅ Checkpoint G — rankings done, ✅ Checkpoint H — initiative done (+24 more)
+Cohesion: 0.04
+Nodes (45): Access control (D3, D4), `AccountService.delete(userId, actorId)`, Backend Contract, Boundaries, Code Style, Commands, Data Contract, Env (+37 more)
 
 ### Community 1 - "auth.service.spec.ts"
 Cohesion: 0.06
-Nodes (37): AppModule, AccountService, setup(), assertSafeAuthConfig(), AuthModule, AuthService, setup(), user (+29 more)
+Nodes (39): AppModule, AccountService, setup(), assertSafeAuthConfig(), AuthModule, AuthService, setup(), user (+31 more)
 
 ### Community 2 - "createClient"
-Cohesion: 0.07
-Nodes (42): nextConfig, hooks, destination, countries, metadata, ProfileContent(), ProfilePage(), metadata (+34 more)
+Cohesion: 0.06
+Nodes (44): nextConfig, hooks, countries, emailTypes, GET(), metadata, ProfileContent(), ProfilePage() (+36 more)
 
 ### Community 3 - "backend/package.json"
-Cohesion: 0.04
-Nodes (46): author, description, engines, node, jest, collectCoverageFrom, coverageDirectory, moduleFileExtensions (+38 more)
+Cohesion: 0.05
+Nodes (45): author, description, engines, node, jest, collectCoverageFrom, coverageDirectory, moduleFileExtensions (+37 more)
 
 ### Community 4 - "RegisterForm.tsx"
 Cohesion: 0.14
@@ -118,11 +113,11 @@ Nodes (17): ForgotPasswordPage(), metadata, metadata, RegisterPage(), metadata, 
 
 ### Community 5 - "nextjs/package.json"
 Cohesion: 0.05
-Nodes (39): eslintConfig, dependencies, next, react, react-dom, @supabase/ssr, @supabase/supabase-js, devDependencies (+31 more)
+Nodes (37): eslintConfig, dependencies, next, react, react-dom, @supabase/ssr, @supabase/supabase-js, devDependencies (+29 more)
 
 ### Community 6 - "storage-smoke.mjs"
-Cohesion: 0.17
-Nodes (9): ws, admin, { createClient }, files, options, png, require, users (+1 more)
+Cohesion: 0.07
+Nodes (21): destination, hooks, classify(), ctx, manifestSrc, sw, hooks, hooks (+13 more)
 
 ### Community 7 - "devDependencies"
 Cohesion: 0.08
@@ -149,12 +144,12 @@ Cohesion: 0.15
 Nodes (13): scripts, build, format, lint, start, start:debug, start:dev, start:prod (+5 more)
 
 ### Community 13 - "verify.mjs"
-Cohesion: 0.18
-Nodes (10): Outstanding before Checkpoint A can be marked complete, before, bucket(), bucketBefore, local, migrations, psql(), root (+2 more)
+Cohesion: 0.12
+Nodes (14): Cloud advisor results, Identity precheck results — 2026-10-18, Outstanding before Checkpoint A can be marked complete, T3a follow-up, 2026-10-18, Verification evidence, before, bucket(), bucketBefore (+6 more)
 
-### Community 14 - "layout.tsx"
-Cohesion: 0.11
-Nodes (19): metadata, RootLayout(), viewport, Home(), steps, lines, TerminalHero(), dismissed() (+11 more)
+### Community 14 - "app/layout.tsx"
+Cohesion: 0.13
+Nodes (13): metadata, RootLayout(), viewport, AuthHeader(), dismissed(), InstallEvent, InstallPrompt(), OfflineBanner() (+5 more)
 
 ### Community 15 - "backend/README.md"
 Cohesion: 0.20
@@ -170,7 +165,7 @@ Nodes (6): AppleIcon(), contentType, size, GET(), sizes, monogram()
 
 ### Community 18 - "safeNext"
 Cohesion: 0.09
-Nodes (27): Configure the dashboard, Email registration setup (T8), Forgot / reset password (T10), GitHub + Google OAuth (T9), Repeat local checks, Verify real registration, emailTypes, GET() (+19 more)
+Nodes (29): Configure the dashboard, Email registration setup (T8), Forgot / reset password (T10), GitHub + Google OAuth (T9), Repeat local checks, Verify real registration, Automated evidence (2026-10-19), DevArena identity checks: T3a–T11 (Phase 4 Cutover) (+21 more)
 
 ### Community 19 - "Identity database: T1–T3a"
 Cohesion: 0.29
@@ -192,61 +187,49 @@ Nodes (4): Answer, Outcome, Q: How does the completed T7 header obtain its accou
 Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
 
-### Community 34 - "Spec: `identity` — Accounts, Sessions & Access Control"
-Cohesion: 0.07
-Nodes (27): Access control (D3, D4), `AccountService.delete(userId, actorId)`, Backend Contract, Boundaries, Code Style, Commands, Data Contract, Env (+19 more)
+### Community 34 - "Phase 5 — `profile`"
+Cohesion: 0.25
+Nodes (7): UsersModule, Phase 5 — `profile`, T12: Migration `profile_technologies` + `update_profile()`, T13: `GET /me/profile` + `PATCH /me/profile`, T14: `/profile/settings` form (text fields), T15: Avatar upload, T16: `/profile` on real data
 
 ### Community 35 - "Spec: `pwa` + `arena-ui` (installable DevArena with a coding-arena look)"
 Cohesion: 0.13
 Nodes (14): Assumptions (correct me now), Boundaries, Code style, Commands, Decisions (approved 2026-10-19), Design system (tokens, in `globals.css` `@theme`), Motion (all gated by `prefers-reduced-motion: no-preference`), Objective (+6 more)
 
-### Community 36 - "Implementation Plan: DevArena User & Auth initiative"
+### Community 36 - "MeController"
+Cohesion: 0.15
+Nodes (7): MeController, Phase 7 — `rankings`, T22: Dev seed script, T23: `dev_scores` view + `leaderboard()` function, T24: `GET /rankings`, T25: `/rankings` page, T26: Score and tier on `/profile`
+
+### Community 38 - "Implementation Plan: DevArena User & Auth initiative"
 Cohesion: 0.25
 Nodes (7): API Contracts (define before parallel work), Dependency Graph, Implementation Plan: DevArena User & Auth initiative, Open Questions (rankings/profile; answer before T23 / T16), Overview, Risks and Mitigations, Task List (details in `tasks/todo.md`)
-
-### Community 38 - "DevArena identity checks: T3a–T8"
-Cohesion: 0.40
-Nodes (4): Automated evidence (2026-10-18), DevArena identity checks: T3a–T8, Live checks for the human (pending), Project graph
-
-### Community 40 - "MeProfileController"
-Cohesion: 0.22
-Nodes (3): MeProfileController, UsersModule, T13: `GET /me/profile` + `PATCH /me/profile`
 
 ### Community 42 - "update-profile.dto.ts"
 Cohesion: 0.38
 Nodes (4): IsIsoCountry(), regionDisplayNames, class-transformer, class-validator
 
-### Community 46 - "check-register-http.mjs"
-Cohesion: 0.25
-Nodes (5): hooks, checks, href, link, rendered
-
-### Community 48 - "check-pwa.mjs"
-Cohesion: 0.33
-Nodes (4): classify(), ctx, manifestSrc, sw
-
-### Community 49 - "Identity precheck results — 2026-10-18"
-Cohesion: 0.40
-Nodes (4): Cloud advisor results, Identity precheck results — 2026-10-18, T3a follow-up, 2026-10-18, Verification evidence
+### Community 45 - "app/page.tsx"
+Cohesion: 0.47
+Nodes (4): Home(), steps, lines, TerminalHero()
 
 ## Knowledge Gaps
-- **330 isolated node(s):** `$schema`, `collection`, `sourceRoot`, `deleteOutDir`, `name` (+325 more)
+- **328 isolated node(s):** `$schema`, `collection`, `sourceRoot`, `deleteOutDir`, `name` (+323 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 410 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `next` connect `createClient` to `RegisterForm.tsx`, `nextjs/package.json`, `layout.tsx`, `apple-icon.tsx`, `safeNext`?**
-  _High betweenness centrality (0.113) - this node is a cross-community bridge._
+- **Why does `next` connect `createClient` to `RegisterForm.tsx`, `nextjs/package.json`, `app/layout.tsx`, `apple-icon.tsx`, `safeNext`?**
+  _High betweenness centrality (0.112) - this node is a cross-community bridge._
 - **Why does `ws` connect `storage-smoke.mjs` to `auth.service.spec.ts`, `backend/package.json`?**
-  _High betweenness centrality (0.094) - this node is a cross-community bridge._
+  _High betweenness centrality (0.089) - this node is a cross-community bridge._
 - **Why does `@nestjs/common` connect `auth.service.spec.ts` to `backend/package.json`?**
-  _High betweenness centrality (0.080) - this node is a cross-community bridge._
+  _High betweenness centrality (0.077) - this node is a cross-community bridge._
 - **What connects `$schema`, `collection`, `sourceRoot` to the rest of the system?**
-  _330 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _328 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tasks: `identity` module` be split into smaller, more focused modules?**
-  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04421768707482993 - nodes in this community are weakly interconnected._
 - **Should `auth.service.spec.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.058254963427377224 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06196213425129088 - nodes in this community are weakly interconnected._
 - **Should `createClient` be split into smaller, more focused modules?**
-  _Cohesion score 0.06777493606138107 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06202435312024353 - nodes in this community are weakly interconnected._

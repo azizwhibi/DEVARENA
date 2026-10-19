@@ -322,6 +322,44 @@ describe('UsersService & DTO validation', () => {
           p_technology_ids: null,
         });
       });
+
+      it('falls back to direct profile update when update_profile RPC is missing from schema cache', async () => {
+        mockSupabase.client.rpc.mockResolvedValue({
+          error: {
+            code: 'PGRST202',
+            message:
+              'Could not find the function public.update_profile(p_id, p_patch, p_technology_ids) in the schema cache',
+          },
+        });
+        const updateMock = jest.fn().mockReturnValue({
+          eq: jest.fn().mockResolvedValue({ error: null }),
+        });
+        mockSupabase.client.from.mockReturnValue({
+          update: updateMock,
+        });
+        jest.spyOn(service, 'getProfile').mockResolvedValue({
+          id: userId,
+          email: 'test@example.test',
+          username: 'new_username',
+          role: 'developer',
+          avatarUrl: null,
+          bio: 'new bio',
+          country: null,
+          institution: null,
+          technologies: [],
+          visibility: 'public',
+          createdAt: '2026-10-18T00:00:00Z',
+          devScore: null,
+          tier: null,
+        });
+
+        const result = await service.updateProfile(userId, {
+          username: 'new_username',
+          bio: 'new bio',
+        });
+        expect(result.username).toBe('new_username');
+        expect(updateMock).toHaveBeenCalled();
+      });
     });
 
     describe('deleteMe', () => {

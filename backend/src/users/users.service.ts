@@ -139,20 +139,94 @@ export class UsersService {
 
     const techIds = dto.technologyIds !== undefined ? dto.technologyIds : null;
 
-    const { error } = await this.supabase.client.rpc('update_profile', {
-      p_id: userId,
-      p_patch: patch,
-      p_technology_ids: techIds,
-    });
+    let rpcError: { code?: string; message: string } | null = null;
+    try {
+      const res = await this.supabase.client.rpc('update_profile', {
+        p_id: userId,
+        p_patch: patch,
+        p_technology_ids: techIds,
+      });
+      rpcError = res.error;
+    } catch (err: unknown) {
+      rpcError = { message: (err as Error).message };
+    }
 
-    if (error) {
-      if (error.code === '23505' || /unique/i.test(error.message)) {
+    if (rpcError) {
+      if (rpcError.code === '23505' || /unique/i.test(rpcError.message)) {
         throw new ConflictException({
           message: 'Username is already taken',
           code: 'username_taken',
         });
       }
-      throw new InternalServerErrorException(error.message);
+
+      // If update_profile RPC function is not found in schema cache, fallback to direct table update
+      if (
+        rpcError.code === 'PGRST202' ||
+        /Could not find the function/i.test(rpcError.message)
+      ) {
+        if (Object.keys(patch).length > 0) {
+          const profilePatch: Record<string, unknown> = {
+            ...patch,
+            updated_at: new Date().toISOString(),
+          };
+          if (typeof profilePatch.username === 'string') {
+            profilePatch.username = profilePatch.username.trim();
+          }
+          if (typeof profilePatch.country === 'string') {
+            profilePatch.country = profilePatch.country.trim().toUpperCase();
+          }
+          if (typeof profilePatch.institution === 'string') {
+            profilePatch.institution = profilePatch.institution.trim();
+          }
+          if (typeof profilePatch.bio === 'string') {
+            profilePatch.bio = profilePatch.bio.trim();
+          }
+
+          const { error: updateError } = await this.supabase.client
+            .from('profiles')
+            .update(profilePatch as never)
+            .eq('id', userId);
+
+          if (updateError) {
+            if (
+              updateError.code === '23505' ||
+              /unique/i.test(updateError.message)
+            ) {
+              throw new ConflictException({
+                message: 'Username is already taken',
+                code: 'username_taken',
+              });
+            }
+            throw new InternalServerErrorException(updateError.message);
+          }
+        }
+
+        // If technologies were provided and profile_technologies exists, sync them
+        if (techIds !== null) {
+          try {
+            await this.supabase.client
+              .from('profile_technologies' as never)
+              .delete()
+              .eq('profile_id', userId);
+
+            if (techIds.length > 0) {
+              const rows = Array.from(new Set(techIds)).map(
+                (technology_id) => ({
+                  profile_id: userId,
+                  technology_id,
+                }),
+              );
+              await this.supabase.client
+                .from('profile_technologies' as never)
+                .insert(rows as never);
+            }
+          } catch {
+            // profile_technologies table may not exist yet in schema cache
+          }
+        }
+      } else {
+        throw new InternalServerErrorException(rpcError.message);
+      }
     }
 
     return this.getProfile(userId);

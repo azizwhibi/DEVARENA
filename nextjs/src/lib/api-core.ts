@@ -38,6 +38,11 @@ export async function request<T>(path: string, token?: string, init: RequestInit
   if (!base) throw new Error('NEXT_PUBLIC_API_URL is required');
   const headers = new Headers(init.headers);
   headers.set('Accept', 'application/json');
+  if (init.body && !headers.has('Content-Type')) {
+    if (typeof FormData === 'undefined' || !(init.body instanceof FormData)) {
+      headers.set('Content-Type', 'application/json');
+    }
+  }
   if (token) headers.set('Authorization', `Bearer ${token}`);
   else headers.delete('Authorization');
   const response = await fetch(base.replace(/\/$/, '') + path, {

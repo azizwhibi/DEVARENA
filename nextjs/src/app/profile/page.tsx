@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
+import { connection } from 'next/server';
 import { apiRequest } from '@/lib/api-server';
 import { ApiError } from '@/lib/api-core';
 import { ProfileHeader } from '@/components/profile/ProfileHeader';
@@ -8,6 +9,7 @@ import type { UserProfileData } from '@/components/profile/ProfileForm';
 export const metadata = { title: 'Profile | DevArena' };
 
 async function ProfileContent() {
+  await connection();
   let profile: UserProfileData | null = null;
   let shouldRedirectLogin = false;
   try {

@@ -28,6 +28,7 @@ export function DangerZone({ currentUsername }: DangerZoneProps) {
     try {
       await apiRequest('/me', {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ confirmUsername: confirmInput }),
       });
 

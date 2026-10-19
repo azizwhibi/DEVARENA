@@ -121,19 +121,6 @@
       "source_location": "L11"
     },
     {
-      "id": "backend_src_auth_me_controller_mecontroller",
-      "label": "MeController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "mecontroller",
-      "source_file": "backend/src/auth/me.controller.ts",
-      "source_location": "L11"
-    },
-    {
       "id": "backend_src_common_problem_details_filter_problemdetailsfilter",
       "label": "ProblemDetailsFilter",
       "_callable": true,
@@ -270,7 +257,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "installevent",
       "source_file": "nextjs/src/components/pwa/InstallPrompt.tsx",
@@ -287,7 +274,7 @@
       "file_type": "code",
       "norm_label": "account",
       "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L10"
+      "source_location": "L9"
     },
     {
       "id": "nextjs_src_components_profile_avatarupload_avataruploadprops",
@@ -433,6 +420,32 @@
       "source_location": "L19"
     },
     {
+      "id": "backend_src_users_users_module_usersmodule",
+      "label": "UsersModule",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Phase 5 \u2014 `profile`",
+      "file_type": "code",
+      "norm_label": "usersmodule",
+      "source_file": "backend/src/users/users.module.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "backend_src_auth_me_controller_mecontroller",
+      "label": "MeController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "mecontroller",
+      "source_file": "backend/src/auth/me.controller.ts",
+      "source_location": "L11"
+    },
+    {
       "id": "backend_src_auth_admin_ping_controller_adminpingcontroller",
       "label": "AdminPingController",
       "_callable": true,
@@ -485,17 +498,17 @@
       "source_location": "L23"
     },
     {
-      "id": "backend_src_users_users_module_usersmodule",
-      "label": "UsersModule",
+      "id": "backend_src_users_users_service_userprofileresponse",
+      "label": "UserProfileResponse",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 40,
       "community_name": "MeProfileController",
       "file_type": "code",
-      "norm_label": "usersmodule",
-      "source_file": "backend/src/users/users.module.ts",
-      "source_location": "L15"
+      "norm_label": "userprofileresponse",
+      "source_file": "backend/src/users/users.service.ts",
+      "source_location": "L19"
     },
     {
       "id": "backend_src_users_dto_delete_me_dto_deletemedto",
@@ -517,24 +530,11 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "technologiescontroller",
       "source_file": "backend/src/users/technologies.controller.ts",
       "source_location": "L7"
-    },
-    {
-      "id": "backend_src_users_users_service_userprofileresponse",
-      "label": "UserProfileResponse",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": "userprofileresponse",
-      "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L19"
     },
     {
       "id": "backend_src_users_users_service_usersservice",
@@ -542,12 +542,36 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 45,
+      "community": 43,
       "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "usersservice",
       "source_file": "backend/src/users/users.service.ts",
       "source_location": "L41"
+    },
+    {
+      "id": "backend_src_auth_account_service_accountservice_avatarpaths",
+      "label": ".avatarPaths()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "code",
+      "norm_label": ".avatarpaths()",
+      "source_file": "backend/src/auth/account.service.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "backend_src_auth_account_service_accountservice_delete",
+      "label": ".delete()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "code",
+      "norm_label": ".delete()",
+      "source_file": "backend/src/auth/account.service.ts",
+      "source_location": "L15"
     },
     {
       "id": "backend_src_auth_account_service_accountservice_constructor",
@@ -682,18 +706,6 @@
       "source_location": "L12"
     },
     {
-      "id": "backend_src_auth_me_controller_mecontroller_me",
-      "label": ".me()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": ".me()",
-      "source_file": "backend/src/auth/me.controller.ts",
-      "source_location": "L13"
-    },
-    {
       "id": "backend_src_common_problem_details_filter_problemdetailsfilter_catch",
       "label": ".catch()",
       "_callable": true,
@@ -807,35 +819,59 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "rootlayout()",
       "source_file": "nextjs/src/app/layout.tsx",
       "source_location": "L15"
     },
     {
-      "id": "nextjs_src_app_page_home",
-      "label": "Home()",
+      "id": "nextjs_src_components_authheader_authheader",
+      "label": "AuthHeader()",
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
-      "norm_label": "home()",
-      "source_file": "nextjs/src/app/page.tsx",
-      "source_location": "L9"
+      "norm_label": "authheader()",
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L11"
     },
     {
-      "id": "nextjs_src_components_arena_terminalhero_terminalhero",
-      "label": "TerminalHero()",
+      "id": "nextjs_src_components_authheader_authheader_handleprofileupdated",
+      "label": "handleProfileUpdated()",
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
-      "norm_label": "terminalhero()",
-      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
-      "source_location": "L7"
+      "norm_label": "handleprofileupdated()",
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L51"
+    },
+    {
+      "id": "nextjs_src_components_authheader_authheader_load",
+      "label": "load()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "app/layout.tsx",
+      "file_type": "code",
+      "norm_label": "load()",
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L23"
+    },
+    {
+      "id": "nextjs_src_components_authheader_authheader_logout",
+      "label": "logout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "app/layout.tsx",
+      "file_type": "code",
+      "norm_label": "logout()",
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L71"
     },
     {
       "id": "nextjs_src_components_pwa_installprompt_dismissed",
@@ -843,7 +879,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "dismissed()",
       "source_file": "nextjs/src/components/pwa/InstallPrompt.tsx",
@@ -855,7 +891,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "installprompt()",
       "source_file": "nextjs/src/components/pwa/InstallPrompt.tsx",
@@ -867,7 +903,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "hide()",
       "source_file": "nextjs/src/components/pwa/InstallPrompt.tsx",
@@ -879,7 +915,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "offlinebanner()",
       "source_file": "nextjs/src/components/pwa/OfflineBanner.tsx",
@@ -891,7 +927,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "registersw()",
       "source_file": "nextjs/src/components/pwa/RegisterSW.tsx",
@@ -932,18 +968,6 @@
       "norm_label": "monogram()",
       "source_file": "nextjs/src/lib/icon.tsx",
       "source_location": "L4"
-    },
-    {
-      "id": "nextjs_src_app_auth_callback_route_get",
-      "label": "GET()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "safeNext",
-      "file_type": "code",
-      "norm_label": "get()",
-      "source_file": "nextjs/src/app/auth/callback/route.ts",
-      "source_location": "L8"
     },
     {
       "id": "nextjs_src_app_auth_login_page_logincontent",
@@ -1054,16 +1078,16 @@
       "source_location": "L1"
     },
     {
-      "id": "nextjs_src_lib_supabase_server_createclient",
-      "label": "createClient()",
+      "id": "nextjs_src_app_auth_callback_route_get",
+      "label": "GET()",
       "_callable": true,
       "_origin": "ast",
-      "community": 18,
-      "community_name": "safeNext",
+      "community": 2,
+      "community_name": "createClient",
       "file_type": "code",
-      "norm_label": "createclient()",
-      "source_file": "nextjs/src/lib/supabase/server.ts",
-      "source_location": "L5"
+      "norm_label": "get()",
+      "source_file": "nextjs/src/app/auth/callback/route.ts",
+      "source_location": "L8"
     },
     {
       "id": "nextjs_src_app_manifest_manifest",
@@ -1099,7 +1123,7 @@
       "file_type": "code",
       "norm_label": "profilecontent()",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L10"
+      "source_location": "L11"
     },
     {
       "id": "nextjs_src_app_profile_page_profilepage",
@@ -1111,7 +1135,7 @@
       "file_type": "code",
       "norm_label": "profilepage()",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L29"
+      "source_location": "L31"
     },
     {
       "id": "nextjs_src_app_profile_settings_page_profilesettingspage",
@@ -1123,7 +1147,7 @@
       "file_type": "code",
       "norm_label": "profilesettingspage()",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L29"
+      "source_location": "L31"
     },
     {
       "id": "nextjs_src_app_profile_settings_page_settingscontent",
@@ -1135,43 +1159,7 @@
       "file_type": "code",
       "norm_label": "settingscontent()",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L10"
-    },
-    {
-      "id": "nextjs_src_components_authheader_authheader",
-      "label": "AuthHeader()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "createClient",
-      "file_type": "code",
-      "norm_label": "authheader()",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L12"
-    },
-    {
-      "id": "nextjs_src_components_authheader_authheader_load",
-      "label": "load()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "createClient",
-      "file_type": "code",
-      "norm_label": "load()",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L22"
-    },
-    {
-      "id": "nextjs_src_components_authheader_authheader_logout",
-      "label": "logout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "createClient",
-      "file_type": "code",
-      "norm_label": "logout()",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L46"
+      "source_location": "L11"
     },
     {
       "id": "nextjs_src_components_profile_avatarupload_avatarupload",
@@ -1327,7 +1315,7 @@
       "file_type": "code",
       "norm_label": "apirequest()",
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L5"
+      "source_location": "L6"
     },
     {
       "id": "nextjs_src_lib_countries_getcountryname",
@@ -1366,6 +1354,30 @@
       "source_location": "L5"
     },
     {
+      "id": "nextjs_src_lib_supabase_server_createclient",
+      "label": "createClient()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "createclient()",
+      "source_file": "nextjs/src/lib/supabase/server.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "nextjs_src_proxy_proxy",
+      "label": "proxy()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "proxy()",
+      "source_file": "nextjs/src/proxy.ts",
+      "source_location": "L4"
+    },
+    {
       "id": "nextjs_public_sw_classify",
       "label": "classify()",
       "_callable": true,
@@ -1402,28 +1414,16 @@
       "source_location": "L3"
     },
     {
-      "id": "backend_src_auth_account_service_accountservice_avatarpaths",
-      "label": ".avatarPaths()",
+      "id": "backend_src_auth_me_controller_mecontroller_me",
+      "label": ".me()",
       "_callable": true,
       "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "community": 36,
+      "community_name": "MeController",
       "file_type": "code",
-      "norm_label": ".avatarpaths()",
-      "source_file": "backend/src/auth/account.service.ts",
-      "source_location": "L44"
-    },
-    {
-      "id": "backend_src_auth_account_service_accountservice_delete",
-      "label": ".delete()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "code",
-      "norm_label": ".delete()",
-      "source_file": "backend/src/auth/account.service.ts",
-      "source_location": "L15"
+      "norm_label": ".me()",
+      "source_file": "backend/src/auth/me.controller.ts",
+      "source_location": "L13"
     },
     {
       "id": "backend_src_auth_admin_ping_controller_adminpingcontroller_ping",
@@ -1606,6 +1606,30 @@
       "source_location": "L24"
     },
     {
+      "id": "backend_src_users_me_profile_controller_meprofilecontroller_getprofile",
+      "label": ".getProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "MeProfileController",
+      "file_type": "code",
+      "norm_label": ".getprofile()",
+      "source_file": "backend/src/users/me-profile.controller.ts",
+      "source_location": "L27"
+    },
+    {
+      "id": "backend_src_users_me_profile_controller_meprofilecontroller_updateprofile",
+      "label": ".updateProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "MeProfileController",
+      "file_type": "code",
+      "norm_label": ".updateprofile()",
+      "source_file": "backend/src/users/me-profile.controller.ts",
+      "source_location": "L34"
+    },
+    {
       "id": "backend_src_users_me_profile_controller_meprofilecontroller_deleteme",
       "label": ".deleteMe()",
       "_callable": true,
@@ -1627,7 +1651,7 @@
       "file_type": "code",
       "norm_label": ".deleteme()",
       "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L161"
+      "source_location": "L235"
     },
     {
       "id": "backend_src_users_dto_is_iso_country_decorator_isisocountry",
@@ -1659,7 +1683,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": ".constructor()",
       "source_file": "backend/src/users/technologies.controller.ts",
@@ -1671,54 +1695,18 @@
       "_callable": true,
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": ".list()",
       "source_file": "backend/src/users/technologies.controller.ts",
       "source_location": "L11"
     },
     {
-      "id": "backend_src_users_users_service_usersservice_listtechnologies",
-      "label": ".listTechnologies()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "TechnologiesController",
-      "file_type": "code",
-      "norm_label": ".listtechnologies()",
-      "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L181"
-    },
-    {
-      "id": "backend_src_users_me_profile_controller_meprofilecontroller_getprofile",
-      "label": ".getProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": ".getprofile()",
-      "source_file": "backend/src/users/me-profile.controller.ts",
-      "source_location": "L27"
-    },
-    {
-      "id": "backend_src_users_me_profile_controller_meprofilecontroller_updateprofile",
-      "label": ".updateProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": ".updateprofile()",
-      "source_file": "backend/src/users/me-profile.controller.ts",
-      "source_location": "L34"
-    },
-    {
       "id": "backend_src_users_users_service_usersservice_assertvalidavatarurl",
       "label": ".assertValidAvatarUrl()",
       "_callable": true,
       "_origin": "ast",
-      "community": 45,
+      "community": 43,
       "community_name": "UsersService",
       "file_type": "code",
       "norm_label": ".assertvalidavatarurl()",
@@ -1730,7 +1718,7 @@
       "label": ".getProfile()",
       "_callable": true,
       "_origin": "ast",
-      "community": 45,
+      "community": 43,
       "community_name": "UsersService",
       "file_type": "code",
       "norm_label": ".getprofile()",
@@ -1738,11 +1726,23 @@
       "source_location": "L70"
     },
     {
+      "id": "backend_src_users_users_service_usersservice_listtechnologies",
+      "label": ".listTechnologies()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 43,
+      "community_name": "UsersService",
+      "file_type": "code",
+      "norm_label": ".listtechnologies()",
+      "source_file": "backend/src/users/users.service.ts",
+      "source_location": "L255"
+    },
+    {
       "id": "backend_src_users_users_service_usersservice_updateprofile",
       "label": ".updateProfile()",
       "_callable": true,
       "_origin": "ast",
-      "community": 45,
+      "community": 43,
       "community_name": "UsersService",
       "file_type": "code",
       "norm_label": ".updateprofile()",
@@ -1750,40 +1750,52 @@
       "source_location": "L124"
     },
     {
-      "id": "nextjs_scripts_check_register_form",
-      "label": "form()",
+      "id": "nextjs_src_app_page_home",
+      "label": "Home()",
       "_callable": true,
       "_origin": "ast",
-      "community": 47,
-      "community_name": "check-register.mjs",
+      "community": 45,
+      "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "form()",
-      "source_file": "nextjs/scripts/check-register.mjs",
-      "source_location": "L25"
+      "norm_label": "home()",
+      "source_file": "nextjs/src/app/page.tsx",
+      "source_location": "L9"
+    },
+    {
+      "id": "nextjs_src_components_arena_terminalhero_terminalhero",
+      "label": "TerminalHero()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 45,
+      "community_name": "app/page.tsx",
+      "file_type": "code",
+      "norm_label": "terminalhero()",
+      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
+      "source_location": "L7"
     },
     {
       "id": "nextjs_scripts_check_pwa_classify",
       "label": "classify()",
       "_callable": true,
       "_origin": "ast",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
       "file_type": "code",
       "norm_label": "classify()",
       "source_file": "nextjs/scripts/check-pwa.mjs",
       "source_location": "L9"
     },
     {
-      "id": "nextjs_src_proxy_proxy",
-      "label": "proxy()",
+      "id": "nextjs_scripts_check_register_form",
+      "label": "form()",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "nextjs/package.json",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
       "file_type": "code",
-      "norm_label": "proxy()",
-      "source_file": "nextjs/src/proxy.ts",
-      "source_location": "L4"
+      "norm_label": "form()",
+      "source_file": "nextjs/scripts/check-register.mjs",
+      "source_location": "L25"
     },
     {
       "id": "supabase_tests_storage_smoke_ok",
@@ -1858,6 +1870,294 @@
       "source_url": null
     },
     {
+      "id": "spec_identity",
+      "label": "SPEC-identity.md",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "spec-identity.md",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "spec_identity_access_control_d3_d4",
+      "label": "Access control (D3, D4)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "access control (d3, d4)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "spec_identity_accountservice_delete_userid_actorid",
+      "label": "`AccountService.delete(userId, actorId)`",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "`accountservice.delete(userid, actorid)`",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L97"
+    },
+    {
+      "id": "spec_identity_backend_contract",
+      "label": "Backend Contract",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "backend contract",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L80"
+    },
+    {
+      "id": "spec_identity_boundaries",
+      "label": "Boundaries",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "boundaries",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L200"
+    },
+    {
+      "id": "spec_identity_code_style",
+      "label": "Code Style",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "code style",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L170"
+    },
+    {
+      "id": "spec_identity_commands",
+      "label": "Commands",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "commands",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L139"
+    },
+    {
+      "id": "spec_identity_data_contract",
+      "label": "Data Contract",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "data contract",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L30"
+    },
+    {
+      "id": "spec_identity_env",
+      "label": "Env",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "env",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L135"
+    },
+    {
+      "id": "spec_identity_frontend_contract",
+      "label": "Frontend Contract",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "frontend contract",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L104"
+    },
+    {
+      "id": "spec_identity_objective",
+      "label": "Objective",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "objective",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "spec_identity_other_schema_changes",
+      "label": "Other schema changes",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "other schema changes",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L53"
+    },
+    {
+      "id": "spec_identity_project_structure_new_changed_only_reconciled_with_the_real_tree_before_planning",
+      "label": "Project Structure (new/changed only; reconciled with the real tree before planning)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "project structure (new/changed only; reconciled with the real tree before planning)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L152"
+    },
+    {
+      "id": "spec_identity_public_profiles_alter_the_existing_table_it_already_has_id_email_username_role_avatar_url_bio_created_at",
+      "label": "`public.profiles` (ALTER the existing table; it already has `id, email, username, role, avatar_url, bio, created_at`)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "`public.profiles` (alter the existing table; it already has `id, email, username, role, avatar_url, bio, created_at`)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "spec_identity_resolved_questions_2026_10_18",
+      "label": "Resolved questions (2026-10-18)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "resolved questions (2026-10-18)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L232"
+    },
+    {
+      "id": "spec_identity_routes",
+      "label": "Routes",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "routes",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L106"
+    },
+    {
+      "id": "spec_identity_session",
+      "label": "Session",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "session",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L116"
+    },
+    {
+      "id": "spec_identity_spec_identity_accounts_sessions_access_control",
+      "label": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "spec: `identity` \u2014 accounts, sessions & access control",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "spec_identity_success_criteria",
+      "label": "Success Criteria",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "success criteria",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L221"
+    },
+    {
+      "id": "spec_identity_supabase_dashboard_configuration_manual_documented_in_the_plan",
+      "label": "Supabase dashboard configuration (manual, documented in the plan)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "supabase dashboard configuration (manual, documented in the plan)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L126"
+    },
+    {
+      "id": "spec_identity_superseded_open_questions_kept_for_history",
+      "label": "Superseded open questions (kept for history)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "superseded open questions (kept for history)",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L240"
+    },
+    {
+      "id": "spec_identity_tech_stack",
+      "label": "Tech Stack",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "tech stack",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L22"
+    },
+    {
+      "id": "spec_identity_testing_strategy",
+      "label": "Testing Strategy",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "testing strategy",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L190"
+    },
+    {
+      "id": "spec_identity_triggers",
+      "label": "Triggers",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tasks: `identity` module",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "triggers",
+      "source_file": "SPEC-identity.md",
+      "source_location": "L60"
+    },
+    {
       "id": "todo",
       "label": "todo.md",
       "_origin": "ast",
@@ -1915,7 +2215,7 @@
       "node_kind": "heading",
       "norm_label": "\u2705 checkpoint d \u2014 identity done",
       "source_file": "todo.md",
-      "source_location": "L237"
+      "source_location": "L238"
     },
     {
       "id": "todo_checkpoint_e_profile_done",
@@ -1927,7 +2227,7 @@
       "node_kind": "heading",
       "norm_label": "\u2705 checkpoint e \u2014 profile done",
       "source_file": "todo.md",
-      "source_location": "L328"
+      "source_location": "L335"
     },
     {
       "id": "todo_checkpoint_f_user_admin_done",
@@ -1939,7 +2239,7 @@
       "node_kind": "heading",
       "norm_label": "\u2705 checkpoint f \u2014 user-admin done",
       "source_file": "todo.md",
-      "source_location": "L394"
+      "source_location": "L401"
     },
     {
       "id": "todo_checkpoint_g_rankings_done",
@@ -1951,7 +2251,7 @@
       "node_kind": "heading",
       "norm_label": "\u2705 checkpoint g \u2014 rankings done",
       "source_file": "todo.md",
-      "source_location": "L479"
+      "source_location": "L486"
     },
     {
       "id": "todo_checkpoint_h_initiative_done",
@@ -1963,19 +2263,19 @@
       "node_kind": "heading",
       "norm_label": "\u2705 checkpoint h \u2014 initiative done",
       "source_file": "todo.md",
-      "source_location": "L529"
+      "source_location": "L536"
     },
     {
-      "id": "todo_phase_0_setup",
-      "label": "Phase 0 \u2014 Setup",
+      "id": "todo_phase_1_database",
+      "label": "Phase 1 \u2014 Database",
       "_origin": "ast",
       "community": 0,
       "community_name": "Tasks: `identity` module",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "phase 0 \u2014 setup",
+      "norm_label": "phase 1 \u2014 database",
       "source_file": "todo.md",
-      "source_location": "L8"
+      "source_location": "L41"
     },
     {
       "id": "todo_phase_2_backend",
@@ -2002,18 +2302,6 @@
       "source_location": "L219"
     },
     {
-      "id": "todo_phase_5_profile",
-      "label": "Phase 5 \u2014 `profile`",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "phase 5 \u2014 `profile`",
-      "source_file": "todo.md",
-      "source_location": "L242"
-    },
-    {
       "id": "todo_phase_6_user_admin",
       "label": "Phase 6 \u2014 `user-admin`",
       "_origin": "ast",
@@ -2023,31 +2311,7 @@
       "node_kind": "heading",
       "norm_label": "phase 6 \u2014 `user-admin`",
       "source_file": "todo.md",
-      "source_location": "L335"
-    },
-    {
-      "id": "todo_phase_7_rankings",
-      "label": "Phase 7 \u2014 `rankings`",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "phase 7 \u2014 `rankings`",
-      "source_file": "todo.md",
-      "source_location": "L400"
-    },
-    {
-      "id": "todo_t0_workspace",
-      "label": "T0: Workspace",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t0: workspace",
-      "source_file": "todo.md",
-      "source_location": "L10"
+      "source_location": "L342"
     },
     {
       "id": "todo_t11_bypass_off_admin_seed_success_criteria",
@@ -2062,66 +2326,6 @@
       "source_location": "L221"
     },
     {
-      "id": "todo_t12_migration_profile_technologies_update_profile",
-      "label": "T12: Migration `profile_technologies` + `update_profile()`",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t12: migration `profile_technologies` + `update_profile()`",
-      "source_file": "todo.md",
-      "source_location": "L244"
-    },
-    {
-      "id": "todo_t14_profile_settings_form_text_fields",
-      "label": "T14: `/profile/settings` form (text fields)",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t14: `/profile/settings` form (text fields)",
-      "source_file": "todo.md",
-      "source_location": "L282"
-    },
-    {
-      "id": "todo_t15_avatar_upload",
-      "label": "T15: Avatar upload",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t15: avatar upload",
-      "source_file": "todo.md",
-      "source_location": "L295"
-    },
-    {
-      "id": "todo_t16_profile_on_real_data",
-      "label": "T16: `/profile` on real data",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t16: `/profile` on real data",
-      "source_file": "todo.md",
-      "source_location": "L308"
-    },
-    {
-      "id": "todo_t17_self_service_account_deletion",
-      "label": "T17: Self-service account deletion",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t17: self-service account deletion",
-      "source_file": "todo.md",
-      "source_location": "L318"
-    },
-    {
       "id": "todo_t18_list_users_api_ui",
       "label": "T18: List users (API + UI)",
       "_origin": "ast",
@@ -2131,7 +2335,7 @@
       "node_kind": "heading",
       "norm_label": "t18: list users (api + ui)",
       "source_file": "todo.md",
-      "source_location": "L337"
+      "source_location": "L344"
     },
     {
       "id": "todo_t19_change_role",
@@ -2143,19 +2347,7 @@
       "node_kind": "heading",
       "norm_label": "t19: change role",
       "source_file": "todo.md",
-      "source_location": "L355"
-    },
-    {
-      "id": "todo_t1_secrets_supabase_project_schema_snapshot",
-      "label": "T1: Secrets, Supabase project, schema snapshot",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t1: secrets, supabase project, schema snapshot",
-      "source_file": "todo.md",
-      "source_location": "L22"
+      "source_location": "L362"
     },
     {
       "id": "todo_t20_suspend_reactivate",
@@ -2167,7 +2359,7 @@
       "node_kind": "heading",
       "norm_label": "t20: suspend / reactivate",
       "source_file": "todo.md",
-      "source_location": "L371"
+      "source_location": "L378"
     },
     {
       "id": "todo_t21_delete_user",
@@ -2179,55 +2371,43 @@
       "node_kind": "heading",
       "norm_label": "t21: delete user",
       "source_file": "todo.md",
-      "source_location": "L384"
+      "source_location": "L391"
     },
     {
-      "id": "todo_t22_dev_seed_script",
-      "label": "T22: Dev seed script",
+      "id": "todo_t2_migration_identity_profiles",
+      "label": "T2: Migration `identity_profiles`",
       "_origin": "ast",
       "community": 0,
       "community_name": "Tasks: `identity` module",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t22: dev seed script",
+      "norm_label": "t2: migration `identity_profiles`",
       "source_file": "todo.md",
-      "source_location": "L402"
+      "source_location": "L43"
     },
     {
-      "id": "todo_t23_dev_scores_view_leaderboard_function",
-      "label": "T23: `dev_scores` view + `leaderboard()` function",
+      "id": "todo_t3_migration_identity_deletion",
+      "label": "T3: Migration `identity_deletion`",
       "_origin": "ast",
       "community": 0,
       "community_name": "Tasks: `identity` module",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t23: `dev_scores` view + `leaderboard()` function",
+      "norm_label": "t3: migration `identity_deletion`",
       "source_file": "todo.md",
-      "source_location": "L417"
+      "source_location": "L59"
     },
     {
-      "id": "todo_t25_rankings_page",
-      "label": "T25: `/rankings` page",
+      "id": "todo_t3a_review_fixes_antigravity_audit_2026_10_18_triaged",
+      "label": "T3a: Review fixes (Antigravity audit 2026-10-18, triaged)",
       "_origin": "ast",
       "community": 0,
       "community_name": "Tasks: `identity` module",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t25: `/rankings` page",
+      "norm_label": "t3a: review fixes (antigravity audit 2026-10-18, triaged)",
       "source_file": "todo.md",
-      "source_location": "L455"
-    },
-    {
-      "id": "todo_t26_score_and_tier_on_profile",
-      "label": "T26: Score and tier on `/profile`",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "Tasks: `identity` module",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t26: score and tier on `/profile`",
-      "source_file": "todo.md",
-      "source_location": "L470"
+      "source_location": "L75"
     },
     {
       "id": "todo_t5_accountservice_delete",
@@ -2474,61 +2654,6 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_src_auth_me_controller_ts_apibearerauth",
-      "label": "ApiBearerAuth",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "apibearerauth",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_src_auth_me_controller_ts_apitags",
-      "label": "ApiTags",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "apitags",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_src_auth_me_controller_ts_controller",
-      "label": "Controller",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "controller",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_src_auth_me_controller_ts_get",
-      "label": "Get",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "get",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_src_auth_me_controller_ts_useguards",
-      "label": "UseGuards",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "auth.service.spec.ts",
-      "file_type": "code",
-      "norm_label": "useguards",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "backend_src_common_problem_details_filter",
       "label": "problem-details.filter.ts",
       "_origin": "ast",
@@ -2749,6 +2874,17 @@
       "source_location": "L27"
     },
     {
+      "id": "ref_nestjs_throttler",
+      "label": "@nestjs/throttler",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "auth.service.spec.ts",
+      "file_type": "concept",
+      "norm_label": "@nestjs/throttler",
+      "source_file": "backend/package.json",
+      "source_location": "L28"
+    },
+    {
       "id": "plan_architecture_decisions",
       "label": "Architecture Decisions",
       "_origin": "ast",
@@ -2773,16 +2909,40 @@
       "source_location": "L82"
     },
     {
-      "id": "todo_t24_get_rankings",
-      "label": "T24: `GET /rankings`",
+      "id": "todo_phase_0_setup",
+      "label": "Phase 0 \u2014 Setup",
       "_origin": "ast",
       "community": 1,
       "community_name": "auth.service.spec.ts",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t24: `get /rankings`",
+      "norm_label": "phase 0 \u2014 setup",
       "source_file": "todo.md",
-      "source_location": "L440"
+      "source_location": "L8"
+    },
+    {
+      "id": "todo_t0_workspace",
+      "label": "T0: Workspace",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "auth.service.spec.ts",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t0: workspace",
+      "source_file": "todo.md",
+      "source_location": "L10"
+    },
+    {
+      "id": "todo_t1_secrets_supabase_project_schema_snapshot",
+      "label": "T1: Secrets, Supabase project, schema snapshot",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "auth.service.spec.ts",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t1: secrets, supabase project, schema snapshot",
+      "source_file": "todo.md",
+      "source_location": "L22"
     },
     {
       "id": "todo_t4_authservice_guards_get_me",
@@ -3149,6 +3309,42 @@
       "source_location": "L8"
     },
     {
+      "id": "supabase_precheck",
+      "label": "precheck.md",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "verify.mjs",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "precheck.md",
+      "source_file": "supabase/precheck.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "supabase_precheck_cloud_advisor_results",
+      "label": "Cloud advisor results",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "verify.mjs",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "cloud advisor results",
+      "source_file": "supabase/precheck.md",
+      "source_location": "L48"
+    },
+    {
+      "id": "supabase_precheck_identity_precheck_results_2026_10_18",
+      "label": "Identity precheck results \u2014 2026-10-18",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "verify.mjs",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "identity precheck results \u2014 2026-10-18",
+      "source_file": "supabase/precheck.md",
+      "source_location": "L1"
+    },
+    {
       "id": "supabase_precheck_outstanding_before_checkpoint_a_can_be_marked_complete",
       "label": "Outstanding before Checkpoint A can be marked complete",
       "_origin": "ast",
@@ -3161,11 +3357,35 @@
       "source_location": "L35"
     },
     {
+      "id": "supabase_precheck_t3a_follow_up_2026_10_18",
+      "label": "T3a follow-up, 2026-10-18",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "verify.mjs",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t3a follow-up, 2026-10-18",
+      "source_file": "supabase/precheck.md",
+      "source_location": "L44"
+    },
+    {
+      "id": "supabase_precheck_verification_evidence",
+      "label": "Verification evidence",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "verify.mjs",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "verification evidence",
+      "source_file": "supabase/precheck.md",
+      "source_location": "L20"
+    },
+    {
       "id": "nextjs_src_app_globals",
       "label": "globals.css",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "globals.css",
       "rationale": "Manually registered the existing CSS file to resolve the AST import endpoint from layout.tsx; CSS internals are not parsed.",
@@ -3177,7 +3397,7 @@
       "label": "app/layout.tsx",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "app/layout.tsx",
       "source_file": "nextjs/src/app/layout.tsx",
@@ -3188,7 +3408,7 @@
       "label": "metadata",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "metadata",
       "source_file": "nextjs/src/app/layout.tsx",
@@ -3199,62 +3419,18 @@
       "label": "viewport",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "viewport",
       "source_file": "nextjs/src/app/layout.tsx",
       "source_location": "L8"
     },
     {
-      "id": "nextjs_src_app_page",
-      "label": "app/page.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "code",
-      "norm_label": "app/page.tsx",
-      "source_file": "nextjs/src/app/page.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_src_app_page_steps",
-      "label": "steps",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "code",
-      "norm_label": "steps",
-      "source_file": "nextjs/src/app/page.tsx",
-      "source_location": "L3"
-    },
-    {
-      "id": "nextjs_src_components_arena_terminalhero",
-      "label": "TerminalHero.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "code",
-      "norm_label": "terminalhero.tsx",
-      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_src_components_arena_terminalhero_lines",
-      "label": "lines",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "code",
-      "norm_label": "lines",
-      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
-      "source_location": "L2"
-    },
-    {
       "id": "nextjs_src_components_pwa_installprompt",
       "label": "InstallPrompt.tsx",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "installprompt.tsx",
       "source_file": "nextjs/src/components/pwa/InstallPrompt.tsx",
@@ -3265,7 +3441,7 @@
       "label": "OfflineBanner.tsx",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "offlinebanner.tsx",
       "source_file": "nextjs/src/components/pwa/OfflineBanner.tsx",
@@ -3276,95 +3452,59 @@
       "label": "RegisterSW.tsx",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "code",
       "norm_label": "registersw.tsx",
       "source_file": "nextjs/src/components/pwa/RegisterSW.tsx",
       "source_location": "L1"
     },
     {
-      "id": "todo_a1_arena_ui_tokens_motion_landing_themed_auth",
-      "label": "A1 (arena-ui): tokens, motion, landing, themed auth",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "a1 (arena-ui): tokens, motion, landing, themed auth",
-      "source_file": "todo.md",
-      "source_location": "L538"
-    },
-    {
       "id": "todo_phase_8_pwa",
       "label": "Phase 8 \u2014 `pwa`",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 8 \u2014 `pwa`",
       "source_file": "todo.md",
-      "source_location": "L485"
-    },
-    {
-      "id": "todo_phase_9_arena_ui_pwa_implementation_spec_pwa_md",
-      "label": "Phase 9 \u2014 `arena-ui` + `pwa` implementation (SPEC-pwa.md)",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "phase 9 \u2014 `arena-ui` + `pwa` implementation (spec-pwa.md)",
-      "source_file": "todo.md",
-      "source_location": "L536"
+      "source_location": "L492"
     },
     {
       "id": "todo_t27_manifest_icons",
       "label": "T27: Manifest + icons",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "t27: manifest + icons",
       "source_file": "todo.md",
-      "source_location": "L487"
-    },
-    {
-      "id": "todo_t27_t28_t29_pwa_manifest_icons_service_worker_offline_install_prompt",
-      "label": "T27/T28/T29 (pwa): manifest, icons, service worker, offline, install prompt",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t27/t28/t29 (pwa): manifest, icons, service worker, offline, install prompt",
-      "source_file": "todo.md",
-      "source_location": "L540"
+      "source_location": "L494"
     },
     {
       "id": "todo_t28_service_worker_offline_page",
       "label": "T28: Service worker + offline page",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "t28: service worker + offline page",
       "source_file": "todo.md",
-      "source_location": "L499"
+      "source_location": "L506"
     },
     {
       "id": "todo_t29_install_prompt_offline_banner",
       "label": "T29: Install prompt + offline banner",
       "_origin": "ast",
       "community": 14,
-      "community_name": "layout.tsx",
+      "community_name": "app/layout.tsx",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "t29: install prompt + offline banner",
       "source_file": "todo.md",
-      "source_location": "L517"
+      "source_location": "L524"
     },
     {
       "id": "backend_readme",
@@ -3630,28 +3770,6 @@
       "source_location": "L1"
     },
     {
-      "id": "nextjs_src_app_auth_callback_route",
-      "label": "route.ts",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "safeNext",
-      "file_type": "code",
-      "norm_label": "route.ts",
-      "source_file": "nextjs/src/app/auth/callback/route.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_src_app_auth_callback_route_emailtypes",
-      "label": "emailTypes",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "safeNext",
-      "file_type": "code",
-      "norm_label": "emailtypes",
-      "source_file": "nextjs/src/app/auth/callback/route.ts",
-      "source_location": "L6"
-    },
-    {
       "id": "nextjs_src_app_auth_login_page",
       "label": "login/page.tsx",
       "_origin": "ast",
@@ -3740,17 +3858,6 @@
       "source_location": "L1"
     },
     {
-      "id": "nextjs_src_lib_supabase_server",
-      "label": "server.ts",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "safeNext",
-      "file_type": "code",
-      "norm_label": "server.ts",
-      "source_file": "nextjs/src/lib/supabase/server.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "docs_supabase_auth_setup",
       "label": "supabase-auth-setup.md",
       "_origin": "ast",
@@ -3833,6 +3940,78 @@
       "norm_label": "verify real registration",
       "source_file": "docs/supabase-auth-setup.md",
       "source_location": "L19"
+    },
+    {
+      "id": "identity_e2e",
+      "label": "identity-e2e.md",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "identity-e2e.md",
+      "source_file": "identity-e2e.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "identity_e2e_automated_evidence_2026_10_19",
+      "label": "Automated evidence (2026-10-19)",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "automated evidence (2026-10-19)",
+      "source_file": "identity-e2e.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
+      "label": "DevArena identity checks: T3a\u2013T11 (Phase 4 Cutover)",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "devarena identity checks: t3a\u2013t11 (phase 4 cutover)",
+      "source_file": "identity-e2e.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "identity_e2e_live_checks_for_the_human_pending",
+      "label": "Live checks for the human (pending)",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "live checks for the human (pending)",
+      "source_file": "identity-e2e.md",
+      "source_location": "L56"
+    },
+    {
+      "id": "identity_e2e_project_graph",
+      "label": "Project graph",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "project graph",
+      "source_file": "identity-e2e.md",
+      "source_location": "L139"
+    },
+    {
+      "id": "identity_e2e_spec_success_criteria_status_spec_identity_md",
+      "label": "Spec Success Criteria Status (SPEC-identity.md)",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "safeNext",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "spec success criteria status (spec-identity.md)",
+      "source_file": "identity-e2e.md",
+      "source_location": "L17"
     },
     {
       "id": "todo_phase_3_frontend",
@@ -4035,28 +4214,6 @@
       "source_location": "L5"
     },
     {
-      "id": "nextjs_scripts_check_login_http",
-      "label": "check-login-http.mjs",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "createClient",
-      "file_type": "code",
-      "norm_label": "check-login-http.mjs",
-      "source_file": "nextjs/scripts/check-login-http.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_scripts_check_login_http_destination",
-      "label": "destination",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "createClient",
-      "file_type": "code",
-      "norm_label": "destination",
-      "source_file": "nextjs/scripts/check-login-http.mjs",
-      "source_location": "L22"
-    },
-    {
       "id": "nextjs_scripts_check_profile",
       "label": "check-profile.mjs",
       "_origin": "ast",
@@ -4077,6 +4234,28 @@
       "norm_label": "countries",
       "source_file": "nextjs/scripts/check-profile.mjs",
       "source_location": "L14"
+    },
+    {
+      "id": "nextjs_src_app_auth_callback_route",
+      "label": "route.ts",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "route.ts",
+      "source_file": "nextjs/src/app/auth/callback/route.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_src_app_auth_callback_route_emailtypes",
+      "label": "emailTypes",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "emailtypes",
+      "source_file": "nextjs/src/app/auth/callback/route.ts",
+      "source_location": "L6"
     },
     {
       "id": "nextjs_src_app_manifest",
@@ -4120,7 +4299,7 @@
       "file_type": "code",
       "norm_label": "metadata",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L8"
+      "source_location": "L9"
     },
     {
       "id": "nextjs_src_app_profile_settings_page",
@@ -4142,7 +4321,7 @@
       "file_type": "code",
       "norm_label": "metadata",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L8"
+      "source_location": "L9"
     },
     {
       "id": "nextjs_src_components_authheader",
@@ -4167,13 +4346,13 @@
       "source_location": "L1"
     },
     {
-      "id": "nextjs_src_components_profile_avatarupload_allowed_mime_types",
-      "label": "ALLOWED_MIME_TYPES",
+      "id": "nextjs_src_components_profile_avatarupload_valid_extensions",
+      "label": "VALID_EXTENSIONS",
       "_origin": "ast",
       "community": 2,
       "community_name": "createClient",
       "file_type": "code",
-      "norm_label": "allowed_mime_types",
+      "norm_label": "valid_extensions",
       "source_file": "nextjs/src/components/profile/AvatarUpload.tsx",
       "source_location": "L14"
     },
@@ -4310,6 +4489,39 @@
       "source_location": "L1"
     },
     {
+      "id": "nextjs_src_lib_supabase_server",
+      "label": "server.ts",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "server.ts",
+      "source_file": "nextjs/src/lib/supabase/server.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_src_proxy",
+      "label": "proxy.ts",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "proxy.ts",
+      "source_file": "nextjs/src/proxy.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_src_proxy_config",
+      "label": "config",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "code",
+      "norm_label": "config",
+      "source_file": "nextjs/src/proxy.ts",
+      "source_location": "L49"
+    },
+    {
       "id": "ref_next",
       "label": "next",
       "_origin": "ast",
@@ -4330,6 +4542,17 @@
       "norm_label": "react",
       "source_file": "nextjs/package.json",
       "source_location": "L16"
+    },
+    {
+      "id": "ref_supabase_ssr",
+      "label": "@supabase/ssr",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "createClient",
+      "file_type": "concept",
+      "norm_label": "@supabase/ssr",
+      "source_file": "nextjs/package.json",
+      "source_location": "L13"
     },
     {
       "id": "backend_tsconfig_build",
@@ -4947,17 +5170,6 @@
       "source_location": "L41"
     },
     {
-      "id": "ref_nestjs_throttler",
-      "label": "@nestjs/throttler",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "backend/package.json",
-      "file_type": "concept",
-      "norm_label": "@nestjs/throttler",
-      "source_file": "backend/package.json",
-      "source_location": "L28"
-    },
-    {
       "id": "ref_prettier",
       "label": "prettier",
       "_origin": "ast",
@@ -5202,340 +5414,87 @@
       "source_location": "L1"
     },
     {
-      "id": "spec_identity",
-      "label": "SPEC-identity.md",
+      "id": "backend_src_users_users_module_ts_module",
+      "label": "Module",
       "_origin": "ast",
       "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "spec-identity.md",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L1"
+      "community_name": "Phase 5 \u2014 `profile`",
+      "file_type": "code",
+      "norm_label": "module",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "spec_identity_access_control_d3_d4",
-      "label": "Access control (D3, D4)",
+      "id": "todo_phase_5_profile",
+      "label": "Phase 5 \u2014 `profile`",
       "_origin": "ast",
       "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "community_name": "Phase 5 \u2014 `profile`",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "access control (d3, d4)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L70"
-    },
-    {
-      "id": "spec_identity_accountservice_delete_userid_actorid",
-      "label": "`AccountService.delete(userId, actorId)`",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "`accountservice.delete(userid, actorid)`",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L97"
-    },
-    {
-      "id": "spec_identity_backend_contract",
-      "label": "Backend Contract",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "backend contract",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L80"
-    },
-    {
-      "id": "spec_identity_boundaries",
-      "label": "Boundaries",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "boundaries",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L200"
-    },
-    {
-      "id": "spec_identity_code_style",
-      "label": "Code Style",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "code style",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L170"
-    },
-    {
-      "id": "spec_identity_commands",
-      "label": "Commands",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "commands",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L139"
-    },
-    {
-      "id": "spec_identity_data_contract",
-      "label": "Data Contract",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "data contract",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L30"
-    },
-    {
-      "id": "spec_identity_env",
-      "label": "Env",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "env",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L135"
-    },
-    {
-      "id": "spec_identity_frontend_contract",
-      "label": "Frontend Contract",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "frontend contract",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L104"
-    },
-    {
-      "id": "spec_identity_objective",
-      "label": "Objective",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "objective",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L5"
-    },
-    {
-      "id": "spec_identity_other_schema_changes",
-      "label": "Other schema changes",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "other schema changes",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L53"
-    },
-    {
-      "id": "spec_identity_project_structure_new_changed_only_reconciled_with_the_real_tree_before_planning",
-      "label": "Project Structure (new/changed only; reconciled with the real tree before planning)",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "project structure (new/changed only; reconciled with the real tree before planning)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L152"
-    },
-    {
-      "id": "spec_identity_public_profiles_alter_the_existing_table_it_already_has_id_email_username_role_avatar_url_bio_created_at",
-      "label": "`public.profiles` (ALTER the existing table; it already has `id, email, username, role, avatar_url, bio, created_at`)",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "`public.profiles` (alter the existing table; it already has `id, email, username, role, avatar_url, bio, created_at`)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L32"
-    },
-    {
-      "id": "spec_identity_resolved_questions_2026_10_18",
-      "label": "Resolved questions (2026-10-18)",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "resolved questions (2026-10-18)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L232"
-    },
-    {
-      "id": "spec_identity_routes",
-      "label": "Routes",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "routes",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L106"
-    },
-    {
-      "id": "spec_identity_session",
-      "label": "Session",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "session",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L116"
-    },
-    {
-      "id": "spec_identity_spec_identity_accounts_sessions_access_control",
-      "label": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "spec: `identity` \u2014 accounts, sessions & access control",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "spec_identity_success_criteria",
-      "label": "Success Criteria",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "success criteria",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L221"
-    },
-    {
-      "id": "spec_identity_supabase_dashboard_configuration_manual_documented_in_the_plan",
-      "label": "Supabase dashboard configuration (manual, documented in the plan)",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "supabase dashboard configuration (manual, documented in the plan)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L126"
-    },
-    {
-      "id": "spec_identity_superseded_open_questions_kept_for_history",
-      "label": "Superseded open questions (kept for history)",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "superseded open questions (kept for history)",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L240"
-    },
-    {
-      "id": "spec_identity_tech_stack",
-      "label": "Tech Stack",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "tech stack",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L22"
-    },
-    {
-      "id": "spec_identity_testing_strategy",
-      "label": "Testing Strategy",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "testing strategy",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L190"
-    },
-    {
-      "id": "spec_identity_triggers",
-      "label": "Triggers",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "triggers",
-      "source_file": "SPEC-identity.md",
-      "source_location": "L60"
-    },
-    {
-      "id": "todo_phase_1_database",
-      "label": "Phase 1 \u2014 Database",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "phase 1 \u2014 database",
+      "norm_label": "phase 5 \u2014 `profile`",
       "source_file": "todo.md",
-      "source_location": "L41"
+      "source_location": "L243"
     },
     {
-      "id": "todo_t2_migration_identity_profiles",
-      "label": "T2: Migration `identity_profiles`",
+      "id": "todo_t12_migration_profile_technologies_update_profile",
+      "label": "T12: Migration `profile_technologies` + `update_profile()`",
       "_origin": "ast",
       "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "community_name": "Phase 5 \u2014 `profile`",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t2: migration `identity_profiles`",
+      "norm_label": "t12: migration `profile_technologies` + `update_profile()`",
       "source_file": "todo.md",
-      "source_location": "L43"
+      "source_location": "L245"
     },
     {
-      "id": "todo_t3_migration_identity_deletion",
-      "label": "T3: Migration `identity_deletion`",
+      "id": "todo_t13_get_me_profile_patch_me_profile",
+      "label": "T13: `GET /me/profile` + `PATCH /me/profile`",
       "_origin": "ast",
       "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "community_name": "Phase 5 \u2014 `profile`",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t3: migration `identity_deletion`",
+      "norm_label": "t13: `get /me/profile` + `patch /me/profile`",
       "source_file": "todo.md",
-      "source_location": "L59"
+      "source_location": "L263"
     },
     {
-      "id": "todo_t3a_review_fixes_antigravity_audit_2026_10_18_triaged",
-      "label": "T3a: Review fixes (Antigravity audit 2026-10-18, triaged)",
+      "id": "todo_t14_profile_settings_form_text_fields",
+      "label": "T14: `/profile/settings` form (text fields)",
       "_origin": "ast",
       "community": 34,
-      "community_name": "Spec: `identity` \u2014 Accounts, Sessions & Access Control",
+      "community_name": "Phase 5 \u2014 `profile`",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "t3a: review fixes (antigravity audit 2026-10-18, triaged)",
+      "norm_label": "t14: `/profile/settings` form (text fields)",
       "source_file": "todo.md",
-      "source_location": "L75"
+      "source_location": "L285"
+    },
+    {
+      "id": "todo_t15_avatar_upload",
+      "label": "T15: Avatar upload",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Phase 5 \u2014 `profile`",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t15: avatar upload",
+      "source_file": "todo.md",
+      "source_location": "L299"
+    },
+    {
+      "id": "todo_t16_profile_on_real_data",
+      "label": "T16: `/profile` on real data",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Phase 5 \u2014 `profile`",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t16: `/profile` on real data",
+      "source_file": "todo.md",
+      "source_location": "L313"
     },
     {
       "id": "spec_pwa",
@@ -5718,100 +5677,131 @@
       "source_location": "L85"
     },
     {
-      "id": "plan",
-      "label": "plan.md",
+      "id": "backend_src_auth_me_controller_ts_apibearerauth",
+      "label": "ApiBearerAuth",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "plan.md",
-      "source_file": "plan.md",
-      "source_location": "L1"
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "apibearerauth",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "plan_api_contracts_define_before_parallel_work",
-      "label": "API Contracts (define before parallel work)",
+      "id": "backend_src_auth_me_controller_ts_apitags",
+      "label": "ApiTags",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "api contracts (define before parallel work)",
-      "source_file": "plan.md",
-      "source_location": "L47"
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "apitags",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "plan_dependency_graph",
-      "label": "Dependency Graph",
+      "id": "backend_src_auth_me_controller_ts_controller",
+      "label": "Controller",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "dependency graph",
-      "source_file": "plan.md",
-      "source_location": "L65"
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "controller",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "plan_implementation_plan_devarena_user_auth_initiative",
-      "label": "Implementation Plan: DevArena User & Auth initiative",
+      "id": "backend_src_auth_me_controller_ts_get",
+      "label": "Get",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "implementation plan: devarena user & auth initiative",
-      "source_file": "plan.md",
-      "source_location": "L1"
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "get",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "plan_open_questions_rankings_profile_answer_before_t23_t16",
-      "label": "Open Questions (rankings/profile; answer before T23 / T16)",
+      "id": "backend_src_auth_me_controller_ts_useguards",
+      "label": "UseGuards",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "open questions (rankings/profile; answer before t23 / t16)",
-      "source_file": "plan.md",
-      "source_location": "L101"
+      "community_name": "MeController",
+      "file_type": "code",
+      "norm_label": "useguards",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "plan_overview",
-      "label": "Overview",
+      "id": "todo_phase_7_rankings",
+      "label": "Phase 7 \u2014 `rankings`",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "community_name": "MeController",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "overview",
-      "source_file": "plan.md",
-      "source_location": "L8"
+      "norm_label": "phase 7 \u2014 `rankings`",
+      "source_file": "todo.md",
+      "source_location": "L407"
     },
     {
-      "id": "plan_risks_and_mitigations",
-      "label": "Risks and Mitigations",
+      "id": "todo_t22_dev_seed_script",
+      "label": "T22: Dev seed script",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "community_name": "MeController",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "risks and mitigations",
-      "source_file": "plan.md",
-      "source_location": "L87"
+      "norm_label": "t22: dev seed script",
+      "source_file": "todo.md",
+      "source_location": "L409"
     },
     {
-      "id": "plan_task_list_details_in_tasks_todo_md",
-      "label": "Task List (details in `tasks/todo.md`)",
+      "id": "todo_t23_dev_scores_view_leaderboard_function",
+      "label": "T23: `dev_scores` view + `leaderboard()` function",
       "_origin": "ast",
       "community": 36,
-      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "community_name": "MeController",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "task list (details in `tasks/todo.md`)",
-      "source_file": "plan.md",
-      "source_location": "L79"
+      "norm_label": "t23: `dev_scores` view + `leaderboard()` function",
+      "source_file": "todo.md",
+      "source_location": "L424"
+    },
+    {
+      "id": "todo_t24_get_rankings",
+      "label": "T24: `GET /rankings`",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "MeController",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t24: `get /rankings`",
+      "source_file": "todo.md",
+      "source_location": "L447"
+    },
+    {
+      "id": "todo_t25_rankings_page",
+      "label": "T25: `/rankings` page",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "MeController",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t25: `/rankings` page",
+      "source_file": "todo.md",
+      "source_location": "L462"
+    },
+    {
+      "id": "todo_t26_score_and_tier_on_profile",
+      "label": "T26: Score and tier on `/profile`",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "MeController",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t26: score and tier on `/profile`",
+      "source_file": "todo.md",
+      "source_location": "L477"
     },
     {
       "id": "backend_src_auth_admin_ping_controller_ts_apibearerauth",
@@ -5869,64 +5859,100 @@
       "source_location": ""
     },
     {
-      "id": "identity_e2e",
-      "label": "identity-e2e.md",
+      "id": "plan",
+      "label": "plan.md",
       "_origin": "ast",
       "community": 38,
-      "community_name": "DevArena identity checks: T3a\u2013T8",
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
       "file_type": "document",
       "node_kind": "page",
-      "norm_label": "identity-e2e.md",
-      "source_file": "identity-e2e.md",
+      "norm_label": "plan.md",
+      "source_file": "plan.md",
       "source_location": "L1"
     },
     {
-      "id": "identity_e2e_automated_evidence_2026_10_18",
-      "label": "Automated evidence (2026-10-18)",
+      "id": "plan_api_contracts_define_before_parallel_work",
+      "label": "API Contracts (define before parallel work)",
       "_origin": "ast",
       "community": 38,
-      "community_name": "DevArena identity checks: T3a\u2013T8",
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "automated evidence (2026-10-18)",
-      "source_file": "identity-e2e.md",
-      "source_location": "L5"
+      "norm_label": "api contracts (define before parallel work)",
+      "source_file": "plan.md",
+      "source_location": "L47"
     },
     {
-      "id": "identity_e2e_devarena_identity_checks_t3a_t8",
-      "label": "DevArena identity checks: T3a\u2013T8",
+      "id": "plan_dependency_graph",
+      "label": "Dependency Graph",
       "_origin": "ast",
       "community": 38,
-      "community_name": "DevArena identity checks: T3a\u2013T8",
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "devarena identity checks: t3a\u2013t8",
-      "source_file": "identity-e2e.md",
+      "norm_label": "dependency graph",
+      "source_file": "plan.md",
+      "source_location": "L65"
+    },
+    {
+      "id": "plan_implementation_plan_devarena_user_auth_initiative",
+      "label": "Implementation Plan: DevArena User & Auth initiative",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "implementation plan: devarena user & auth initiative",
+      "source_file": "plan.md",
       "source_location": "L1"
     },
     {
-      "id": "identity_e2e_live_checks_for_the_human_pending",
-      "label": "Live checks for the human (pending)",
+      "id": "plan_open_questions_rankings_profile_answer_before_t23_t16",
+      "label": "Open Questions (rankings/profile; answer before T23 / T16)",
       "_origin": "ast",
       "community": 38,
-      "community_name": "DevArena identity checks: T3a\u2013T8",
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "live checks for the human (pending)",
-      "source_file": "identity-e2e.md",
-      "source_location": "L44"
+      "norm_label": "open questions (rankings/profile; answer before t23 / t16)",
+      "source_file": "plan.md",
+      "source_location": "L101"
     },
     {
-      "id": "identity_e2e_project_graph",
-      "label": "Project graph",
+      "id": "plan_overview",
+      "label": "Overview",
       "_origin": "ast",
       "community": 38,
-      "community_name": "DevArena identity checks: T3a\u2013T8",
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "project graph",
-      "source_file": "identity-e2e.md",
-      "source_location": "L111"
+      "norm_label": "overview",
+      "source_file": "plan.md",
+      "source_location": "L8"
+    },
+    {
+      "id": "plan_risks_and_mitigations",
+      "label": "Risks and Mitigations",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "risks and mitigations",
+      "source_file": "plan.md",
+      "source_location": "L87"
+    },
+    {
+      "id": "plan_task_list_details_in_tasks_todo_md",
+      "label": "Task List (details in `tasks/todo.md`)",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "Implementation Plan: DevArena User & Auth initiative",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "task list (details in `tasks/todo.md`)",
+      "source_file": "plan.md",
+      "source_location": "L79"
     },
     {
       "id": "arraymaxsize",
@@ -6204,6 +6230,17 @@
       "source_location": ""
     },
     {
+      "id": "backend_src_users_me_profile_controller_ts_get",
+      "label": "Get",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "MeProfileController",
+      "file_type": "code",
+      "norm_label": "get",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "backend_src_users_me_profile_controller_ts_useguards",
       "label": "UseGuards",
       "_origin": "ast",
@@ -6215,27 +6252,26 @@
       "source_location": ""
     },
     {
-      "id": "backend_src_users_users_module_ts_module",
-      "label": "Module",
+      "id": "body",
+      "label": "Body",
       "_origin": "ast",
       "community": 40,
       "community_name": "MeProfileController",
       "file_type": "code",
-      "norm_label": "module",
+      "norm_label": "body",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "todo_t13_get_me_profile_patch_me_profile",
-      "label": "T13: `GET /me/profile` + `PATCH /me/profile`",
+      "id": "patch",
+      "label": "Patch",
       "_origin": "ast",
       "community": 40,
       "community_name": "MeProfileController",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t13: `get /me/profile` + `patch /me/profile`",
-      "source_file": "todo.md",
-      "source_location": "L261"
+      "file_type": "code",
+      "norm_label": "patch",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "backend_src_users_dto_delete_me_dto",
@@ -6291,6 +6327,18 @@
       "norm_label": "isnotempty",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "todo_t17_self_service_account_deletion",
+      "label": "T17: Self-service account deletion",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": ".deleteMe",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "t17: self-service account deletion",
+      "source_file": "todo.md",
+      "source_location": "L324"
     },
     {
       "id": "backend_src_users_dto_is_iso_country_decorator",
@@ -6352,7 +6400,7 @@
       "label": "ApiTags",
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "apitags",
       "source_file": "",
@@ -6363,7 +6411,7 @@
       "label": "Controller",
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "controller",
       "source_file": "",
@@ -6374,42 +6422,9 @@
       "label": "Get",
       "_origin": "ast",
       "community": 43,
-      "community_name": "TechnologiesController",
+      "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "get",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_src_users_me_profile_controller_ts_get",
-      "label": "Get",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": "get",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "body",
-      "label": "Body",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": "body",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "patch",
-      "label": "Patch",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": ".updateProfile",
-      "file_type": "code",
-      "norm_label": "patch",
       "source_file": "",
       "source_location": ""
     },
@@ -6417,7 +6432,7 @@
       "id": "backend_src_users_users_service_ts_injectable",
       "label": "Injectable",
       "_origin": "ast",
-      "community": 45,
+      "community": 43,
       "community_name": "UsersService",
       "file_type": "code",
       "norm_label": "injectable",
@@ -6425,229 +6440,48 @@
       "source_location": ""
     },
     {
-      "id": "nextjs_scripts_check_recovery",
-      "label": "check-recovery.mjs",
+      "id": "nextjs_src_app_page",
+      "label": "app/page.tsx",
       "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
+      "community": 45,
+      "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "check-recovery.mjs",
-      "source_file": "nextjs/scripts/check-recovery.mjs",
+      "norm_label": "app/page.tsx",
+      "source_file": "nextjs/src/app/page.tsx",
       "source_location": "L1"
     },
     {
-      "id": "nextjs_scripts_check_recovery_hooks",
-      "label": "hooks",
+      "id": "nextjs_src_app_page_steps",
+      "label": "steps",
       "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
+      "community": 45,
+      "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "hooks",
-      "source_file": "nextjs/scripts/check-recovery.mjs",
-      "source_location": "L5"
+      "norm_label": "steps",
+      "source_file": "nextjs/src/app/page.tsx",
+      "source_location": "L3"
     },
     {
-      "id": "nextjs_scripts_check_register_http",
-      "label": "check-register-http.mjs",
+      "id": "nextjs_src_components_arena_terminalhero",
+      "label": "TerminalHero.tsx",
       "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
+      "community": 45,
+      "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "check-register-http.mjs",
-      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "norm_label": "terminalhero.tsx",
+      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
       "source_location": "L1"
     },
     {
-      "id": "nextjs_scripts_check_register_http_checks",
-      "label": "checks",
+      "id": "nextjs_src_components_arena_terminalhero_lines",
+      "label": "lines",
       "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
+      "community": 45,
+      "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "checks",
-      "source_file": "nextjs/scripts/check-register-http.mjs",
-      "source_location": "L9"
-    },
-    {
-      "id": "nextjs_scripts_check_register_http_href",
-      "label": "href",
-      "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
-      "file_type": "code",
-      "norm_label": "href",
-      "source_file": "nextjs/scripts/check-register-http.mjs",
-      "source_location": "L30"
-    },
-    {
-      "id": "nextjs_scripts_check_register_http_link",
-      "label": "link",
-      "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
-      "file_type": "code",
-      "norm_label": "link",
-      "source_file": "nextjs/scripts/check-register-http.mjs",
-      "source_location": "L31"
-    },
-    {
-      "id": "nextjs_scripts_check_register_http_rendered",
-      "label": "rendered",
-      "_origin": "ast",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
-      "file_type": "code",
-      "norm_label": "rendered",
-      "source_file": "nextjs/scripts/check-register-http.mjs",
-      "source_location": "L29"
-    },
-    {
-      "id": "nextjs_scripts_check_oauth",
-      "label": "check-oauth.mjs",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "check-register.mjs",
-      "file_type": "code",
-      "norm_label": "check-oauth.mjs",
-      "source_file": "nextjs/scripts/check-oauth.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_scripts_check_oauth_hooks",
-      "label": "hooks",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "check-register.mjs",
-      "file_type": "code",
-      "norm_label": "hooks",
-      "source_file": "nextjs/scripts/check-oauth.mjs",
-      "source_location": "L4"
-    },
-    {
-      "id": "nextjs_scripts_check_register",
-      "label": "check-register.mjs",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "check-register.mjs",
-      "file_type": "code",
-      "norm_label": "check-register.mjs",
-      "source_file": "nextjs/scripts/check-register.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_scripts_check_register_hooks",
-      "label": "hooks",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "check-register.mjs",
-      "file_type": "code",
-      "norm_label": "hooks",
-      "source_file": "nextjs/scripts/check-register.mjs",
-      "source_location": "L4"
-    },
-    {
-      "id": "nextjs_scripts_check_pwa",
-      "label": "check-pwa.mjs",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
-      "file_type": "code",
-      "norm_label": "check-pwa.mjs",
-      "source_file": "nextjs/scripts/check-pwa.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_scripts_check_pwa_ctx",
-      "label": "ctx",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
-      "file_type": "code",
-      "norm_label": "ctx",
-      "source_file": "nextjs/scripts/check-pwa.mjs",
-      "source_location": "L7"
-    },
-    {
-      "id": "nextjs_scripts_check_pwa_manifestsrc",
-      "label": "manifestSrc",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
-      "file_type": "code",
-      "norm_label": "manifestsrc",
-      "source_file": "nextjs/scripts/check-pwa.mjs",
-      "source_location": "L23"
-    },
-    {
-      "id": "nextjs_scripts_check_pwa_sw",
-      "label": "sw",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
-      "file_type": "code",
-      "norm_label": "sw",
-      "source_file": "nextjs/scripts/check-pwa.mjs",
-      "source_location": "L19"
-    },
-    {
-      "id": "supabase_precheck",
-      "label": "precheck.md",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "Identity precheck results \u2014 2026-10-18",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "precheck.md",
-      "source_file": "supabase/precheck.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "supabase_precheck_cloud_advisor_results",
-      "label": "Cloud advisor results",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "Identity precheck results \u2014 2026-10-18",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "cloud advisor results",
-      "source_file": "supabase/precheck.md",
-      "source_location": "L48"
-    },
-    {
-      "id": "supabase_precheck_identity_precheck_results_2026_10_18",
-      "label": "Identity precheck results \u2014 2026-10-18",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "Identity precheck results \u2014 2026-10-18",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "identity precheck results \u2014 2026-10-18",
-      "source_file": "supabase/precheck.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "supabase_precheck_t3a_follow_up_2026_10_18",
-      "label": "T3a follow-up, 2026-10-18",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "Identity precheck results \u2014 2026-10-18",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "t3a follow-up, 2026-10-18",
-      "source_file": "supabase/precheck.md",
-      "source_location": "L44"
-    },
-    {
-      "id": "supabase_precheck_verification_evidence",
-      "label": "Verification evidence",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "Identity precheck results \u2014 2026-10-18",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "verification evidence",
-      "source_file": "supabase/precheck.md",
-      "source_location": "L20"
+      "norm_label": "lines",
+      "source_file": "nextjs/src/components/arena/TerminalHero.tsx",
+      "source_location": "L2"
     },
     {
       "id": "nextjs_eslint_config",
@@ -6969,28 +6803,6 @@
       "source_location": "L3"
     },
     {
-      "id": "nextjs_src_proxy",
-      "label": "proxy.ts",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "nextjs/package.json",
-      "file_type": "code",
-      "norm_label": "proxy.ts",
-      "source_file": "nextjs/src/proxy.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "nextjs_src_proxy_config",
-      "label": "config",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "nextjs/package.json",
-      "file_type": "code",
-      "norm_label": "config",
-      "source_file": "nextjs/src/proxy.ts",
-      "source_location": "L49"
-    },
-    {
       "id": "nextjs_package_json_ref_eslint",
       "label": "eslint",
       "_origin": "ast",
@@ -7057,17 +6869,6 @@
       "source_location": "L17"
     },
     {
-      "id": "ref_supabase_ssr",
-      "label": "@supabase/ssr",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "nextjs/package.json",
-      "file_type": "concept",
-      "norm_label": "@supabase/ssr",
-      "source_file": "nextjs/package.json",
-      "source_location": "L13"
-    },
-    {
       "id": "ref_tailwindcss",
       "label": "tailwindcss",
       "_origin": "ast",
@@ -7110,6 +6911,193 @@
       "norm_label": "@types/react-dom",
       "source_file": "nextjs/package.json",
       "source_location": "L23"
+    },
+    {
+      "id": "nextjs_scripts_check_login_http",
+      "label": "check-login-http.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-login-http.mjs",
+      "source_file": "nextjs/scripts/check-login-http.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_login_http_destination",
+      "label": "destination",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "destination",
+      "source_file": "nextjs/scripts/check-login-http.mjs",
+      "source_location": "L22"
+    },
+    {
+      "id": "nextjs_scripts_check_oauth",
+      "label": "check-oauth.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-oauth.mjs",
+      "source_file": "nextjs/scripts/check-oauth.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_oauth_hooks",
+      "label": "hooks",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "hooks",
+      "source_file": "nextjs/scripts/check-oauth.mjs",
+      "source_location": "L4"
+    },
+    {
+      "id": "nextjs_scripts_check_pwa",
+      "label": "check-pwa.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-pwa.mjs",
+      "source_file": "nextjs/scripts/check-pwa.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_pwa_ctx",
+      "label": "ctx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "ctx",
+      "source_file": "nextjs/scripts/check-pwa.mjs",
+      "source_location": "L7"
+    },
+    {
+      "id": "nextjs_scripts_check_pwa_manifestsrc",
+      "label": "manifestSrc",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "manifestsrc",
+      "source_file": "nextjs/scripts/check-pwa.mjs",
+      "source_location": "L23"
+    },
+    {
+      "id": "nextjs_scripts_check_pwa_sw",
+      "label": "sw",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "sw",
+      "source_file": "nextjs/scripts/check-pwa.mjs",
+      "source_location": "L19"
+    },
+    {
+      "id": "nextjs_scripts_check_recovery",
+      "label": "check-recovery.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-recovery.mjs",
+      "source_file": "nextjs/scripts/check-recovery.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_recovery_hooks",
+      "label": "hooks",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "hooks",
+      "source_file": "nextjs/scripts/check-recovery.mjs",
+      "source_location": "L5"
+    },
+    {
+      "id": "nextjs_scripts_check_register",
+      "label": "check-register.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-register.mjs",
+      "source_file": "nextjs/scripts/check-register.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_register_hooks",
+      "label": "hooks",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "hooks",
+      "source_file": "nextjs/scripts/check-register.mjs",
+      "source_location": "L4"
+    },
+    {
+      "id": "nextjs_scripts_check_register_http",
+      "label": "check-register-http.mjs",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "check-register-http.mjs",
+      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "nextjs_scripts_check_register_http_checks",
+      "label": "checks",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "checks",
+      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "source_location": "L9"
+    },
+    {
+      "id": "nextjs_scripts_check_register_http_href",
+      "label": "href",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "href",
+      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "source_location": "L30"
+    },
+    {
+      "id": "nextjs_scripts_check_register_http_link",
+      "label": "link",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "link",
+      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "source_location": "L31"
+    },
+    {
+      "id": "nextjs_scripts_check_register_http_rendered",
+      "label": "rendered",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "file_type": "code",
+      "norm_label": "rendered",
+      "source_file": "nextjs/scripts/check-register-http.mjs",
+      "source_location": "L29"
     },
     {
       "id": "supabase_tests_storage_smoke",
@@ -8109,18 +8097,6 @@
       "type": "external"
     },
     {
-      "id": "ref_server_only",
-      "label": "ref_server_only",
-      "_origin": "semantic",
-      "community": 18,
-      "community_name": "safeNext",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_server_only",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_supabase_supabase_js",
       "label": "ref_supabase_supabase_js",
       "_origin": "semantic",
@@ -8133,50 +8109,14 @@
       "type": "external"
     },
     {
-      "id": "ref_node_assert",
-      "label": "ref_node_assert",
+      "id": "ref_server_only",
+      "label": "ref_server_only",
       "_origin": "semantic",
       "community": 2,
       "community_name": "createClient",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_node_assert",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_node_fs",
-      "label": "ref_node_fs",
-      "_origin": "semantic",
-      "community": 46,
-      "community_name": "check-register-http.mjs",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_node_fs",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_node_module",
-      "label": "ref_node_module",
-      "_origin": "semantic",
-      "community": 47,
-      "community_name": "check-register.mjs",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_node_module",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_node_vm",
-      "label": "ref_node_vm",
-      "_origin": "semantic",
-      "community": 48,
-      "community_name": "check-pwa.mjs",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_node_vm",
+      "norm_label": "ref_server_only",
       "source_file": "",
       "type": "external"
     },
@@ -8193,6 +8133,18 @@
       "type": "external"
     },
     {
+      "id": "ref_node_assert",
+      "label": "ref_node_assert",
+      "_origin": "semantic",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_assert",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_node_crypto",
       "label": "ref_node_crypto",
       "_origin": "semantic",
@@ -8201,6 +8153,42 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_node_crypto",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_node_fs",
+      "label": "ref_node_fs",
+      "_origin": "semantic",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_fs",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_node_module",
+      "label": "ref_node_module",
+      "_origin": "semantic",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_module",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_node_vm",
+      "label": "ref_node_vm",
+      "_origin": "semantic",
+      "community": 6,
+      "community_name": "storage-smoke.mjs",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_vm",
       "source_file": "",
       "type": "external"
     }
@@ -8347,7 +8335,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L158",
+      "source_location": "L232",
       "weight": 1.0
     },
     {
@@ -8551,7 +8539,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L26",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -8563,7 +8551,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L42",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -8575,7 +8563,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L57",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -8587,7 +8575,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L26",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -8791,55 +8779,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader_authheader",
-      "target": "nextjs_src_lib_api_apirequest",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L25",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader_authheader",
-      "target": "nextjs_src_lib_supabase_client_createclient",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L27",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader_authheader_load",
-      "target": "nextjs_src_lib_api_apirequest",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L25",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader_authheader_load",
-      "target": "nextjs_src_lib_supabase_client_createclient",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L27",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -8851,19 +8791,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/AvatarUpload.tsx",
-      "source_location": "L46",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_profile_avatarupload_avatarupload",
-      "target": "nextjs_src_lib_api_apirequest",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/profile/AvatarUpload.tsx",
-      "source_location": "L70",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -8875,19 +8803,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/AvatarUpload.tsx",
-      "source_location": "L46",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_profile_avatarupload_avatarupload_handlefilechange",
-      "target": "nextjs_src_lib_api_apirequest",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "nextjs/src/components/profile/AvatarUpload.tsx",
-      "source_location": "L70",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -8911,7 +8827,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/DangerZone.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -8935,7 +8851,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/DangerZone.tsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -8947,7 +8863,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/ProfileForm.tsx",
-      "source_location": "L169",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -8959,7 +8875,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/profile/ProfileForm.tsx",
-      "source_location": "L393",
+      "source_location": "L399",
       "weight": 1.0
     },
     {
@@ -9055,7 +8971,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/lib/api-core.ts",
-      "source_location": "L56",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -9067,7 +8983,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L6",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -9259,7 +9175,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -11551,7 +11467,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -11563,7 +11479,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -11575,7 +11491,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -11587,7 +11503,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -11599,7 +11515,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -11611,7 +11527,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -11623,7 +11539,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -11635,7 +11551,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -11816,18 +11732,6 @@
       "context": "import",
       "source_file": "nextjs/src/components/AuthHeader.tsx",
       "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader",
-      "target": "nextjs_src_lib_supabase_client_createclient",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -12043,7 +11947,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -12055,7 +11959,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -12067,7 +11971,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -14015,7 +13919,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -14027,7 +13931,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -14039,7 +13943,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -14051,7 +13955,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -14063,7 +13967,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "type_only": true,
       "weight": 1.0
     },
@@ -14088,7 +13992,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -14100,7 +14004,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -14112,7 +14016,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -14124,7 +14028,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -14427,18 +14331,6 @@
       "source_file": "nextjs/src/components/AuthHeader.tsx",
       "source_location": "L7",
       "type_only": true,
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader",
-      "target": "nextjs_src_lib_supabase_client",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -14769,7 +14661,7 @@
     },
     {
       "source": "nextjs_src_lib_api_server",
-      "target": "nextjs_src_lib_api_core",
+      "target": "ref_next",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14781,7 +14673,7 @@
     },
     {
       "source": "nextjs_src_lib_api_server",
-      "target": "nextjs_src_lib_supabase_server",
+      "target": "nextjs_src_lib_api_core",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14789,6 +14681,18 @@
       "context": "import",
       "source_file": "nextjs/src/lib/api-server.ts",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "nextjs_src_lib_api_server",
+      "target": "nextjs_src_lib_supabase_server",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "nextjs/src/lib/api-server.ts",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -17000,7 +16904,7 @@
     },
     {
       "source": "identity_e2e",
-      "target": "identity_e2e_devarena_identity_checks_t3a_t8",
+      "target": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17010,36 +16914,47 @@
       "weight": 1.0
     },
     {
-      "source": "identity_e2e_devarena_identity_checks_t3a_t8",
+      "source": "identity_e2e_automated_evidence_2026_10_19",
+      "target": "identity_e2e_spec_success_criteria_status_spec_identity_md",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "identity-e2e.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
       "target": "identity_e2e_project_graph",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "identity-e2e.md",
-      "source_location": "L111",
+      "source_location": "L139",
       "weight": 1.0
     },
     {
-      "source": "identity_e2e_devarena_identity_checks_t3a_t8",
-      "target": "identity_e2e_live_checks_for_the_human_pending",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "identity-e2e.md",
-      "source_location": "L44",
-      "weight": 1.0
-    },
-    {
-      "source": "identity_e2e_devarena_identity_checks_t3a_t8",
-      "target": "identity_e2e_automated_evidence_2026_10_18",
+      "source": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
+      "target": "identity_e2e_automated_evidence_2026_10_19",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "identity-e2e.md",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
+      "target": "identity_e2e_live_checks_for_the_human_pending",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "identity-e2e.md",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -17875,7 +17790,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -17886,7 +17801,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L29",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -17897,7 +17812,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/page.tsx",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -17908,7 +17823,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -17919,7 +17834,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L29",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -17930,7 +17845,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/app/profile/settings/page.tsx",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -18078,24 +17993,24 @@
     },
     {
       "source": "nextjs_src_components_authheader",
-      "target": "nextjs_src_components_authheader_account",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L10",
-      "weight": 1.0
-    },
-    {
-      "source": "nextjs_src_components_authheader",
       "target": "nextjs_src_components_authheader_authheader",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "nextjs_src_components_authheader",
+      "target": "nextjs_src_components_authheader_account",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -18106,12 +18021,12 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/components/AuthHeader.tsx",
-      "source_location": "L46",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
       "source": "nextjs_src_components_profile_avatarupload",
-      "target": "nextjs_src_components_profile_avatarupload_allowed_mime_types",
+      "target": "nextjs_src_components_profile_avatarupload_valid_extensions",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18392,7 +18307,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "nextjs/src/lib/api-server.ts",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -19789,7 +19704,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L244",
+      "source_location": "L245",
       "weight": 1.0
     },
     {
@@ -19800,7 +19715,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L261",
+      "source_location": "L263",
       "weight": 1.0
     },
     {
@@ -19811,7 +19726,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L282",
+      "source_location": "L285",
       "weight": 1.0
     },
     {
@@ -19822,7 +19737,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L295",
+      "source_location": "L299",
       "weight": 1.0
     },
     {
@@ -19833,7 +19748,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L308",
+      "source_location": "L313",
       "weight": 1.0
     },
     {
@@ -19844,7 +19759,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L318",
+      "source_location": "L324",
       "weight": 1.0
     },
     {
@@ -19855,7 +19770,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L337",
+      "source_location": "L344",
       "weight": 1.0
     },
     {
@@ -19866,7 +19781,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L355",
+      "source_location": "L362",
       "weight": 1.0
     },
     {
@@ -19877,7 +19792,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L371",
+      "source_location": "L378",
       "weight": 1.0
     },
     {
@@ -19888,7 +19803,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L384",
+      "source_location": "L391",
       "weight": 1.0
     },
     {
@@ -19899,7 +19814,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L402",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -19910,7 +19825,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L417",
+      "source_location": "L424",
       "weight": 1.0
     },
     {
@@ -19921,7 +19836,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L440",
+      "source_location": "L447",
       "weight": 1.0
     },
     {
@@ -19932,7 +19847,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L455",
+      "source_location": "L462",
       "weight": 1.0
     },
     {
@@ -19943,7 +19858,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L470",
+      "source_location": "L477",
       "weight": 1.0
     },
     {
@@ -19954,7 +19869,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L487",
+      "source_location": "L494",
       "weight": 1.0
     },
     {
@@ -19965,7 +19880,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L499",
+      "source_location": "L506",
       "weight": 1.0
     },
     {
@@ -19976,29 +19891,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L517",
-      "weight": 1.0
-    },
-    {
-      "source": "todo_phase_9_arena_ui_pwa_implementation_spec_pwa_md",
-      "target": "todo_a1_arena_ui_tokens_motion_landing_themed_auth",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "todo.md",
-      "source_location": "L538",
-      "weight": 1.0
-    },
-    {
-      "source": "todo_phase_9_arena_ui_pwa_implementation_spec_pwa_md",
-      "target": "todo_t27_t28_t29_pwa_manifest_icons_service_worker_offline_install_prompt",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "todo.md",
-      "source_location": "L540",
+      "source_location": "L524",
       "weight": 1.0
     },
     {
@@ -20064,7 +19957,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L237",
+      "source_location": "L238",
       "weight": 1.0
     },
     {
@@ -20075,7 +19968,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L242",
+      "source_location": "L243",
       "weight": 1.0
     },
     {
@@ -20086,7 +19979,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L328",
+      "source_location": "L335",
       "weight": 1.0
     },
     {
@@ -20097,7 +19990,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L335",
+      "source_location": "L342",
       "weight": 1.0
     },
     {
@@ -20108,7 +20001,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L394",
+      "source_location": "L401",
       "weight": 1.0
     },
     {
@@ -20119,7 +20012,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L400",
+      "source_location": "L407",
       "weight": 1.0
     },
     {
@@ -20141,7 +20034,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L479",
+      "source_location": "L486",
       "weight": 1.0
     },
     {
@@ -20152,23 +20045,12 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "todo.md",
-      "source_location": "L485",
+      "source_location": "L492",
       "weight": 1.0
     },
     {
       "source": "todo_tasks_identity_module",
       "target": "todo_checkpoint_h_initiative_done",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "todo.md",
-      "source_location": "L529",
-      "weight": 1.0
-    },
-    {
-      "source": "todo_tasks_identity_module",
-      "target": "todo_phase_9_arena_ui_pwa_implementation_spec_pwa_md",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20481,7 +20363,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L161",
+      "source_location": "L235",
       "weight": 1.0
     },
     {
@@ -20492,7 +20374,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L181",
+      "source_location": "L255",
       "weight": 1.0
     },
     {
@@ -20641,7 +20523,19 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "backend/src/users/users.service.ts",
-      "source_location": "L178",
+      "source_location": "L252",
+      "weight": 1.0
+    },
+    {
+      "source": "nextjs_src_components_authheader_authheader",
+      "target": "nextjs_src_components_authheader_authheader_handleprofileupdated",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "nextjs/src/components/AuthHeader.tsx",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -20729,6 +20623,30 @@
       "weight": 1.0
     },
     {
+      "source": "identity_e2e_automated_evidence_2026_10_19",
+      "target": "backend_src_auth_guards_adminguard",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "AdminGuard",
+      "source_file": "identity-e2e.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "identity_e2e_devarena_identity_checks_t3a_t11_phase_4_cutover",
+      "target": "backend_src_auth_guards_adminguard",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "AdminGuard",
+      "source_file": "identity-e2e.md",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "plan_architecture_decisions",
       "target": "backend_src_auth_guards_adminguard",
       "relation": "references",
@@ -20773,7 +20691,7 @@
       "confidence_score": 0.95,
       "context": "AdminGuard",
       "source_file": "todo.md",
-      "source_location": "L229",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -20785,7 +20703,7 @@
       "confidence_score": 0.95,
       "context": "AdminGuard",
       "source_file": "todo.md",
-      "source_location": "L364",
+      "source_location": "L371",
       "weight": 1.0
     },
     {
@@ -20825,6 +20743,18 @@
       "weight": 1.0
     },
     {
+      "source": "todo_t17_self_service_account_deletion",
+      "target": "backend_src_users_dto_delete_me_dto_deletemedto",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "DeleteMeDto",
+      "source_file": "todo.md",
+      "source_location": "L325",
+      "weight": 1.0
+    },
+    {
       "source": "todo_t10_forgot_reset_password",
       "target": "nextjs_src_components_auth_forgotpasswordform_forgotpasswordform",
       "relation": "references",
@@ -20837,18 +20767,6 @@
       "weight": 1.0
     },
     {
-      "source": "todo_t27_t28_t29_pwa_manifest_icons_service_worker_offline_install_prompt",
-      "target": "nextjs_src_components_pwa_installprompt_installprompt",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "context": "InstallPrompt",
-      "source_file": "todo.md",
-      "source_location": "L541",
-      "weight": 1.0
-    },
-    {
       "source": "todo_t29_install_prompt_offline_banner",
       "target": "nextjs_src_components_pwa_installprompt_installprompt",
       "relation": "references",
@@ -20857,7 +20775,7 @@
       "confidence_score": 0.95,
       "context": "InstallPrompt",
       "source_file": "todo.md",
-      "source_location": "L519",
+      "source_location": "L526",
       "weight": 1.0
     },
     {
@@ -20869,7 +20787,19 @@
       "confidence_score": 0.95,
       "context": "MeProfileController",
       "source_file": "todo.md",
-      "source_location": "L262",
+      "source_location": "L264",
+      "weight": 1.0
+    },
+    {
+      "source": "todo_t17_self_service_account_deletion",
+      "target": "backend_src_users_me_profile_controller_meprofilecontroller",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "MeProfileController",
+      "source_file": "todo.md",
+      "source_location": "L325",
       "weight": 1.0
     },
     {
@@ -20885,6 +20815,18 @@
       "weight": 1.0
     },
     {
+      "source": "identity_e2e_automated_evidence_2026_10_19",
+      "target": "nextjs_src_components_auth_oauthbuttons_oauthbuttons",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "OAuthButtons",
+      "source_file": "identity-e2e.md",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
       "source": "todo_t9_github_google_oauth",
       "target": "nextjs_src_components_auth_oauthbuttons_oauthbuttons",
       "relation": "references",
@@ -20897,18 +20839,6 @@
       "weight": 1.0
     },
     {
-      "source": "todo_t27_t28_t29_pwa_manifest_icons_service_worker_offline_install_prompt",
-      "target": "nextjs_src_components_pwa_offlinebanner_offlinebanner",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "context": "OfflineBanner",
-      "source_file": "todo.md",
-      "source_location": "L541",
-      "weight": 1.0
-    },
-    {
       "source": "todo_t29_install_prompt_offline_banner",
       "target": "nextjs_src_components_pwa_offlinebanner_offlinebanner",
       "relation": "references",
@@ -20917,7 +20847,7 @@
       "confidence_score": 0.95,
       "context": "OfflineBanner",
       "source_file": "todo.md",
-      "source_location": "L520",
+      "source_location": "L527",
       "weight": 1.0
     },
     {
@@ -20941,7 +20871,7 @@
       "confidence_score": 0.95,
       "context": "OptionalAuthGuard",
       "source_file": "todo.md",
-      "source_location": "L442",
+      "source_location": "L449",
       "weight": 1.0
     },
     {
@@ -20969,15 +20899,15 @@
       "weight": 1.0
     },
     {
-      "source": "todo_t27_t28_t29_pwa_manifest_icons_service_worker_offline_install_prompt",
-      "target": "nextjs_src_components_pwa_registersw_registersw",
+      "source": "todo_t16_profile_on_real_data",
+      "target": "nextjs_src_app_profile_page_profilepage",
       "relation": "references",
       "_origin": "ast",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
-      "context": "RegisterSW",
+      "context": "ProfilePage",
       "source_file": "todo.md",
-      "source_location": "L541",
+      "source_location": "L314",
       "weight": 1.0
     },
     {
@@ -21029,30 +20959,6 @@
       "weight": 1.0
     },
     {
-      "source": "todo_a1_arena_ui_tokens_motion_landing_themed_auth",
-      "target": "nextjs_src_components_arena_terminalhero_terminalhero",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "context": "TerminalHero",
-      "source_file": "todo.md",
-      "source_location": "L539",
-      "weight": 1.0
-    },
-    {
-      "source": "todo_a1_arena_ui_tokens_motion_landing_themed_auth",
-      "target": "nextjs_src_components_arena_tickicon_tickicon",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "context": "TickIcon",
-      "source_file": "todo.md",
-      "source_location": "L539",
-      "weight": 1.0
-    },
-    {
       "source": "todo_t13_get_me_profile_patch_me_profile",
       "target": "backend_src_users_dto_update_profile_dto_updateprofiledto",
       "relation": "references",
@@ -21061,7 +20967,7 @@
       "confidence_score": 0.95,
       "context": "UpdateProfileDto",
       "source_file": "todo.md",
-      "source_location": "L262",
+      "source_location": "L264",
       "weight": 1.0
     },
     {
@@ -21109,7 +21015,7 @@
       "confidence_score": 0.95,
       "context": "UsersModule",
       "source_file": "todo.md",
-      "source_location": "L262",
+      "source_location": "L264",
       "weight": 1.0
     },
     {
@@ -21121,7 +21027,19 @@
       "confidence_score": 0.95,
       "context": "UsersService",
       "source_file": "todo.md",
-      "source_location": "L262",
+      "source_location": "L264",
+      "weight": 1.0
+    },
+    {
+      "source": "todo_t17_self_service_account_deletion",
+      "target": "backend_src_users_users_service_usersservice_deleteme",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "UsersService.deleteMe",
+      "source_file": "todo.md",
+      "source_location": "L325",
       "weight": 1.0
     },
     {
@@ -21133,7 +21051,7 @@
       "confidence_score": 0.95,
       "context": "me",
       "source_file": "todo.md",
-      "source_location": "L445",
+      "source_location": "L452",
       "weight": 1.0
     },
     {
@@ -21146,6 +21064,18 @@
       "context": "psql",
       "source_file": "supabase/precheck.md",
       "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "identity_e2e_automated_evidence_2026_10_19",
+      "target": "nextjs_src_lib_safe_next_safenext",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "context": "safeNext",
+      "source_file": "identity-e2e.md",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -21197,5 +21127,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f9adb2cfb20b3a16838e1073ab95143844627042"
+  "built_at_commit": "b5424200f2436e8760bbcf8d2713ca0461e94bc3"
 }

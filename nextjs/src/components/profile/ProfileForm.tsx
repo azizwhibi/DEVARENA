@@ -117,6 +117,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
     try {
       const updated = await apiRequest<UserProfileData>('/me/profile', {
         method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
@@ -138,6 +139,11 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       );
 
       setSuccessMessage('Profile settings saved successfully.');
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('profile-updated', { detail: updated }),
+        );
+      }
       router.refresh();
     } catch (err: unknown) {
       if (err instanceof ApiError) {

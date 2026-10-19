@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiRequest, ApiError } from '@/lib/api';
 import type { AuthUser } from '@/lib/api-core';
-import { createClient } from '@/lib/supabase/client';
 
 type Account = { id: string; username: string; role: AuthUser['role'] };
 
@@ -14,34 +13,60 @@ export function AuthHeader() {
   const [account, setAccount] = useState<Account | null>(null);
   const [failure, setFailure] = useState<{ id: string; message: string } | null>(null);
   const [leaving, setLeaving] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
   const userId = user?.id;
 
   useEffect(() => {
     if (!userId) return;
     const controller = new AbortController();
+
     async function load() {
       try {
-        const [me, profile] = await Promise.all([
-          apiRequest<AuthUser>('/me', { signal: controller.signal }),
-          // /me intentionally has no username; this read is restricted by owner RLS.
-          createClient().from('profiles').select('username').eq('id', userId!).abortSignal(controller.signal).maybeSingle(),
-        ]);
+        const profile = await apiRequest<{
+          id: string;
+          username: string;
+          role: AuthUser['role'];
+        }>('/me/profile', { signal: controller.signal });
         if (controller.signal.aborted) return;
-        if (me.id !== userId || me.status !== 'active' || profile.error || typeof profile.data?.username !== 'string') {
+        if (profile.id !== userId || typeof profile.username !== 'string') {
           throw new Error('Account could not be loaded');
         }
-        setAccount({ id: me.id, username: profile.data.username, role: me.role });
+        setAccount({ id: profile.id, username: profile.username, role: profile.role });
         setFailure(null);
       } catch (error) {
         if (controller.signal.aborted) return;
         setAccount(null);
-        setFailure({ id: userId!, message: error instanceof ApiError && error.problem.code === 'account_suspended'
-          ? 'Account suspended' : 'Account unavailable. Try again shortly.' });
+        setFailure({
+          id: userId!,
+          message:
+            error instanceof ApiError && error.problem.code === 'account_suspended'
+              ? 'Account suspended'
+              : 'Account unavailable. Try again shortly.',
+        });
       }
     }
+
     void load();
-    return () => controller.abort();
-  }, [userId]);
+
+    function handleProfileUpdated(e: Event) {
+      const customEvent = e as CustomEvent<{ id: string; username: string; role: AuthUser['role'] }>;
+      if (customEvent.detail && customEvent.detail.id === userId) {
+        setAccount({
+          id: customEvent.detail.id,
+          username: customEvent.detail.username,
+          role: customEvent.detail.role,
+        });
+        setFailure(null);
+      }
+    }
+
+    window.addEventListener('profile-updated', handleProfileUpdated);
+
+    return () => {
+      controller.abort();
+      window.removeEventListener('profile-updated', handleProfileUpdated);
+    };
+  }, [userId, retryKey]);
 
   async function logout() {
     setLeaving(true);
@@ -69,7 +94,21 @@ export function AuthHeader() {
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
             {current?.role === 'admin' && <Link href="/admin" className={linkClass}>Administration</Link>}
             <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
-            {message && <p role="alert" className="w-full text-red-200">{message}</p>}
+            {message && (
+              <div role="alert" className="flex w-full items-center gap-3 text-red-200">
+                <span>{message}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFailure(null);
+                    setRetryKey((k) => k + 1);
+                  }}
+                  className="text-xs underline hover:text-red-100"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
           </div>
         ) : <Link href="/login" className={`${linkClass} inline-flex min-h-11 items-center px-2`}>Sign in</Link>}
       </nav>
