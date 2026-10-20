@@ -9,6 +9,7 @@ import { TickIcon } from '@/components/arena/TickIcon';
 
 export function RegisterForm() {
   const router = useRouter();
+  const [role, setRole] = useState<'developer' | 'recruiter'>('developer');
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
@@ -33,7 +34,8 @@ export function RegisterForm() {
       }
       element.reset();
       if (result.signedIn) {
-        router.replace('/');
+        const destination = result.role === 'recruiter' ? '/recruiter' : '/profile';
+        router.replace(destination);
         router.refresh();
       } else {
         setSent(true);
@@ -66,6 +68,58 @@ export function RegisterForm() {
             <form onSubmit={submit} aria-busy={pending} className="mt-6">
               <fieldset disabled={pending} className="space-y-5">
                 <legend className="sr-only">Account details</legend>
+
+                <div>
+                  <label id="account-type-label" className="text-sm font-medium">I want to join as</label>
+                  <div className="mt-2 grid grid-cols-2 gap-3" role="radiogroup" aria-labelledby="account-type-label">
+                    <label
+                      className={`flex cursor-pointer flex-col rounded-xl border p-3 transition-colors focus-within:ring-2 focus-within:ring-primary ${
+                        role === 'developer'
+                          ? 'border-primary bg-primary/10 text-zinc-100'
+                          : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-sm text-zinc-100">💻 Developer</span>
+                        <input
+                          type="radio"
+                          name="role"
+                          value="developer"
+                          checked={role === 'developer'}
+                          onChange={() => setRole('developer')}
+                          className="h-4 w-4 accent-primary"
+                        />
+                      </div>
+                      <span className="mt-1 text-xs text-zinc-400 leading-4">
+                        Solve arenas, earn tiers, climb rankings
+                      </span>
+                    </label>
+
+                    <label
+                      className={`flex cursor-pointer flex-col rounded-xl border p-3 transition-colors focus-within:ring-2 focus-within:ring-primary ${
+                        role === 'recruiter'
+                          ? 'border-primary bg-primary/10 text-zinc-100'
+                          : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-sm text-zinc-100">💼 Recruiter</span>
+                        <input
+                          type="radio"
+                          name="role"
+                          value="recruiter"
+                          checked={role === 'recruiter'}
+                          onChange={() => setRole('recruiter')}
+                          className="h-4 w-4 accent-primary"
+                        />
+                      </div>
+                      <span className="mt-1 text-xs text-zinc-400 leading-4">
+                        Discover talent & verified skills
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
                 <div>
                   <label htmlFor="email" className="text-sm font-medium">Email</label>
                   <input id="email" name="email" type="email" autoComplete="email" required maxLength={254} className={inputClass} />
@@ -80,10 +134,17 @@ export function RegisterForm() {
                   <input id="password" name="password" type="password" autoComplete="new-password" required minLength={8} aria-describedby="password-hint" className={inputClass} />
                   <p id="password-hint" className="mt-2 text-xs leading-5 text-zinc-400">Use at least eight characters.</p>
                 </div>
-                <label htmlFor="visibility" className="flex min-h-11 cursor-pointer items-start gap-3 py-2 text-sm leading-6">
-                  <input id="visibility" name="visibility" type="checkbox" defaultChecked aria-describedby="visibility-hint" className="mt-1 h-5 w-5 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" />
-                  <span>Show me on public leaderboards<span id="visibility-hint" className="mt-1 block text-xs leading-5 text-zinc-400">Uncheck to keep your profile private. You can change this later.</span></span>
-                </label>
+
+                {role === 'developer' ? (
+                  <label htmlFor="visibility" className="flex min-h-11 cursor-pointer items-start gap-3 py-2 text-sm leading-6">
+                    <input id="visibility" name="visibility" type="checkbox" defaultChecked aria-describedby="visibility-hint" className="mt-1 h-5 w-5 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" />
+                    <span>Show me on public leaderboards<span id="visibility-hint" className="mt-1 block text-xs leading-5 text-zinc-400">Uncheck to keep your profile private. You can change this later.</span></span>
+                  </label>
+                ) : (
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 text-xs leading-5 text-zinc-400">
+                    <span className="font-semibold text-zinc-300">Recruiter Account:</span> You will have access to the Candidate Hub and Talent Directory. Recruiter accounts are not listed as competitors on developer leaderboards.
+                  </div>
+                )}
                 {error && <p role="alert" className="rounded-lg border border-red-400/40 bg-red-950/40 p-3 text-sm leading-6 text-red-200">{error}</p>}
                 <button type="submit" disabled={pending} className="arena-btn min-h-12 w-full rounded-lg bg-primary px-4 font-semibold text-zinc-950 hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-60">{pending ? 'Creating account…' : 'Create account'}</button>
               </fieldset>

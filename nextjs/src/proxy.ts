@@ -27,7 +27,7 @@ export async function proxy(request: NextRequest) {
     // An unverifiable session gets the same redirects as a missing session.
   }
   const { pathname, search } = request.nextUrl;
-  const protectedRoute = ['/profile', '/admin', '/reset-password', '/dashboard', '/my-skills', '/skills', '/coach', '/arena', '/discover', '/marketplace', '/knowledge'].some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  const protectedRoute = ['/profile', '/admin', '/recruiter', '/reset-password', '/dashboard', '/my-skills', '/skills', '/coach', '/arena', '/discover', '/marketplace', '/knowledge'].some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`));
   let destination: URL | undefined;
   if (!authenticated && protectedRoute) {
     destination = new URL('/login', request.url);

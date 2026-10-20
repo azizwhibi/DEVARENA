@@ -96,6 +96,7 @@ export function AuthHeader() {
           <summary className={styles.trigger} aria-label={`Menu du compte ${displayName}`}><span className={styles.avatar}>{displayName.slice(0, 2)}</span><WorkspaceIcon name="chevron" size={16} /></summary>
           <div className={styles.dropdown}>
             <Link href="/profile" className={styles.item} onClick={event => { event.currentTarget.closest('details')?.removeAttribute('open'); }}><WorkspaceIcon name="user" />Mon profil</Link>
+            {(current?.role === 'recruiter' || current?.role === 'admin') && <Link href="/recruiter" className={styles.item} onClick={event => { event.currentTarget.closest('details')?.removeAttribute('open'); }}><WorkspaceIcon name="users" />Recruiter Portal</Link>}
             <button type="button" className={styles.item} onClick={logout} disabled={leaving}><WorkspaceIcon name="logout" />{leaving ? 'Déconnexion…' : 'Se déconnecter'}</button>
           </div>
         </details> : <Link href="/login" className={styles.login}>Se connecter</Link>}

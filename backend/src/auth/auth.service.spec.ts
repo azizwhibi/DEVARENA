@@ -11,7 +11,12 @@ import request from 'supertest';
 import type { Server } from 'node:http';
 import { AuthService } from './auth.service';
 import { assertSafeAuthConfig } from './auth-config';
-import { AdminGuard, OptionalAuthGuard, UserGuard } from './guards';
+import {
+  AdminGuard,
+  OptionalAuthGuard,
+  RecruiterGuard,
+  UserGuard,
+} from './guards';
 import { AuthModule } from './auth.module';
 import { SupabaseService } from '../supabase/supabase.service';
 import { ProblemDetailsFilter } from '../common/problem-details.filter';
@@ -29,10 +34,16 @@ function setup(overrides: Record<string, string> = {}) {
   const claims = jest
     .fn()
     .mockResolvedValue({ data: { claims: { sub: id } }, error: null });
-  const maybeSingle = jest.fn().mockResolvedValue({ data: user, error: null });
+  const maybeSingle = jest
+    .fn()
+    .mockImplementation(() =>
+      Promise.resolve({ data: { ...user }, error: null }),
+    );
   const eq = jest.fn().mockReturnValue({ maybeSingle });
   const select = jest.fn().mockReturnValue({ eq });
-  const from = jest.fn().mockReturnValue({ select });
+  const updateEq = jest.fn().mockResolvedValue({ error: null });
+  const update = jest.fn().mockReturnValue({ eq: updateEq });
+  const from = jest.fn().mockReturnValue({ select, update });
   const supabase = {
     client: { auth: { getClaims: claims }, from },
   } as unknown as SupabaseService;
@@ -50,6 +61,8 @@ function setup(overrides: Record<string, string> = {}) {
     maybeSingle,
     eq,
     select,
+    update,
+    updateEq,
     from,
   };
 }
@@ -197,6 +210,26 @@ describe('AuthService', () => {
       s.auth.authenticate('Bearer a.jwt.token'),
     ).rejects.toBeInstanceOf(InternalServerErrorException);
   });
+  it('syncs profile to recruiter when JWT claims user_metadata role is recruiter', async () => {
+    const s = setup();
+    s.claims.mockResolvedValue({
+      data: { claims: { sub: id, user_metadata: { role: 'recruiter' } } },
+      error: null,
+    });
+    const result = await s.auth.authenticate('Bearer a.jwt.token');
+    expect(result.role).toBe('recruiter');
+    expect(s.update).toHaveBeenCalledWith({ role: 'recruiter' });
+  });
+  it('never escalates to admin when JWT claims user_metadata role is admin', async () => {
+    const s = setup();
+    s.claims.mockResolvedValue({
+      data: { claims: { sub: id, user_metadata: { role: 'admin' } } },
+      error: null,
+    });
+    const result = await s.auth.authenticate('Bearer a.jwt.token');
+    expect(result.role).toBe('developer');
+    expect(s.update).not.toHaveBeenCalled();
+  });
 });
 
 describe('auth guards', () => {
@@ -222,6 +255,43 @@ describe('auth guards', () => {
     await expect(
       new AdminGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
     ).resolves.toBe(true);
+  });
+  it('denies a developer on RecruiterGuard', async () => {
+    const s = setup();
+    const { ctx } = context('Bearer a.jwt.token');
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+  it('accepts an active recruiter on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'recruiter' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).resolves.toBe(true);
+  });
+  it('accepts an active admin on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'admin' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).resolves.toBe(true);
+  });
+  it('rejects a suspended recruiter on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'recruiter', status: 'suspended' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
   it('allows anonymous requests only when the header is absent', async () => {
     const s = setup();
