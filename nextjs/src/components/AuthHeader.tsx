@@ -93,6 +93,9 @@ export function AuthHeader() {
             {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
             {current?.role === 'admin' && <Link href="/admin/users" className={linkClass}>Administration</Link>}
+            {(current?.role === 'recruiter' || current?.role === 'admin') && (
+              <Link href="/recruiter" className={linkClass}>Recruiter Portal</Link>
+            )}
             <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
             {message && (
               <div role="alert" className="flex w-full items-center gap-3 text-red-200">

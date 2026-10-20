@@ -12,10 +12,10 @@
     "semantic_hash": "fa439650fa28a1a7aa8c2b6d81c8cc20"
   },
   "backend/package.json": {
-    "mtime": 1792353978.6150396,
-    "seen": 1792362480.3929806,
-    "ast_hash": "9a0a5ad8238bca4b6bd7b49a3f18d8d1",
-    "semantic_hash": "9a0a5ad8238bca4b6bd7b49a3f18d8d1"
+    "mtime": 1792493209.6606412,
+    "seen": 1792493628.793671,
+    "ast_hash": "12faa9ae2dc626f7add4494f8104828f",
+    "semantic_hash": ""
   },
   "backend/src/app.module.ts": {
     "mtime": 1792394354.4288416,
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "backend/src/auth/auth.service.spec.ts": {
-    "mtime": 1792402466.9229238,
-    "seen": 1792403198.717566,
-    "ast_hash": "84b0166e2cabf327ce9843b8b451b4a9",
+    "mtime": 1792493093.6210241,
+    "seen": 1792493628.7996604,
+    "ast_hash": "86d47945edfbd594b5b0bdbc3ea01ec6",
     "semantic_hash": ""
   },
   "backend/src/auth/auth.service.ts": {
@@ -72,10 +72,10 @@
     "semantic_hash": "fec197ee639834e790b20ead2f4ffb05"
   },
   "backend/src/auth/guards.ts": {
-    "mtime": 1792359177.1499863,
-    "seen": 1792362480.3929806,
-    "ast_hash": "623794184c358ff98ed7f7b12d61b69f",
-    "semantic_hash": "623794184c358ff98ed7f7b12d61b69f"
+    "mtime": 1792493028.0860417,
+    "seen": 1792493628.803298,
+    "ast_hash": "53ce01f0d53d2af3fadf7118c8233500",
+    "semantic_hash": ""
   },
   "backend/src/auth/me.controller.ts": {
     "mtime": 1792359166.7069104,
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "nextjs/package.json": {
-    "mtime": 1792403066.8240204,
-    "seen": 1792403198.7219555,
-    "ast_hash": "70b758e061fbd4a91ae3160fac011a3d",
+    "mtime": 1792493471.5644698,
+    "seen": 1792493628.8317857,
+    "ast_hash": "97b138ad13650365d73378fda3047747",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-safe-next.mjs": {
@@ -198,9 +198,9 @@
     "semantic_hash": "03a50f8c69c4fb4f545f6ee2097260fe"
   },
   "nextjs/src/proxy.ts": {
-    "mtime": 1792365389.4887273,
-    "seen": 1792366022.9180596,
-    "ast_hash": "bc02ada36b06d470c5dbb071fad72863",
+    "mtime": 1792493236.4985046,
+    "seen": 1792493628.8982098,
+    "ast_hash": "ba7bde3bacc85412a3e53d6788f3b849",
     "semantic_hash": ""
   },
   "nextjs/tsconfig.json": {
@@ -360,15 +360,15 @@
     "semantic_hash": "40d41a8f54a0ced00eb510adac790814"
   },
   "nextjs/src/components/AuthHeader.tsx": {
-    "mtime": 1792402685.0043085,
-    "seen": 1792403198.7275105,
-    "ast_hash": "91e460f0f4c18a0320387fa574be9130",
+    "mtime": 1792493284.5806303,
+    "seen": 1792493628.864067,
+    "ast_hash": "3b63d240abc4393fbd1949036dfd3c5c",
     "semantic_hash": ""
   },
   "nextjs/src/components/auth/LoginForm.tsx": {
-    "mtime": 1792369140.250381,
-    "seen": 1792369252.290882,
-    "ast_hash": "73ad09cca34f55b551a93a283783aaf3",
+    "mtime": 1792493509.4713297,
+    "seen": 1792493628.869349,
+    "ast_hash": "da0a53e94bf3019428eff1549de44cc9",
     "semantic_hash": ""
   },
   "nextjs/src/hooks/useAuth.ts": {
@@ -396,10 +396,10 @@
     "semantic_hash": "2ebce1461bdbe04e402f8d5926967fdf"
   },
   "AGENTS.md": {
-    "mtime": 1792363021.492161,
-    "seen": 1792363162.8259296,
-    "ast_hash": "c2c0821f2cbb9038ab1ed3d5836abec9",
-    "semantic_hash": "c2c0821f2cbb9038ab1ed3d5836abec9"
+    "mtime": 1792492112.31745,
+    "seen": 1792493628.9033465,
+    "ast_hash": "b7d9a9963a92d5099acd418ab3cdde19",
+    "semantic_hash": ""
   },
   "nextjs/scripts/check-register-http.mjs": {
     "mtime": 1792364114.5138993,
@@ -783,6 +783,36 @@
     "mtime": 1792403156.1198573,
     "seen": 1792403198.7275105,
     "ast_hash": "77f50710b88816699fb937460948bc10",
+    "semantic_hash": ""
+  },
+  "backend/scripts/seed-roles.mjs": {
+    "mtime": 1792493177.879904,
+    "seen": 1792493628.7936845,
+    "ast_hash": "fa5b5191a319a2e0c3571e7ea116838b",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-role-login.mjs": {
+    "mtime": 1792493452.962817,
+    "seen": 1792493628.8434489,
+    "ast_hash": "f63b7d12a6fb9145bd8171b948cf84e1",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/recruiter/page.tsx": {
+    "mtime": 1792493271.8676665,
+    "seen": 1792493628.864054,
+    "ast_hash": "cd5cf3f4404b855424ac59dd2b1e761a",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/recruiter/RecruiterDashboard.tsx": {
+    "mtime": 1792493263.0703218,
+    "seen": 1792493628.8803072,
+    "ast_hash": "b601d626435595881a6ba870760f48a5",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/role-login.ts": {
+    "mtime": 1792493440.4363334,
+    "seen": 1792493628.8942068,
+    "ast_hash": "3aeab7c04fc8af9e6bba4264dd8cf35f",
     "semantic_hash": ""
   }
 }

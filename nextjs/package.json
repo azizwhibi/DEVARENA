@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
-    "test:auth": "node --experimental-strip-types scripts/check-safe-next.mjs && node --experimental-strip-types scripts/check-api.mjs && node --experimental-strip-types scripts/check-register.mjs && node --experimental-strip-types scripts/check-oauth.mjs && node --experimental-strip-types scripts/check-recovery.mjs && node --experimental-strip-types scripts/check-profile.mjs && node scripts/check-admin.mjs && node scripts/check-pwa.mjs"
+    "test:auth": "node --experimental-strip-types scripts/check-safe-next.mjs && node --experimental-strip-types scripts/check-api.mjs && node --experimental-strip-types scripts/check-register.mjs && node --experimental-strip-types scripts/check-oauth.mjs && node --experimental-strip-types scripts/check-recovery.mjs && node --experimental-strip-types scripts/check-profile.mjs && node scripts/check-admin.mjs && node scripts/check-pwa.mjs && node --experimental-strip-types scripts/check-role-login.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

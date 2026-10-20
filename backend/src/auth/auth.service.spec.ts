@@ -11,7 +11,12 @@ import request from 'supertest';
 import type { Server } from 'node:http';
 import { AuthService } from './auth.service';
 import { assertSafeAuthConfig } from './auth-config';
-import { AdminGuard, OptionalAuthGuard, UserGuard } from './guards';
+import {
+  AdminGuard,
+  OptionalAuthGuard,
+  RecruiterGuard,
+  UserGuard,
+} from './guards';
 import { AuthModule } from './auth.module';
 import { SupabaseService } from '../supabase/supabase.service';
 import { ProblemDetailsFilter } from '../common/problem-details.filter';
@@ -222,6 +227,43 @@ describe('auth guards', () => {
     await expect(
       new AdminGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
     ).resolves.toBe(true);
+  });
+  it('denies a developer on RecruiterGuard', async () => {
+    const s = setup();
+    const { ctx } = context('Bearer a.jwt.token');
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+  it('accepts an active recruiter on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'recruiter' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).resolves.toBe(true);
+  });
+  it('accepts an active admin on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'admin' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).resolves.toBe(true);
+  });
+  it('rejects a suspended recruiter on RecruiterGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'recruiter', status: 'suspended' },
+      error: null,
+    });
+    await expect(
+      new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
   it('allows anonymous requests only when the header is absent', async () => {
     const s = setup();
