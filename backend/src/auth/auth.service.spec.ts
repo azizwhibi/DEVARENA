@@ -34,10 +34,16 @@ function setup(overrides: Record<string, string> = {}) {
   const claims = jest
     .fn()
     .mockResolvedValue({ data: { claims: { sub: id } }, error: null });
-  const maybeSingle = jest.fn().mockResolvedValue({ data: user, error: null });
+  const maybeSingle = jest
+    .fn()
+    .mockImplementation(() =>
+      Promise.resolve({ data: { ...user }, error: null }),
+    );
   const eq = jest.fn().mockReturnValue({ maybeSingle });
   const select = jest.fn().mockReturnValue({ eq });
-  const from = jest.fn().mockReturnValue({ select });
+  const updateEq = jest.fn().mockResolvedValue({ error: null });
+  const update = jest.fn().mockReturnValue({ eq: updateEq });
+  const from = jest.fn().mockReturnValue({ select, update });
   const supabase = {
     client: { auth: { getClaims: claims }, from },
   } as unknown as SupabaseService;
@@ -55,6 +61,8 @@ function setup(overrides: Record<string, string> = {}) {
     maybeSingle,
     eq,
     select,
+    update,
+    updateEq,
     from,
   };
 }
@@ -201,6 +209,26 @@ describe('AuthService', () => {
     await expect(
       s.auth.authenticate('Bearer a.jwt.token'),
     ).rejects.toBeInstanceOf(InternalServerErrorException);
+  });
+  it('syncs profile to recruiter when JWT claims user_metadata role is recruiter', async () => {
+    const s = setup();
+    s.claims.mockResolvedValue({
+      data: { claims: { sub: id, user_metadata: { role: 'recruiter' } } },
+      error: null,
+    });
+    const result = await s.auth.authenticate('Bearer a.jwt.token');
+    expect(result.role).toBe('recruiter');
+    expect(s.update).toHaveBeenCalledWith({ role: 'recruiter' });
+  });
+  it('never escalates to admin when JWT claims user_metadata role is admin', async () => {
+    const s = setup();
+    s.claims.mockResolvedValue({
+      data: { claims: { sub: id, user_metadata: { role: 'admin' } } },
+      error: null,
+    });
+    const result = await s.auth.authenticate('Bearer a.jwt.token');
+    expect(result.role).toBe('developer');
+    expect(s.update).not.toHaveBeenCalled();
   });
 });
 

@@ -107,9 +107,28 @@ function testHeaderLinks() {
   );
 }
 
+// 5. Register form recruiter option test
+function testRegisterFormRecruiterRole() {
+  const registerPath = resolve(__dirname, '../src/components/auth/RegisterForm.tsx');
+  const registerContent = readFileSync(registerPath, 'utf8');
+  assert.ok(
+    registerContent.includes('value="recruiter"'),
+    'RegisterForm.tsx must contain recruiter role radio option',
+  );
+  assert.ok(
+    registerContent.includes('value="developer"'),
+    'RegisterForm.tsx must contain developer role radio option',
+  );
+  assert.ok(
+    !registerContent.includes('value="admin"'),
+    'RegisterForm.tsx must never contain admin role option',
+  );
+}
+
 await testRoleDestinations();
 testDemoAccounts();
 testProxyRouteProtection();
 testHeaderLinks();
+testRegisterFormRecruiterRole();
 
-console.log('PASS: 16 role-based sign-in and recruiter navigation assertions');
+console.log('PASS: 19 role-based sign-in and recruiter navigation assertions');

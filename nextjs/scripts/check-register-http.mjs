@@ -24,7 +24,10 @@ const checks = [
   ['Login link', /href="\/login"/],
 ];
 for (const [label, pattern] of checks) assert.match(html, pattern, label);
-assert.doesNotMatch(html, /name="(?:role|status)"/);
+assert.match(html, /name="role"[^>]*value="developer"/, 'Developer role radio option');
+assert.match(html, /name="role"[^>]*value="recruiter"/, 'Recruiter role radio option');
+assert.doesNotMatch(html, /name="status"/, 'Status must not be user-selectable');
+assert.doesNotMatch(html, /name="role"[^>]*value="admin"/, 'Admin role must not be user-selectable');
 const template = await readFile(new URL('../../supabase/templates/confirmation.html', import.meta.url), 'utf8');
 const rendered = template.replaceAll('{{ .RedirectTo }}', base + '/auth/callback').replaceAll('{{ .TokenHash }}', 'synthetic-test-hash');
 const href = rendered.match(/href="([^"]+)"/)[1].replaceAll('&amp;', '&');

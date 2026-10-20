@@ -49,6 +49,27 @@ try {
   assert.deepEqual(Object.keys(payload).sort(), ['email', 'options', 'password']);
   scenarios++;
 
+  const recruiterForm = form();
+  recruiterForm.set('role', 'recruiter');
+  assert.deepEqual(await register(recruiterForm, 'http://localhost:3001'), { signedIn: false, role: 'recruiter' });
+  const recruiterPayload = calls.pop();
+  assert.deepEqual(recruiterPayload.options.data, { username: 'player_1', visibility: 'public', role: 'recruiter' });
+  assert.equal(recruiterPayload.options.emailRedirectTo, 'http://localhost:3001/auth/callback?next=/recruiter');
+  scenarios++;
+
+  const recruiterSignInForm = form();
+  recruiterSignInForm.set('role', 'recruiter');
+  globalThis.registrationTestClient.auth.signUp = async () => ({
+    data: { session: { access_token: 'recruiter-token' } },
+    error: null,
+  });
+  assert.deepEqual(await register(recruiterSignInForm, 'http://localhost:3001'), { signedIn: true, role: 'recruiter' });
+  scenarios++;
+  globalThis.registrationTestClient.auth.signUp = async payload => {
+    calls.push(payload);
+    return { data: { user: { id: 'test-user' }, session: null }, error: null };
+  };
+
   for (const username of ['', 'ab', 'a'.repeat(25), 'with space', 'hyphen-name', '<script>', 'naïve', 'player\n']) {
     const data = form();
     data.set('username', username);

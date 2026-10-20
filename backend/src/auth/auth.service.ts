@@ -31,6 +31,7 @@ export class AuthService {
 
   async authenticate(authorizationHeader?: string): Promise<AuthUser> {
     let id = this.devUserId;
+    let claims: Record<string, unknown> | undefined;
     if (!this.bypass) {
       const token = /^Bearer\s+(\S+)$/i.exec(authorizationHeader ?? '')?.[1];
       if (!token) throw new UnauthorizedException();
@@ -41,6 +42,7 @@ export class AuthService {
           throw new UnauthorizedException();
         }
         id = data.claims.sub;
+        claims = data.claims;
       } catch {
         throw new UnauthorizedException();
       }
@@ -59,6 +61,17 @@ export class AuthService {
         code: 'account_suspended',
       });
     }
-    return data;
+    const userProfile: AuthUser = { ...data };
+    const metaRole = (
+      claims?.user_metadata as Record<string, unknown> | undefined
+    )?.role;
+    if (userProfile.role === 'developer' && metaRole === 'recruiter') {
+      await this.supabase.client
+        .from('profiles')
+        .update({ role: 'recruiter' })
+        .eq('id', id);
+      userProfile.role = 'recruiter';
+    }
+    return userProfile;
   }
 }
