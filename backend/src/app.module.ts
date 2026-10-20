@@ -1,3 +1,6 @@
+import { KnowledgeModule } from './knowledge/knowledge.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { SkillsModule } from './skills/skills.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -13,6 +16,9 @@ import { UsersModule } from './users/users.module';
     SupabaseModule,
     AuthModule,
     UsersModule,
+    EventEmitterModule.forRoot(),
+    SkillsModule,
+    KnowledgeModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

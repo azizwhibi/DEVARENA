@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 // Typing/fade animations live in globals.css (.arena-term-*); delays chain the lines once.
 const lines: { text: string; n: number; delay: number; dur: number }[] = [
   { text: 'devarena login --as you', n: 23, delay: 0.3, dur: 1.2 },
@@ -18,7 +19,7 @@ export function TerminalHero() {
             <span className="arena-term-line align-bottom" style={{ '--ch': `${l.n}ch`, '--n': l.n, '--delay': `${l.delay}s`, '--dur': `${l.dur}s` } as React.CSSProperties}>{l.text}</span>
           </p>
         ))}
-        <p className="arena-term-out text-primary" style={{ '--delay': '3.6s' } as React.CSSProperties}>✔ 12/12 tests passed</p>
+        <p className="arena-term-out text-primary" style={{ '--delay': '3.6s' } as React.CSSProperties}><Check size={16} strokeWidth={1.5} className="inline-block" aria-hidden="true" /> 12/12 tests passed</p>
         <p className="arena-term-out text-accent" style={{ '--delay': '3.9s' } as React.CSSProperties}>+120 XP · rank #1,024 → #812</p>
         <p className="text-primary">$ <span className="arena-caret" /></p>
       </div>

@@ -33,14 +33,14 @@ export default function ProfileSettingsPage() {
     <main className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Profile Settings</h1>
-          <p className="text-sm text-zinc-400">
+          <h1 className="text-[28px] font-semibold text-zinc-100">Profile Settings</h1>
+          <p className="text-sm text-[#8B93A7]">
             Manage your personal details, public profile, and account settings.
           </p>
         </div>
         <Link
           href="/profile"
-          className="rounded-md bg-zinc-800 px-3 py-1.5 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="rounded-md bg-zinc-800 px-3 py-1.5 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
         >
           View Profile
         </Link>
@@ -49,7 +49,7 @@ export default function ProfileSettingsPage() {
       <Suspense
         fallback={
           <div
-            className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-8 text-center text-sm text-zinc-400"
+            className="rounded-xl border border-white/[0.06] bg-[#111827] p-8 text-center text-sm text-[#8B93A7]"
             aria-busy="true"
           >
             Loading settings...

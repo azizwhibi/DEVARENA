@@ -30,11 +30,11 @@ async function ProfileContent() {
 
 export default function ProfilePage() {
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
+    <main className="mx-auto w-full max-w-[1100px] p-8 max-sm:p-4">
       <Suspense
         fallback={
           <div
-            className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-8 text-center text-sm text-zinc-400"
+            className="rounded-xl border border-white/[0.06] bg-[#111827] p-8 text-center text-sm text-[#8B93A7]"
             aria-busy="true"
           >
             Loading profile...

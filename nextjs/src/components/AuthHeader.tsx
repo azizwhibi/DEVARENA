@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiRequest, ApiError } from '@/lib/api';
 import type { AuthUser } from '@/lib/api-core';
+import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
+import styles from './auth-header.module.css';
 
 type Account = { id: string; username: string; role: AuthUser['role'] };
 
@@ -83,35 +85,22 @@ export function AuthHeader() {
 
   const current = account?.id === userId ? account : null;
   const message = failure?.id === userId ? failure?.message : undefined;
-  const linkClass = 'rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary';
-  return (
-    <header className="border-b border-zinc-800 bg-zinc-950 px-5 py-4">
-      <nav aria-label="Main navigation" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 text-sm">
-        <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-primary`}>DevArena</Link>
-        {loading ? <span role="status" className="text-zinc-400">Checking session…</span> : user ? (
-          <div className="flex flex-wrap items-center gap-4">
-            {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
-              : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
-            {current?.role === 'admin' && <Link href="/admin/users" className={linkClass}>Administration</Link>}
-            <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
-            {message && (
-              <div role="alert" className="flex w-full items-center gap-3 text-red-200">
-                <span>{message}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFailure(null);
-                    setRetryKey((k) => k + 1);
-                  }}
-                  className="text-xs underline hover:text-red-100"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
+  const displayName = current?.username ?? user?.email ?? 'Compte';
+  return <header className={styles.header}>
+    <nav aria-label="Navigation du compte" className={styles.nav}>
+      <Link href="/" className={styles.brand} aria-label="DevArena — accueil"><WorkspaceIcon name="practice" size={20} /><span className={styles.brandText}>DevArena</span></Link>
+      <div className={styles.right}>
+        {loading ? <span role="status" aria-label="Chargement du compte" className={styles.skeleton} /> : user ? <details className={styles.account} onKeyDown={event => {
+          if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); }
+        }} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false; }}>
+          <summary className={styles.trigger} aria-label={`Menu du compte ${displayName}`}><span className={styles.avatar}>{displayName.slice(0, 2)}</span><WorkspaceIcon name="chevron" size={16} /></summary>
+          <div className={styles.dropdown}>
+            <Link href="/profile" className={styles.item} onClick={event => { event.currentTarget.closest('details')?.removeAttribute('open'); }}><WorkspaceIcon name="user" />Mon profil</Link>
+            <button type="button" className={styles.item} onClick={logout} disabled={leaving}><WorkspaceIcon name="logout" />{leaving ? 'Déconnexion…' : 'Se déconnecter'}</button>
           </div>
-        ) : <Link href="/login" className={`${linkClass} inline-flex min-h-11 items-center px-2`}>Sign in</Link>}
-      </nav>
-    </header>
-  );
+        </details> : <Link href="/login" className={styles.login}>Se connecter</Link>}
+      </div>
+    </nav>
+    {message && <div role="alert" className={styles.error}><span>{message}</span><button type="button" className={styles.retry} onClick={() => { setFailure(null); setRetryKey(key => key + 1); }}>Réessayer</button></div>}
+  </header>;
 }

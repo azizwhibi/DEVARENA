@@ -118,7 +118,7 @@ export function AvatarUpload({
 
   return (
     <div className="flex items-center gap-6">
-      <div className="relative h-20 w-20 overflow-hidden rounded-full bg-zinc-800 ring-2 ring-zinc-700">
+      <div className="relative h-20 w-20 overflow-hidden rounded-full bg-zinc-800 ring-2 ring-white/[0.06]">
         {currentAvatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -128,7 +128,7 @@ export function AvatarUpload({
           />
         ) : (
           <div
-            className="flex h-full w-full items-center justify-center text-xl font-bold text-zinc-400"
+            className="flex h-full w-full items-center justify-center text-xl font-semibold text-[#8B93A7]"
             aria-hidden="true"
           >
             ?
@@ -144,7 +144,7 @@ export function AvatarUpload({
       <div className="flex flex-col gap-2">
         <label
           htmlFor="avatar-upload-input"
-          className={`cursor-pointer inline-flex items-center justify-center rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+          className={`cursor-pointer inline-flex items-center justify-center rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
             loading ? 'opacity-50 pointer-events-none' : ''
           }`}
         >
@@ -159,7 +159,7 @@ export function AvatarUpload({
           onChange={handleFileChange}
           className="sr-only"
         />
-        <span className="text-xs text-zinc-400">
+        <span className="text-xs text-[#8B93A7]">
           PNG, JPEG or WebP up to 2 MB.
         </span>
         {error && (

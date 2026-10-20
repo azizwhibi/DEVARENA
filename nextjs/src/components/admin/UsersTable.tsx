@@ -189,10 +189,10 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-100">User Management</h1>
-          <p className="text-sm text-zinc-400">View, manage roles, suspend, and delete user accounts.</p>
+          <h1 className="text-[28px] font-semibold tracking-tight text-zinc-100">User Management</h1>
+          <p className="text-sm text-[#8B93A7]">View, manage roles, suspend, and delete user accounts.</p>
         </div>
-        <div className="text-sm text-zinc-400">
+        <div className="text-sm text-[#8B93A7]">
           Total Users: <span className="font-semibold text-zinc-200">{total}</span>
         </div>
       </div>
@@ -230,9 +230,9 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
       )}
 
       {/* Filter Toolbar */}
-      <div className="grid grid-cols-1 gap-4 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 rounded-xl border border-white/[0.06] bg-[#111827] p-4 sm:grid-cols-3">
         <div>
-          <label htmlFor="search-users" className="block text-xs font-medium text-zinc-400">
+          <label htmlFor="search-users" className="block text-xs font-medium text-[#8B93A7]">
             Search
           </label>
           <input
@@ -242,12 +242,12 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             maxLength={64}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="mt-1 w-full rounded-lg border border-white/[0.12] bg-[#0B0F1A] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
         <div>
-          <label htmlFor="role-filter" className="block text-xs font-medium text-zinc-400">
+          <label htmlFor="role-filter" className="block text-xs font-medium text-[#8B93A7]">
             Role
           </label>
           <select
@@ -257,7 +257,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
               setRoleFilter(e.target.value);
               setPage(1);
             }}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="mt-1 w-full rounded-lg border border-white/[0.12] bg-[#0B0F1A] px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="all">All Roles</option>
             <option value="admin">Admin</option>
@@ -267,7 +267,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
         </div>
 
         <div>
-          <label htmlFor="status-filter" className="block text-xs font-medium text-zinc-400">
+          <label htmlFor="status-filter" className="block text-xs font-medium text-[#8B93A7]">
             Status
           </label>
           <select
@@ -277,7 +277,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="mt-1 w-full rounded-lg border border-white/[0.12] bg-[#0B0F1A] px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active</option>
@@ -287,9 +287,9 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
       </div>
 
       {/* Users Table */}
-      <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/40">
+      <div className="overflow-x-auto rounded-xl border border-white/[0.06] bg-[#111827]">
         <table className="w-full text-left text-sm text-zinc-300">
-          <thead className="border-b border-zinc-800 bg-zinc-900/80 text-xs uppercase tracking-wider text-zinc-400">
+          <thead className="border-b border-white/[0.06] bg-[#111827]/80 text-xs uppercase tracking-wider text-[#8B93A7]">
             <tr>
               <th scope="col" className="px-4 py-3">User</th>
               <th scope="col" className="px-4 py-3">Role</th>
@@ -301,7 +301,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
           <tbody className="divide-y divide-zinc-800/60">
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-12 text-center text-zinc-400">
+                <td colSpan={5} className="py-12 text-center text-[#8B93A7]">
                   Loading users…
                 </td>
               </tr>
@@ -318,7 +318,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   <tr key={u.id} className="hover:bg-zinc-800/30">
                     <td className="px-4 py-3">
                       <div className="font-medium text-zinc-100">{u.username}</div>
-                      <div className="text-xs text-zinc-400">{u.email}</div>
+                      <div className="text-xs text-[#8B93A7]">{u.email}</div>
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -344,7 +344,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                         {u.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-zinc-400">
+                    <td className="px-4 py-3 text-xs text-[#8B93A7]">
                       {new Date(u.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -358,7 +358,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                           }}
                           disabled={isSelf}
                           title={isSelf ? 'Cannot change own role' : 'Change Role'}
-                          className="rounded border border-zinc-700 bg-zinc-800/60 px-2.5 py-1 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+                          className="rounded border border-white/[0.12] bg-zinc-800/60 px-2.5 py-1 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           Role
                         </button>
@@ -405,7 +405,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between text-xs text-zinc-400">
+      <div className="flex items-center justify-between text-xs text-[#8B93A7]">
         <div>
           Showing page {page} of {totalPages}
         </div>
@@ -414,7 +414,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
             type="button"
             disabled={page <= 1 || loading}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 font-medium text-zinc-200 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded border border-white/[0.12] bg-[#111827] px-3 py-1.5 font-medium text-zinc-200 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Previous
           </button>
@@ -422,7 +422,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
             type="button"
             disabled={page >= totalPages || loading}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 font-medium text-zinc-200 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded border border-white/[0.12] bg-[#111827] px-3 py-1.5 font-medium text-zinc-200 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Next
           </button>
@@ -437,11 +437,11 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
           aria-labelledby="role-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
         >
-          <div className="w-full max-w-md rounded-xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
-            <h2 id="role-modal-title" className="text-lg font-bold text-zinc-100">
+          <div className="w-full max-w-md rounded-xl border border-white/[0.12] bg-[#111827] p-6 shadow-2xl">
+            <h2 id="role-modal-title" className="text-lg font-semibold text-zinc-100">
               Change Role for {roleModalUser.username}
             </h2>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-[#8B93A7]">
               Current role: <span className="font-semibold text-zinc-200">{roleModalUser.role}</span>
             </p>
 
@@ -460,7 +460,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   id="new-role-select"
                   value={targetRole}
                   onChange={(e) => setTargetRole(e.target.value as 'admin' | 'developer' | 'recruiter')}
-                  className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="mt-1 w-full rounded-lg border border-white/[0.12] bg-[#0B0F1A] px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 >
                   <option value="developer">developer</option>
                   <option value="recruiter">recruiter</option>
@@ -473,7 +473,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   type="button"
                   onClick={() => setRoleModalUser(null)}
                   disabled={modalSubmitting}
-                  className="rounded border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
+                  className="rounded border border-white/[0.12] px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
                 >
                   Cancel
                 </button>
@@ -498,11 +498,11 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
           aria-labelledby="status-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
         >
-          <div className="w-full max-w-md rounded-xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
-            <h2 id="status-modal-title" className="text-lg font-bold text-zinc-100">
+          <div className="w-full max-w-md rounded-xl border border-white/[0.12] bg-[#111827] p-6 shadow-2xl">
+            <h2 id="status-modal-title" className="text-lg font-semibold text-zinc-100">
               {statusModalUser.status === 'active' ? 'Suspend Account' : 'Reactivate Account'}
             </h2>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-[#8B93A7]">
               User: <span className="font-semibold text-zinc-200">{statusModalUser.username}</span> ({statusModalUser.email})
             </p>
 
@@ -524,7 +524,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   value={statusReason}
                   onChange={(e) => setStatusReason(e.target.value)}
                   placeholder="State the reason for this action (audited)…"
-                  className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 p-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="mt-1 w-full rounded-lg border border-white/[0.12] bg-[#0B0F1A] p-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -533,7 +533,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   type="button"
                   onClick={() => setStatusModalUser(null)}
                   disabled={modalSubmitting}
-                  className="rounded border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
+                  className="rounded border border-white/[0.12] px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
                 >
                   Cancel
                 </button>
@@ -562,11 +562,11 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
           aria-labelledby="delete-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
         >
-          <div className="w-full max-w-md rounded-xl border border-red-800 bg-zinc-900 p-6 shadow-2xl">
-            <h2 id="delete-modal-title" className="text-lg font-bold text-red-400">
+          <div className="w-full max-w-md rounded-xl border border-red-800 bg-[#111827] p-6 shadow-2xl">
+            <h2 id="delete-modal-title" className="text-lg font-semibold text-red-400">
               Permanently Delete Account
             </h2>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 text-xs text-[#8B93A7]">
               This will erase all personal profile data and avatar files for{' '}
               <span className="font-semibold text-zinc-200">{deleteModalUser.username}</span>. Challenge attempts will be anonymized.
             </p>
@@ -580,7 +580,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
             <form onSubmit={handleDeleteSubmit} className="mt-4 space-y-4">
               <div>
                 <label htmlFor="confirm-delete-username" className="block text-xs font-medium text-zinc-300">
-                  Type <span className="font-bold text-red-300">{deleteModalUser.username}</span> to confirm:
+                  Type <span className="font-semibold text-red-300">{deleteModalUser.username}</span> to confirm:
                 </label>
                 <input
                   id="confirm-delete-username"
@@ -589,7 +589,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   value={confirmUsername}
                   onChange={(e) => setConfirmUsername(e.target.value)}
                   placeholder={deleteModalUser.username}
-                  className="mt-1 w-full rounded-lg border border-red-800/80 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-600 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                  className="mt-1 w-full rounded-lg border border-red-800/80 bg-[#0B0F1A] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-600 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
                 />
               </div>
 
@@ -598,7 +598,7 @@ export function UsersTable({ currentUserId }: UsersTableProps) {
                   type="button"
                   onClick={() => setDeleteModalUser(null)}
                   disabled={modalSubmitting}
-                  className="rounded border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
+                  className="rounded border border-white/[0.12] px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
                 >
                   Cancel
                 </button>

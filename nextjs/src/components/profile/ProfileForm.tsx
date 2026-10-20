@@ -167,9 +167,9 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
   return (
     <div className="flex flex-col gap-10">
       {/* Avatar Section */}
-      <section className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+      <section className="rounded-xl border border-white/[0.06] bg-[#111827] p-6">
         <h2 className="text-lg font-semibold text-zinc-100">Profile Photo</h2>
-        <p className="mt-1 text-sm text-zinc-400 mb-6">
+        <p className="mt-1 text-sm text-[#8B93A7] mb-6">
           Upload an image to represent you on public leaderboards and challenges.
         </p>
         <AvatarUpload
@@ -183,7 +183,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       </section>
 
       {/* Main Settings Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8 rounded-xl border border-white/[0.06] bg-[#111827] p-6">
         <h2 className="text-lg font-semibold text-zinc-100">Personal Information</h2>
 
         {successMessage && (
@@ -212,9 +212,9 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             pattern="^[A-Za-z0-9_]{3,24}$"
             title="3-24 characters, letters, digits, or underscores"
             required
-            className="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+            className="mt-2 w-full rounded-md border border-white/[0.12] bg-[#111827] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
           />
-          <p className="mt-1 text-xs text-zinc-400">
+          <p className="mt-1 text-xs text-[#8B93A7]">
             3 to 24 characters: letters, numbers, and underscores.
           </p>
           {usernameError && (
@@ -231,7 +231,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
               Bio
             </label>
             <span
-              className={`text-xs ${bio.length > 280 ? 'text-red-400 font-bold' : 'text-zinc-400'}`}
+              className={`text-xs ${bio.length > 280 ? 'text-red-400 font-semibold' : 'text-[#8B93A7]'}`}
               aria-live="polite"
             >
               {bio.length}/280
@@ -245,7 +245,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             maxLength={280}
             rows={3}
             placeholder="Tell us about your development experience, interests, or background..."
-            className="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+            className="mt-2 w-full rounded-md border border-white/[0.12] bg-[#111827] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
           />
         </div>
 
@@ -259,7 +259,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             disabled={saving}
-            className="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+            className="mt-2 w-full rounded-md border border-white/[0.12] bg-[#111827] px-3 py-2 text-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
           >
             <option value="">Select your country (optional)</option>
             {countryOptions.map((c) => (
@@ -280,7 +280,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             value={selectedInstPreset}
             onChange={(e) => setSelectedInstPreset(e.target.value)}
             disabled={saving}
-            className="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+            className="mt-2 w-full rounded-md border border-white/[0.12] bg-[#111827] px-3 py-2 text-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
           >
             <option value="">None / Independent</option>
             {PRESET_INSTITUTIONS.map((inst) => (
@@ -304,7 +304,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
                 disabled={saving}
                 maxLength={120}
                 placeholder="Enter organization name"
-                className="mt-1 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
+                className="mt-1 w-full rounded-md border border-white/[0.12] bg-[#111827] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
               />
             </div>
           )}
@@ -316,14 +316,14 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             <span className="block text-sm font-medium text-zinc-200">
               Technologies & Frameworks
             </span>
-            <span className="text-xs text-zinc-400">
+            <span className="text-xs text-[#8B93A7]">
               {selectedTechIds.length}/20 selected
             </span>
           </div>
           <div
             role="group"
             aria-label="Technologies"
-            className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 rounded-md border border-zinc-800 bg-zinc-950/60"
+            className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 rounded-md border border-white/[0.06] bg-[#0B0F1A]/60"
           >
             {availableTechnologies.map((tech) => {
               const isSelected = selectedTechIds.includes(tech.id);
@@ -334,7 +334,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
                   onClick={() => handleTechToggle(tech.id)}
                   aria-pressed={isSelected}
                   disabled={saving}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
                     isSelected
                       ? 'bg-indigo-600 text-white hover:bg-indigo-500'
                       : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
@@ -348,11 +348,11 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
         </div>
 
         {/* Visibility Toggle */}
-        <fieldset className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-4">
+        <fieldset className="rounded-lg border border-white/[0.06] bg-[#0B0F1A]/40 p-4">
           <legend className="text-sm font-medium text-zinc-200 px-1">
             Profile Visibility
           </legend>
-          <p className="text-xs text-zinc-400 mt-1 mb-3">
+          <p className="text-xs text-[#8B93A7] mt-1 mb-3">
             Public profiles appear on leaderboards and institutional rankings. Private profiles are hidden from public rankings and visitors.
           </p>
           <div className="flex items-center gap-6">
@@ -364,7 +364,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
                 checked={visibility === 'public'}
                 onChange={() => setVisibility('public')}
                 disabled={saving}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 bg-zinc-900 border-zinc-700"
+                className="h-4 w-4 text-indigo-600 focus:ring-emerald-400 bg-[#111827] border-white/[0.12]"
               />
               Public
             </label>
@@ -376,7 +376,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
                 checked={visibility === 'private'}
                 onChange={() => setVisibility('private')}
                 disabled={saving}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 bg-zinc-900 border-zinc-700"
+                className="h-4 w-4 text-indigo-600 focus:ring-emerald-400 bg-[#111827] border-white/[0.12]"
               />
               Private
             </label>
@@ -388,7 +388,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
           <button
             type="submit"
             disabled={saving}
-            className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:opacity-50"
           >
             {saving ? 'Saving changes...' : 'Save Changes'}
           </button>

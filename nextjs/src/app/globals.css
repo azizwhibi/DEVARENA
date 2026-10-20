@@ -2,10 +2,10 @@
 
 :root {
   color-scheme: dark;
-  --background: #0f172a;
+  --background: #0B0F1A;
   --foreground: #fafafa;
-  --card: #192134;
-  --primary: #22c55e;
+  --card: #111827;
+  --primary: #34d399;
   --accent: #d97706;
   --danger: #dc2626;
   --muted-foreground: #94a3b8;
@@ -75,3 +75,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .arena-tick { stroke-dashoffset: 0; }
 }
+
+:root { --workspace-sidebar-width: 240px; }
+html[data-sidebar-collapsed="true"] { --workspace-sidebar-width: 72px; }
+
+@font-face { font-family: Inter; src: url("/fonts/inter-latin.woff2") format("woff2"); font-weight: 400 600; font-style: normal; font-display: swap; }
