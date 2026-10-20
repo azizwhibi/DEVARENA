@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiRequest, ApiError } from '@/lib/api';
@@ -9,7 +10,9 @@ import type { AuthUser } from '@/lib/api-core';
 type Account = { id: string; username: string; role: AuthUser['role'] };
 
 export function AuthHeader() {
+  const pathname = usePathname();
   const { user, loading, signOut } = useAuth();
+  const marketplaceCurrent = pathname === '/marketplace' || pathname.startsWith('/marketplace/');
   const [account, setAccount] = useState<Account | null>(null);
   const [failure, setFailure] = useState<{ id: string; message: string } | null>(null);
   const [leaving, setLeaving] = useState(false);
@@ -90,6 +93,7 @@ export function AuthHeader() {
         <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-primary`}>DevArena</Link>
         {loading ? <span role="status" className="text-zinc-400">Checking session…</span> : user ? (
           <div className="flex flex-wrap items-center gap-4">
+            <Link href="/marketplace" aria-current={marketplaceCurrent ? 'page' : undefined} className={`${linkClass} inline-flex min-h-11 items-center px-2 ${marketplaceCurrent ? 'font-semibold text-primary underline decoration-primary underline-offset-4' : ''}`}>Marketplace</Link>
             {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
             {current?.role === 'admin' && <Link href="/admin/users" className={linkClass}>Administration</Link>}
