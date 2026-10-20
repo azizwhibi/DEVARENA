@@ -1,42 +1,51 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { apiRequest } from '@/lib/api';
-import type { AuthUser } from '@/lib/api-core';
-import { DEMO_ACCOUNTS, resolveRoleDestination } from '@/lib/role-login';
+import { request, type AuthUser } from '@/lib/api-core';
+import { safeNext } from '@/lib/safe-next';
+import { DEMO_ACCOUNTS, resolveRoleDestination, type DemoAccount } from '@/lib/role-login';
 import { OAuthButtons } from './OAuthButtons';
 
 export function LoginForm({ next, callbackFailed }: { next: string; callbackFailed: boolean }) {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
 
-  async function loginWithCredentials(loginEmail: string, loginPass: string) {
+  async function loginWithCredentials(
+    loginEmail: string,
+    loginPass: string,
+    preferredTarget?: string,
+  ) {
     if (pending) return;
     setPending(true);
     setError('');
     try {
-      const { error: authError } = await createClient().auth.signInWithPassword({
+      const { data: authData, error: authError } = await createClient().auth.signInWithPassword({
         email: loginEmail.trim(),
         password: loginPass,
       });
-      if (authError) {
+      if (authError || !authData?.session) {
         setError('Unable to sign in. Check your email and password and try again.');
         return;
       }
 
-      const destination = await resolveRoleDestination(next, async () => {
-        const me = await apiRequest<AuthUser>('/me');
-        return me.role;
-      });
+      let destination: string;
+      const safe = safeNext(next);
+      if (safe !== '/') {
+        destination = safe;
+      } else if (preferredTarget) {
+        destination = preferredTarget;
+      } else {
+        destination = await resolveRoleDestination(next, async () => {
+          const me = await request<AuthUser>('/me', authData.session.access_token);
+          return me.role;
+        });
+      }
 
-      router.replace(destination);
-      router.refresh();
+      window.location.assign(destination);
     } catch {
       setError('Unable to connect. Check your connection and try again.');
     } finally {
@@ -49,10 +58,10 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
     await loginWithCredentials(email, password);
   }
 
-  async function handleDemoLogin(demoEmail: string, demoPass: string) {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    await loginWithCredentials(demoEmail, demoPass);
+  async function handleDemoLogin(demo: DemoAccount) {
+    setEmail(demo.email);
+    setPassword(demo.password);
+    await loginWithCredentials(demo.email, demo.password, demo.target);
   }
 
   const message = error || (callbackFailed
@@ -78,7 +87,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
                 key={demo.role}
                 type="button"
                 disabled={pending}
-                onClick={() => handleDemoLogin(demo.email, demo.password)}
+                onClick={() => handleDemoLogin(demo)}
                 className="flex flex-col items-start rounded-lg border border-zinc-800 bg-zinc-900/90 p-2.5 text-left transition hover:border-primary hover:bg-zinc-800/80 focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50"
               >
                 <span className="text-xs font-bold text-zinc-200 capitalize">

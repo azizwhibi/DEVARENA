@@ -125,10 +125,36 @@ function testRegisterFormRecruiterRole() {
   );
 }
 
+// 6. Proxy preserves safe next parameter on authenticated login redirect
+function testProxyNextRedirection() {
+  const proxyPath = resolve(__dirname, '../src/proxy.ts');
+  const proxyContent = readFileSync(proxyPath, 'utf8');
+  assert.ok(
+    proxyContent.includes('safeNext(') && proxyContent.includes('nextUrl.searchParams.get'),
+    'proxy.ts must respect and sanitize next parameter on authenticated redirects',
+  );
+}
+
+// 7. LoginForm wires persona targets and avoids race conditions
+function testLoginFormPersonaHandling() {
+  const loginPath = resolve(__dirname, '../src/components/auth/LoginForm.tsx');
+  const loginContent = readFileSync(loginPath, 'utf8');
+  assert.ok(
+    loginContent.includes('demo.target') || loginContent.includes('handleDemoLogin(demo)'),
+    'LoginForm.tsx must wire demo target for instant role routing',
+  );
+  assert.ok(
+    loginContent.includes('window.location.assign'),
+    'LoginForm.tsx must navigate via window.location.assign to avoid router.refresh race conditions',
+  );
+}
+
 await testRoleDestinations();
 testDemoAccounts();
 testProxyRouteProtection();
 testHeaderLinks();
 testRegisterFormRecruiterRole();
+testProxyNextRedirection();
+testLoginFormPersonaHandling();
 
-console.log('PASS: 19 role-based sign-in and recruiter navigation assertions');
+console.log('PASS: 21 role-based sign-in and recruiter navigation assertions');
