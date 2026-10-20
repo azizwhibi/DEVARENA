@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "nextjs/package.json": {
-    "mtime": 1792493471.5644698,
-    "seen": 1792493628.8317857,
-    "ast_hash": "97b138ad13650365d73378fda3047747",
+    "mtime": 1792499232.2549806,
+    "seen": 1792499357.710599,
+    "ast_hash": "dd3fdbca499501d7778311322fd03a77",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-safe-next.mjs": {
@@ -654,9 +654,9 @@
     "semantic_hash": ""
   },
   "backend/src/users/users.module.ts": {
-    "mtime": 1792402334.2973511,
-    "seen": 1792403198.720833,
-    "ast_hash": "4948c6df3d50103a606a30e3b5659228",
+    "mtime": 1792499078.175407,
+    "seen": 1792499357.7097774,
+    "ast_hash": "7f2c29177bc2e3d0e6a0e7cf3e84ee04",
     "semantic_hash": ""
   },
   "backend/src/users/users.service.spec.ts": {
@@ -666,9 +666,9 @@
     "semantic_hash": ""
   },
   "backend/src/users/users.service.ts": {
-    "mtime": 1792402466.9229238,
-    "seen": 1792403198.720833,
-    "ast_hash": "d1e1b55f8f30fa8976bc7512db459732",
+    "mtime": 1792499270.2108414,
+    "seen": 1792499357.709908,
+    "ast_hash": "40212762ed5adb787a8ba22efdf8b650",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-profile.mjs": {
@@ -804,15 +804,45 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/recruiter/RecruiterDashboard.tsx": {
-    "mtime": 1792493263.0703218,
-    "seen": 1792493628.8803072,
-    "ast_hash": "b601d626435595881a6ba870760f48a5",
+    "mtime": 1792499183.1926048,
+    "seen": 1792499357.717028,
+    "ast_hash": "c425f578de2754be55eec595869880f6",
     "semantic_hash": ""
   },
   "nextjs/src/lib/role-login.ts": {
     "mtime": 1792493440.4363334,
     "seen": 1792493628.8942068,
     "ast_hash": "3aeab7c04fc8af9e6bba4264dd8cf35f",
+    "semantic_hash": ""
+  },
+  "backend/src/users/candidates.controller.ts": {
+    "mtime": 1792499066.5454588,
+    "seen": 1792499357.7086058,
+    "ast_hash": "a974fe32e1ad5a2a36da3fca714f1ede",
+    "semantic_hash": ""
+  },
+  "backend/src/users/candidates.spec.ts": {
+    "mtime": 1792499270.2108414,
+    "seen": 1792499357.708608,
+    "ast_hash": "6b3eb79b19431a9830dd697c5ef2db73",
+    "semantic_hash": ""
+  },
+  "backend/src/users/dto/list-candidates.query.ts": {
+    "mtime": 1792499270.2098446,
+    "seen": 1792499357.7089012,
+    "ast_hash": "7dfb01b21b94194acdc82ff17ba1aade",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-recruiter-candidates.mjs": {
+    "mtime": 1792499216.649356,
+    "seen": 1792499357.7117076,
+    "ast_hash": "17fd0487e329c3a6d47a43f8178cde34",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/candidates.ts": {
+    "mtime": 1792499151.9290202,
+    "seen": 1792499357.7176538,
+    "ast_hash": "74c2c6b79a839a893ebc585aaecaef38",
     "semantic_hash": ""
   }
 }

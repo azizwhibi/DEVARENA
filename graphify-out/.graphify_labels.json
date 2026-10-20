@@ -1,5 +1,4 @@
 {
-  "2": "next",
   "3": "backend/package.json",
   "4": "RegisterForm.tsx",
   "5": "nextjs/package.json",
@@ -35,8 +34,5 @@
   "39": "engines",
   "40": ".deleteMe",
   "41": "UpdateProfileDto",
-  "44": "class-validator",
-  "45": "app/page.tsx",
-  "47": "SetStatusDto",
-  "48": "Phase 5 — `profile`"
+  "45": "app/page.tsx"
 }

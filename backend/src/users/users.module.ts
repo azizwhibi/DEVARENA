@@ -6,6 +6,7 @@ import { UsersService } from './users.service';
 import { MeProfileController } from './me-profile.controller';
 import { TechnologiesController } from './technologies.controller';
 import { AdminUsersController } from './admin-users.controller';
+import { RecruiterCandidatesController } from './candidates.controller';
 
 @Module({
   imports: [ConfigModule, SupabaseModule, AuthModule],
@@ -13,6 +14,7 @@ import { AdminUsersController } from './admin-users.controller';
     MeProfileController,
     TechnologiesController,
     AdminUsersController,
+    RecruiterCandidatesController,
   ],
   providers: [UsersService],
   exports: [UsersService],
