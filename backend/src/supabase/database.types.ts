@@ -361,6 +361,139 @@ export type Database = {
           },
         ];
       };
+      invitations: {
+        Row: {
+          candidate_id: string;
+          created_at: string;
+          id: string;
+          message: string | null;
+          recruiter_id: string;
+          status: 'pending' | 'accepted' | 'declined' | 'cancelled';
+          updated_at: string;
+        };
+        Insert: {
+          candidate_id: string;
+          created_at?: string;
+          id?: string;
+          message?: string | null;
+          recruiter_id: string;
+          status?: 'pending' | 'accepted' | 'declined' | 'cancelled';
+          updated_at?: string;
+        };
+        Update: {
+          candidate_id?: string;
+          created_at?: string;
+          id?: string;
+          message?: string | null;
+          recruiter_id?: string;
+          status?: 'pending' | 'accepted' | 'declined' | 'cancelled';
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'invitations_candidate_id_fkey';
+            columns: ['candidate_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'invitations_recruiter_id_fkey';
+            columns: ['recruiter_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      conversations: {
+        Row: {
+          created_at: string;
+          id: string;
+          invitation_id: string;
+          participant_one_id: string;
+          participant_two_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          invitation_id: string;
+          participant_one_id: string;
+          participant_two_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          invitation_id?: string;
+          participant_one_id?: string;
+          participant_two_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'conversations_invitation_id_fkey';
+            columns: ['invitation_id'];
+            isOneToOne: true;
+            referencedRelation: 'invitations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'conversations_participant_one_id_fkey';
+            columns: ['participant_one_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'conversations_participant_two_id_fkey';
+            columns: ['participant_two_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      messages: {
+        Row: {
+          content: string;
+          conversation_id: string;
+          created_at: string;
+          id: string;
+          sender_id: string;
+        };
+        Insert: {
+          content: string;
+          conversation_id: string;
+          created_at?: string;
+          id?: string;
+          sender_id: string;
+        };
+        Update: {
+          content?: string;
+          conversation_id?: string;
+          created_at?: string;
+          id?: string;
+          sender_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'messages_conversation_id_fkey';
+            columns: ['conversation_id'];
+            isOneToOne: false;
+            referencedRelation: 'conversations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'messages_sender_id_fkey';
+            columns: ['sender_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;

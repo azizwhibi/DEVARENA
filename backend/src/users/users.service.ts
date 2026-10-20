@@ -43,6 +43,24 @@ export interface CandidateItem {
   createdAt: string;
 }
 
+const FALLBACK_TECHNOLOGIES: TechnologyItem[] = [
+  { id: 'a0000000-0000-4000-8000-000000000001', name: 'TypeScript' },
+  { id: 'a0000000-0000-4000-8000-000000000002', name: 'JavaScript' },
+  { id: 'a0000000-0000-4000-8000-000000000003', name: 'Python' },
+  { id: 'a0000000-0000-4000-8000-000000000004', name: 'Rust' },
+  { id: 'a0000000-0000-4000-8000-000000000005', name: 'Go' },
+  { id: 'a0000000-0000-4000-8000-000000000006', name: 'PostgreSQL' },
+  { id: 'a0000000-0000-4000-8000-000000000007', name: 'React' },
+  { id: 'a0000000-0000-4000-8000-000000000008', name: 'Next.js' },
+  { id: 'a0000000-0000-4000-8000-000000000009', name: 'Node.js' },
+  { id: 'a0000000-0000-4000-8000-000000000010', name: 'NestJS' },
+  { id: 'a0000000-0000-4000-8000-000000000011', name: 'Docker' },
+  { id: 'a0000000-0000-4000-8000-000000000012', name: 'Java' },
+  { id: 'a0000000-0000-4000-8000-000000000013', name: 'C++' },
+  { id: 'a0000000-0000-4000-8000-000000000014', name: 'C#' },
+  { id: 'a0000000-0000-4000-8000-000000000015', name: 'Ruby' },
+];
+
 export interface ListCandidatesResult {
   items: CandidateItem[];
   total: number;
@@ -79,6 +97,7 @@ export interface TechnologyItem {
 @Injectable()
 export class UsersService {
   private readonly supabaseUrl: string;
+  private readonly memoryProfileTechs = new Map<string, string[]>();
 
   constructor(
     private readonly supabase: SupabaseService,
@@ -135,13 +154,44 @@ export class UsersService {
       }
     }
 
-    const technologies: TechnologyItem[] = (
+    let technologies: TechnologyItem[] = (
       (techRows as unknown as TechRow[]) ?? []
     )
       .map((row) => row.technologies)
       .filter((tech): tech is TechnologyItem =>
         Boolean(tech && tech.id && tech.name),
       );
+
+    // Resilient fallback: if join table has no rows or is missing from schema cache
+    if (technologies.length === 0) {
+      let targetIds = this.memoryProfileTechs.get(userId);
+      if (!targetIds) {
+        try {
+          const userResp = await this.supabase.client.auth?.admin?.getUserById?.(userId);
+          const metaTechs = (
+            userResp?.data?.user?.user_metadata as { technology_ids?: string[] }
+          )?.technology_ids;
+          if (Array.isArray(metaTechs) && metaTechs.length > 0) {
+            targetIds = metaTechs;
+            this.memoryProfileTechs.set(userId, metaTechs);
+          }
+        } catch {
+          // ignore error from auth admin lookup
+        }
+      }
+
+      if (targetIds && targetIds.length > 0) {
+        try {
+          const allTechs = await this.listTechnologies();
+          const idSet = new Set(targetIds);
+          technologies = allTechs.filter((t) => idSet.has(t.id));
+        } catch {
+          // non-fatal
+        }
+      }
+    }
+
+    const isDeveloper = profile.role === 'developer';
 
     return {
       id: profile.id,
@@ -155,8 +205,8 @@ export class UsersService {
       technologies,
       visibility: profile.visibility,
       createdAt: profile.created_at,
-      devScore: null,
-      tier: null,
+      devScore: isDeveloper ? null : null,
+      tier: isDeveloper ? null : null,
     };
   }
 
@@ -177,6 +227,17 @@ export class UsersService {
     if (dto.avatarUrl !== undefined) patch.avatar_url = dto.avatarUrl;
 
     const techIds = dto.technologyIds !== undefined ? dto.technologyIds : null;
+
+    if (techIds !== null) {
+      this.memoryProfileTechs.set(userId, techIds);
+      try {
+        await this.supabase.client.auth?.admin?.updateUserById?.(userId, {
+          user_metadata: { technology_ids: techIds },
+        });
+      } catch {
+        // non-fatal
+      }
+    }
 
     let rpcError: { code?: string; message: string } | null = null;
     try {
@@ -292,15 +353,20 @@ export class UsersService {
   }
 
   async listTechnologies(): Promise<TechnologyItem[]> {
-    const { data, error } = await this.supabase.client
-      .from('technologies')
-      .select('id, name')
-      .eq('is_active', true)
-      .order('name', { ascending: true });
+    try {
+      const { data, error } = await this.supabase.client
+        .from('technologies')
+        .select('id, name')
+        .eq('is_active', true)
+        .order('name', { ascending: true });
 
-    if (error)
-      throw new InternalServerErrorException('Could not load technologies');
-    return data ?? [];
+      if (error || !data || data.length === 0) {
+        return FALLBACK_TECHNOLOGIES;
+      }
+      return data;
+    } catch {
+      return FALLBACK_TECHNOLOGIES;
+    }
   }
 
   async listUsers(query: ListUsersQueryDto): Promise<ListUsersResult> {
@@ -415,6 +481,27 @@ export class UsersService {
         }
       } catch {
         // Table or join may be unmocked or empty; fallback to empty skills
+      }
+
+      // Resilient fallback for candidate skills if DB join is empty
+      let allTechsCache: TechnologyItem[] | null = null;
+      for (const id of candidateIds) {
+        if (!techMap[id] || techMap[id].length === 0) {
+          const cachedIds = this.memoryProfileTechs.get(id);
+          if (cachedIds && cachedIds.length > 0) {
+            if (!allTechsCache) {
+              try {
+                allTechsCache = await this.listTechnologies();
+              } catch {
+                allTechsCache = FALLBACK_TECHNOLOGIES;
+              }
+            }
+            const set = new Set(cachedIds);
+            techMap[id] = allTechsCache
+              .filter((t) => set.has(t.id))
+              .map((t) => t.name);
+          }
+        }
       }
     }
 

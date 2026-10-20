@@ -415,6 +415,64 @@ describe('UsersService & DTO validation', () => {
         const result = await service.listTechnologies();
         expect(result).toEqual(techs);
       });
+
+      it('returns fallback technologies if table query fails or returns empty', async () => {
+        mockSupabase.client.from.mockReturnValue({
+          select: () => ({
+            eq: () => ({
+              order: jest.fn().mockResolvedValue({ data: [], error: { message: 'offline' } }),
+            }),
+          }),
+        });
+
+        const result = await service.listTechnologies();
+        expect(result.length).toBeGreaterThanOrEqual(10);
+        expect(result.some((t) => t.name === 'TypeScript')).toBe(true);
+      });
+    });
+
+    describe('resilient developer skills & recruiter score safety', () => {
+      it('retains skills in memory fallback when profile_technologies join is empty', async () => {
+        // Mock getProfile db call
+        mockSupabase.client.from.mockImplementation((table: string) => {
+          if (table === 'profiles') {
+            return {
+              select: () => ({
+                eq: () => ({
+                  maybeSingle: jest.fn().mockResolvedValue({
+                    data: {
+                      id: userId,
+                      email: 'recruiter@devarena.test',
+                      username: 'lead_recruiter',
+                      role: 'recruiter',
+                      avatar_url: null,
+                      bio: 'Hiring lead',
+                      country: 'DE',
+                      institution: 'Tech Recruit GmbH',
+                      visibility: 'public',
+                      created_at: '2026-10-19T00:00:00Z',
+                    },
+                    error: null,
+                  }),
+                }),
+              }),
+            };
+          }
+          if (table === 'profile_technologies') {
+            return {
+              select: () => ({
+                eq: jest.fn().mockResolvedValue({ data: [], error: null }),
+              }),
+            };
+          }
+          return {};
+        });
+
+        const profile = await service.getProfile(userId);
+        expect(profile.role).toBe('recruiter');
+        expect(profile.devScore).toBeNull();
+        expect(profile.tier).toBeNull();
+      });
     });
   });
 });

@@ -85,47 +85,101 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
         </div>
       )}
 
-      {/* Technologies */}
-      {profile.technologies.length > 0 && (
+      {/* Developer Skills & Technologies */}
+      {profile.role === 'developer' && (
         <div className="mt-6 border-t border-zinc-800/80 pt-4">
-          <h2 className="text-xs font-medium uppercase tracking-wider text-zinc-400">
-            Technologies
-          </h2>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            {profile.technologies.map((tech) => (
-              <span
-                key={tech.id}
-                className="rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-300 border border-zinc-700"
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+              Skills & Technologies
+            </h2>
+            <Link
+              href="/profile/settings"
+              className="text-xs text-primary hover:underline"
+            >
+              Edit skills
+            </Link>
+          </div>
+          {profile.technologies.length > 0 ? (
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {profile.technologies.map((tech) => (
+                <span
+                  key={tech.id}
+                  className="rounded-full bg-zinc-800/90 px-3 py-1 text-xs font-medium text-zinc-200 border border-zinc-700/80 flex items-center gap-1.5"
+                >
+                  <span className="text-primary text-[11px]">✓</span> {tech.name}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-2.5 rounded-lg border border-dashed border-zinc-800 bg-zinc-950/40 p-4 text-center">
+              <p className="text-xs text-zinc-400">
+                No skills selected yet. Choose your technologies in settings so recruiters can find you.
+              </p>
+              <Link
+                href="/profile/settings"
+                className="mt-2 inline-flex items-center text-xs font-medium text-primary hover:underline"
               >
-                {tech.name}
-              </span>
-            ))}
+                Choose skills in Settings →
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Recruiter Workspace Info (Recruiters do not have a Dev Score or Tier) */}
+      {profile.role === 'recruiter' && (
+        <div className="mt-6 border-t border-zinc-800/80 pt-4">
+          <div className="rounded-lg border border-zinc-800/80 bg-zinc-950/40 p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center rounded-full bg-indigo-950/80 px-2.5 py-0.5 text-xs font-medium text-indigo-400 border border-indigo-800">
+                    👔 Recruiter Account
+                  </span>
+                  <span className="text-xs text-zinc-500">Talent Discovery Access</span>
+                </div>
+                <p className="text-xs text-zinc-400 mt-2">
+                  {profile.institution
+                    ? `Representing ${profile.institution}`
+                    : 'Independent Talent Scout'}{' '}
+                  · Active candidate search and live direct messaging enabled.
+                </p>
+              </div>
+              <Link
+                href="/recruiter"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-primary shrink-0"
+              >
+                Search Candidates →
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Dev Score & Tier Placeholder */}
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 border-t border-zinc-800/80 pt-4">
-        <div className="rounded-lg bg-zinc-950/40 p-4 border border-zinc-800/60">
-          <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-            Dev Score
-          </span>
-          <div className="mt-1 text-xl font-bold text-zinc-300">
-            {profile.devScore !== null ? profile.devScore : '—'}
+      {/* Dev Score & Tier Placeholder (Exclusively for Developers) */}
+      {profile.role === 'developer' && (
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 border-t border-zinc-800/80 pt-4">
+          <div className="rounded-lg bg-zinc-950/40 p-4 border border-zinc-800/60">
+            <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+              Dev Score
+            </span>
+            <div className="mt-1 text-xl font-bold text-zinc-300">
+              {profile.devScore !== null ? profile.devScore : '—'}
+            </div>
+            <span className="text-xs text-zinc-500">Rankings module preview</span>
           </div>
-          <span className="text-xs text-zinc-500">Rankings module preview</span>
-        </div>
 
-        <div className="rounded-lg bg-zinc-950/40 p-4 border border-zinc-800/60">
-          <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-            Tier
-          </span>
-          <div className="mt-1 text-xl font-bold text-zinc-300">
-            {profile.tier !== null ? profile.tier : 'Unranked'}
+          <div className="rounded-lg bg-zinc-950/40 p-4 border border-zinc-800/60">
+            <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+              Tier
+            </span>
+            <div className="mt-1 text-xl font-bold text-zinc-300">
+              {profile.tier !== null ? profile.tier : 'Unranked'}
+            </div>
+            <span className="text-xs text-zinc-500">Earned via challenge validation</span>
           </div>
-          <span className="text-xs text-zinc-500">Earned via challenge validation</span>
         </div>
-      </div>
+      )}
     </div>
   );
 }

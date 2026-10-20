@@ -29,6 +29,24 @@ interface TechnologyOption {
   name: string;
 }
 
+const DEFAULT_TECHNOLOGIES: TechnologyOption[] = [
+  { id: 'a0000000-0000-4000-8000-000000000001', name: 'TypeScript' },
+  { id: 'a0000000-0000-4000-8000-000000000002', name: 'JavaScript' },
+  { id: 'a0000000-0000-4000-8000-000000000003', name: 'Python' },
+  { id: 'a0000000-0000-4000-8000-000000000004', name: 'Rust' },
+  { id: 'a0000000-0000-4000-8000-000000000005', name: 'Go' },
+  { id: 'a0000000-0000-4000-8000-000000000006', name: 'PostgreSQL' },
+  { id: 'a0000000-0000-4000-8000-000000000007', name: 'React' },
+  { id: 'a0000000-0000-4000-8000-000000000008', name: 'Next.js' },
+  { id: 'a0000000-0000-4000-8000-000000000009', name: 'Node.js' },
+  { id: 'a0000000-0000-4000-8000-000000000010', name: 'NestJS' },
+  { id: 'a0000000-0000-4000-8000-000000000011', name: 'Docker' },
+  { id: 'a0000000-0000-4000-8000-000000000012', name: 'Java' },
+  { id: 'a0000000-0000-4000-8000-000000000013', name: 'C++' },
+  { id: 'a0000000-0000-4000-8000-000000000014', name: 'C#' },
+  { id: 'a0000000-0000-4000-8000-000000000015', name: 'Ruby' },
+];
+
 interface ProfileFormProps {
   initialProfile: UserProfileData;
 }
@@ -70,12 +88,20 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
     let active = true;
     apiRequest<TechnologyOption[]>('/technologies')
       .then((data) => {
-        if (active) setAvailableTechnologies(data);
+        if (active && Array.isArray(data) && data.length > 0) {
+          setAvailableTechnologies(data);
+        } else if (active) {
+          setAvailableTechnologies(DEFAULT_TECHNOLOGIES);
+        }
       })
       .catch(() => {
-        // Fallback to initial technologies if endpoint temporarily unreachable
-        if (active && initialProfile.technologies.length > 0) {
-          setAvailableTechnologies(initialProfile.technologies);
+        // Fallback to initial technologies or defaults if endpoint temporarily unreachable
+        if (active) {
+          setAvailableTechnologies(
+            initialProfile.technologies.length > 0
+              ? initialProfile.technologies
+              : DEFAULT_TECHNOLOGIES,
+          );
         }
       });
     return () => {
@@ -312,17 +338,20 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
 
         {/* Technologies Multi-select */}
         <div>
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-center mb-1">
             <span className="block text-sm font-medium text-zinc-200">
-              Technologies & Frameworks
+              Skills & Technologies
             </span>
             <span className="text-xs text-zinc-400">
               {selectedTechIds.length}/20 selected
             </span>
           </div>
+          <p className="text-xs text-zinc-400 mb-2.5">
+            Select the skills and technologies you specialize in. These will be highlighted on your profile and shown to recruiters.
+          </p>
           <div
             role="group"
-            aria-label="Technologies"
+            aria-label="Skills & Technologies"
             className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 rounded-md border border-zinc-800 bg-zinc-950/60"
           >
             {availableTechnologies.map((tech) => {

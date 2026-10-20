@@ -8,6 +8,11 @@ import {
   type CandidatesResponse,
   buildCandidatesQuery,
 } from '@/lib/candidates';
+import {
+  sendInvitation,
+  listSentInvitations,
+  type InvitationItem,
+} from '@/lib/messaging';
 
 interface RecruiterDashboardProps {
   currentUserId: string;
@@ -37,7 +42,35 @@ export function RecruiterDashboard({ role }: RecruiterDashboardProps) {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedTech, setSelectedTech] = useState<string>('all');
   const [contactedCandidates, setContactedCandidates] = useState<Record<string, boolean>>({});
+  const [sentInvitations, setSentInvitations] = useState<Record<string, InvitationItem>>({});
   const [contactNotice, setContactNotice] = useState<string | null>(null);
+
+  const [modalCandidate, setModalCandidate] = useState<CandidateItem | null>(null);
+  const [invitationMessage, setInvitationMessage] = useState<string>('');
+  const [sending, setSending] = useState<boolean>(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+
+  // Load sent invitations to show live status badges
+  useEffect(() => {
+    const controller = new AbortController();
+    listSentInvitations(controller.signal)
+      .then((invs) => {
+        if (!controller.signal.aborted) {
+          const map: Record<string, InvitationItem> = {};
+          for (const inv of invs) {
+            map[inv.candidateId] = inv;
+          }
+          setSentInvitations(map);
+        }
+      })
+      .catch(() => {
+        // non-fatal if offline/mock
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   // Debounce search query
   useEffect(() => {
@@ -92,12 +125,38 @@ export function RecruiterDashboard({ role }: RecruiterDashboardProps) {
     };
   }, [debouncedQuery, selectedTech]);
 
-  const handleContact = (candidate: CandidateItem) => {
-    setContactedCandidates((prev) => ({ ...prev, [candidate.id]: true }));
-    setContactNotice(`Interview invitation initiated for @${candidate.username}. The candidate has been alerted.`);
-    setTimeout(() => {
-      setContactNotice(null);
-    }, 4000);
+  const handleOpenInviteModal = (candidate: CandidateItem) => {
+    setModalCandidate(candidate);
+    setInvitationMessage(
+      `Hello @${candidate.username}, we were impressed by your DevArena profile and verified skills. We would love to connect for an interview.`,
+    );
+    setModalError(null);
+  };
+
+  const handleSendInvitation = async () => {
+    if (!modalCandidate) return;
+    setSending(true);
+    setModalError(null);
+    try {
+      const created = await sendInvitation(modalCandidate.id, invitationMessage);
+      setSentInvitations((prev) => ({ ...prev, [modalCandidate.id]: created }));
+      setContactedCandidates((prev) => ({ ...prev, [modalCandidate.id]: true }));
+      setContactNotice(`Interview invitation successfully sent to @${modalCandidate.username}.`);
+      setModalCandidate(null);
+      setTimeout(() => {
+        setContactNotice(null);
+      }, 5000);
+    } catch (err: unknown) {
+      if (err instanceof ApiError) {
+        setModalError(err.problem?.errors?.[0] || err.problem?.detail || err.message);
+      } else if (err instanceof Error) {
+        setModalError(err.message);
+      } else {
+        setModalError('Failed to send interview invitation.');
+      }
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -120,6 +179,18 @@ export function RecruiterDashboard({ role }: RecruiterDashboardProps) {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
+            <Link
+              href="/messages"
+              className="rounded-lg border border-primary/50 bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20 focus-visible:outline-2 focus-visible:outline-primary"
+            >
+              Messages
+            </Link>
+            <Link
+              href="/invitations"
+              className="rounded-lg border border-zinc-700 bg-zinc-800/80 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-primary"
+            >
+              Sent Invitations
+            </Link>
             <Link
               href="/profile"
               className="rounded-lg border border-zinc-700 bg-zinc-800/80 px-4 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-primary"
@@ -307,18 +378,29 @@ export function RecruiterDashboard({ role }: RecruiterDashboardProps) {
                   {/* Action Buttons */}
                   <div className="mt-4 flex items-center justify-between border-t border-zinc-800/80 pt-3">
                     <span className="text-[11px] text-zinc-500">Live verified profile</span>
-                    <button
-                      type="button"
-                      disabled={isContacted}
-                      onClick={() => handleContact(candidate)}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-primary ${
-                        isContacted
-                          ? 'bg-zinc-800/50 text-zinc-500 cursor-not-allowed'
-                          : 'bg-zinc-800 text-zinc-200 hover:bg-primary hover:text-zinc-950'
-                      }`}
-                    >
-                      {isContacted ? 'Invitation Sent ✓' : 'Contact Candidate'}
-                    </button>
+                    {sentInvitations[candidate.id]?.status === 'accepted' ? (
+                      <Link
+                        href="/messages"
+                        className="rounded-lg bg-emerald-950/80 border border-emerald-800/80 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:bg-emerald-900 focus-visible:outline-2 focus-visible:outline-primary"
+                      >
+                        Chat with Candidate →
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={isContacted || sentInvitations[candidate.id]?.status === 'pending'}
+                        onClick={() => handleOpenInviteModal(candidate)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-primary ${
+                          isContacted || sentInvitations[candidate.id]?.status === 'pending'
+                            ? 'bg-zinc-800/50 text-zinc-500 cursor-not-allowed'
+                            : 'bg-zinc-800 text-zinc-200 hover:bg-primary hover:text-zinc-950'
+                        }`}
+                      >
+                        {isContacted || sentInvitations[candidate.id]?.status === 'pending'
+                          ? 'Invitation Sent ✓'
+                          : 'Contact Candidate'}
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -332,6 +414,68 @@ export function RecruiterDashboard({ role }: RecruiterDashboardProps) {
           </div>
         )}
       </section>
+
+      {/* Invitation Composer Modal */}
+      {modalCandidate && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="invite-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
+        >
+          <div className="w-full max-w-lg rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
+            <h2 id="invite-modal-title" className="text-xl font-bold text-zinc-100">
+              Invite @{modalCandidate.username} for Interview
+            </h2>
+            <p className="mt-1 text-xs text-zinc-400">
+              Send a personalized interview invitation request. Once accepted, you can chat in real-time.
+            </p>
+
+            {modalError && (
+              <div role="alert" className="mt-4 rounded-lg border border-red-900/60 bg-red-950/40 p-3 text-xs text-red-300">
+                {modalError}
+              </div>
+            )}
+
+            <div className="mt-4 space-y-2">
+              <label htmlFor="invitation-note" className="block text-xs font-medium text-zinc-300">
+                Invitation Message (optional)
+              </label>
+              <textarea
+                id="invitation-note"
+                rows={4}
+                value={invitationMessage}
+                onChange={(e) => setInvitationMessage(e.target.value)}
+                maxLength={1000}
+                placeholder="Describe your company or the opportunity..."
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 p-3 text-sm text-zinc-100 outline-none focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary"
+              />
+              <p className="text-right text-[11px] text-zinc-500">
+                {invitationMessage.length} / 1000 characters
+              </p>
+            </div>
+
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                disabled={sending}
+                onClick={() => setModalCandidate(null)}
+                className="rounded-lg border border-zinc-700 px-4 py-2 text-xs font-medium text-zinc-300 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={sending}
+                onClick={handleSendInvitation}
+                className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50"
+              >
+                {sending ? 'Sending Request…' : 'Send Invitation Request'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
