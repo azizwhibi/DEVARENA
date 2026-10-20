@@ -6,6 +6,7 @@ import { apiRequest } from '@/lib/api';
 import type { AuthUser } from '@/lib/api-core';
 import { WorkspaceIcon } from './WorkspaceIcon';
 import styles from './workspace.module.css';
+import { DevGuideProvider } from '@/components/dev-guide/DevGuideProvider';
 type Account = AuthUser & {
     username: string;
 };
@@ -68,7 +69,7 @@ export function SkillsWorkspace({ children }: {
       <div className="app-shell">
         <div className={styles.mobileBar}><button type="button" className={styles.toggle} aria-label="Ouvrir la navigation" aria-controls="workspace-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><WorkspaceIcon name="menu"/></button></div>
         {menuOpen && <button type="button" className={styles.backdrop} aria-label="Fermer la navigation" onClick={() => setMenuOpen(false)}/>}
-        <aside id="workspace-navigation" className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''} ${menuOpen ? styles.open : ''}`} onKeyDown={event => { if (event.key === 'Escape')
+        <aside id="workspace-navigation" data-guide-modal={menuOpen ? 'true' : undefined} className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''} ${menuOpen ? styles.open : ''}`} onKeyDown={event => { if (event.key === 'Escape')
         setMenuOpen(false); }}>
           <div className={styles.tools}>
             <button type="button" className={`${styles.toggle} ${styles.desktopToggle}`} aria-label={collapsed ? 'Développer la navigation' : 'Réduire la navigation'} aria-expanded={!collapsed} onClick={() => setCollapsed(!collapsed)}><WorkspaceIcon name={collapsed ? 'expand' : 'collapse'}/></button>
@@ -79,18 +80,19 @@ export function SkillsWorkspace({ children }: {
               {group.title && <p className={styles.groupTitle}>{group.title}</p>}
               {group.links.map(link => {
                 const active = pathname === link.href || (link.href === '/my-skills' && pathname.startsWith('/skills/')) || ((link.href === '/knowledge' || link.href === '/admin/knowledge') && pathname.startsWith(link.href + '/'));
-                return <Link key={link.href} href={link.href} aria-current={active ? 'page' : undefined} aria-label={link.label} title={link.label} onClick={() => setMenuOpen(false)} className={`${styles.link} ${active ? styles.active : ''}`}><WorkspaceIcon name={link.icon}/><span className={styles.label}>{link.label}</span></Link>;
+                return <Link key={link.href} href={link.href} data-tour={`nav-${link.href.slice(1)}`} aria-current={active ? 'page' : undefined} aria-label={link.label} title={link.label} onClick={() => setMenuOpen(false)} className={`${styles.link} ${active ? styles.active : ''}`}><WorkspaceIcon name={link.icon}/><span className={styles.label}>{link.label}</span></Link>;
             })}
             </div>)}
           </nav>
-          <div className={styles.footer}><Link href="/profile/settings" className={styles.link} aria-label="Paramètres du profil" title="Paramètres du profil" onClick={() => setMenuOpen(false)}><WorkspaceIcon name="settings"/><span className={styles.label}>Paramètres du profil</span></Link></div>
+          <div className={styles.footer}><Link href="/profile/settings" data-tour="profile-settings" className={styles.link} aria-label="Paramètres du profil" title="Paramètres du profil" onClick={() => setMenuOpen(false)}><WorkspaceIcon name="settings"/><span className={styles.label}>Paramètres du profil</span></Link></div>
         </aside>
-        <main className={styles.main}>
+        <main className={styles.main} data-tour="workspace-content">
           {failure && <div role="alert" className="workspace-alert">{failure}<button type="button" className="btn btn-ghost" onClick={() => window.location.reload()}>Réessayer</button></div>}
           {!account ? (!failure && <div className="page-container" role="status" aria-label="Chargement du compte"><div className="skeleton skeleton-title"/><div className="skeleton skeleton-panel"/></div>)
             : adminRoute && account.role !== 'admin' ? <div className="page-container"><h1 className="page-title">Accès réservé</h1><Link href="/dashboard" className="btn btn-ghost">Retour au tableau de bord</Link></div> : children}
         </main>
       </div>
+      {account && <DevGuideProvider account={account} />}
     </AccountContext.Provider>
   </div>;
 }

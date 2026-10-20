@@ -1,3 +1,6 @@
+// Rendered behind the workspace's browser-loaded account gate.
+export const instant = false;
+
 import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 
 export default function MarketplacePage() {

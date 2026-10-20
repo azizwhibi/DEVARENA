@@ -24,6 +24,7 @@ export function KnowledgeNav() {
         <Link
           key={href}
           href={href}
+          data-tour={href === '/knowledge/saved' ? 'knowledge-saved' : undefined}
           aria-current={path === href ? "page" : undefined}
         >
           {label}
