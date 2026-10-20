@@ -10,7 +10,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { AccountService } from '../auth/account.service';
 import type { Json } from '../supabase/database.types';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
-import { escapeSearchTerm, ListUsersQueryDto } from './dto/list-users.query';
+import { escapeSearchTerm, GetUsersQueryDto } from './dto/get-users-query.dto';
 
 export interface AdminUserItem {
   id: string;
@@ -26,6 +26,7 @@ export interface ListUsersResult {
   total: number;
   page: number;
   pageSize: number;
+  limit: number;
 }
 
 interface TechRow {
@@ -281,11 +282,11 @@ export class UsersService {
     return data ?? [];
   }
 
-  async listUsers(query: ListUsersQueryDto): Promise<ListUsersResult> {
+  async listUsers(query: GetUsersQueryDto): Promise<ListUsersResult> {
     const page = Math.max(1, query.page ?? 1);
-    const pageSize = Math.min(100, Math.max(1, query.pageSize ?? 20));
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize - 1;
+    const limit = Math.min(100, Math.max(1, query.limit ?? query.pageSize ?? 20));
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
 
     let qb = this.supabase.client
       .from('profiles')
@@ -299,8 +300,9 @@ export class UsersService {
     if (query.status) {
       qb = qb.eq('status', query.status);
     }
-    if (query.q && query.q.trim()) {
-      const term = escapeSearchTerm(query.q.trim());
+    const search = query.query?.trim() || query.q?.trim();
+    if (search) {
+      const term = escapeSearchTerm(search);
       qb = qb.or(`username.ilike.%${term}%,email.ilike.%${term}%`);
     }
 
@@ -326,7 +328,8 @@ export class UsersService {
       items,
       total: count ?? items.length,
       page,
-      pageSize,
+      pageSize: limit,
+      limit,
     };
   }
 
@@ -345,11 +348,22 @@ export class UsersService {
     let rpcError: { code?: string; message: string } | null = null;
     let rpcData: unknown = null;
     try {
-      const res = await this.supabase.client.rpc('admin_set_role', {
-        p_actor: actorId,
-        p_target: targetId,
-        p_role: role,
+      let res = await this.supabase.client.rpc('admin_set_role', {
+        target_user_id: targetId,
+        new_role: role,
+        caller_id: actorId,
       });
+      if (
+        res.error &&
+        (res.error.code === 'PGRST202' ||
+          /Could not find the function/i.test(res.error.message))
+      ) {
+        res = await this.supabase.client.rpc('admin_set_role', {
+          p_actor: actorId,
+          p_target: targetId,
+          p_role: role,
+        });
+      }
       rpcError = res.error;
       rpcData = res.data;
     } catch (err: unknown) {
@@ -487,12 +501,23 @@ export class UsersService {
     let rpcError: { code?: string; message: string } | null = null;
     let rpcData: unknown = null;
     try {
-      const res = await this.supabase.client.rpc('admin_set_status', {
-        p_actor: actorId,
-        p_target: targetId,
-        p_status: status,
-        p_reason: trimmedReason,
+      let res = await this.supabase.client.rpc('admin_set_status', {
+        target_user_id: targetId,
+        new_status: status,
+        caller_id: actorId,
       });
+      if (
+        res.error &&
+        (res.error.code === 'PGRST202' ||
+          /Could not find the function/i.test(res.error.message))
+      ) {
+        res = await this.supabase.client.rpc('admin_set_status', {
+          p_actor: actorId,
+          p_target: targetId,
+          p_status: status,
+          p_reason: trimmedReason,
+        });
+      }
       rpcError = res.error;
       rpcData = res.data;
     } catch (err: unknown) {

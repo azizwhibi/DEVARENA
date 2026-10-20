@@ -140,6 +140,7 @@ describe('Admin Users (T18–T21)', () => {
       expect(result.total).toBe(1);
       expect(result.page).toBe(2);
       expect(result.pageSize).toBe(10);
+      expect(result.limit).toBe(10);
     });
 
     it('setRole forbids changing own role', async () => {
@@ -398,6 +399,7 @@ describe('Admin Users (T18–T21)', () => {
         total: 1,
         page: 1,
         pageSize: 20,
+        limit: 20,
       });
     });
 
@@ -493,6 +495,96 @@ describe('Admin Users (T18–T21)', () => {
 
       const body = res.body as { status?: string };
       expect(body.status).toBe('suspended');
+    });
+
+    it('PATCH /admin/users/:id/role changes role with new_role DTO property', async () => {
+      mockSupabase.client.auth.getClaims.mockResolvedValueOnce({
+        data: { claims: { sub: adminId } },
+        error: null,
+      });
+      mockSupabase.client.from.mockReturnValueOnce({
+        select: jest.fn().mockReturnValue({
+          eq: jest.fn().mockReturnValue({
+            maybeSingle: jest.fn().mockResolvedValueOnce({
+              data: {
+                id: adminId,
+                email: 'admin@test.devarena',
+                role: 'admin',
+                status: 'active',
+              },
+              error: null,
+            }),
+          }),
+        }),
+      });
+
+      mockSupabase.client.rpc.mockResolvedValueOnce({
+        data: [
+          {
+            id: targetId,
+            email: 'user@test.devarena',
+            username: 'user_target',
+            role: 'admin',
+            status: 'active',
+            created_at: '2026-10-18T21:00:00Z',
+          },
+        ],
+        error: null,
+      });
+
+      const res = await request(app.getHttpServer())
+        .patch(`/admin/users/${targetId}/role`)
+        .set('Authorization', 'Bearer admin.token')
+        .send({ new_role: 'admin' })
+        .expect(200);
+
+      const body = res.body as { role?: string };
+      expect(body.role).toBe('admin');
+    });
+
+    it('PATCH /admin/users/:id/status updates status with new_status DTO property', async () => {
+      mockSupabase.client.auth.getClaims.mockResolvedValueOnce({
+        data: { claims: { sub: adminId } },
+        error: null,
+      });
+      mockSupabase.client.from.mockReturnValueOnce({
+        select: jest.fn().mockReturnValue({
+          eq: jest.fn().mockReturnValue({
+            maybeSingle: jest.fn().mockResolvedValueOnce({
+              data: {
+                id: adminId,
+                email: 'admin@test.devarena',
+                role: 'admin',
+                status: 'active',
+              },
+              error: null,
+            }),
+          }),
+        }),
+      });
+
+      mockSupabase.client.rpc.mockResolvedValueOnce({
+        data: [
+          {
+            id: targetId,
+            email: 'user@test.devarena',
+            username: 'user_target',
+            role: 'developer',
+            status: 'active',
+            created_at: '2026-10-18T21:00:00Z',
+          },
+        ],
+        error: null,
+      });
+
+      const res = await request(app.getHttpServer())
+        .patch(`/admin/users/${targetId}/status`)
+        .set('Authorization', 'Bearer admin.token')
+        .send({ new_status: 'active' })
+        .expect(200);
+
+      const body = res.body as { status?: string };
+      expect(body.status).toBe('active');
     });
 
     it('DELETE /admin/users/:id returns 204 on success', async () => {

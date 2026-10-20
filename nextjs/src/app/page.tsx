@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { TerminalHero } from '@/components/arena/TerminalHero';
 
 const steps = [
@@ -14,6 +15,15 @@ export default function Home() {
         <p className="font-mono text-sm tracking-widest text-primary">&lt;/&gt; DEVARENA</p>
         <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">Compete. Code. <span className="text-primary">Level up.</span></h1>
         <p className="max-w-xl text-lg leading-8 text-muted-foreground">The coding arena where your skills are tested, validated and ranked.</p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/duel"
+            className="flex items-center gap-2.5 rounded-xl border border-primary bg-primary px-6 py-3 font-mono text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(34,197,94,0.35)] transition-all hover:bg-emerald-400 hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] active:scale-[0.98]"
+          >
+            <span>⚡</span>
+            <span>Entrer dans l&apos;Arène 1v1 (Beta)</span>
+          </Link>
+        </div>
         <TerminalHero />
       </section>
 

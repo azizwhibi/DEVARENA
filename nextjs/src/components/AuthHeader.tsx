@@ -87,12 +87,30 @@ export function AuthHeader() {
   return (
     <header className="border-b border-zinc-800 bg-zinc-950 px-5 py-4">
       <nav aria-label="Main navigation" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 text-sm">
-        <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-primary`}>DevArena</Link>
+        <div className="flex items-center gap-3">
+          <Link href="/" className={`${linkClass} text-lg font-semibold tracking-tight text-primary`}>DevArena</Link>
+          <Link
+            href="/duel"
+            className={`${linkClass} inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-950/40 px-3 py-1 font-mono text-xs font-medium text-emerald-300 transition-all hover:border-emerald-400 hover:bg-emerald-900/40 hover:text-emerald-200`}
+          >
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+            <span>1v1 Duel</span>
+            <span className="rounded bg-emerald-500/20 px-1 py-0.5 text-[9px] font-bold uppercase text-emerald-300">Beta</span>
+          </Link>
+        </div>
         {loading ? <span role="status" className="text-zinc-400">Checking session…</span> : user ? (
           <div className="flex flex-wrap items-center gap-4">
             {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
-            {current?.role === 'admin' && <Link href="/admin/users" className={linkClass}>Administration</Link>}
+            {current?.role === 'admin' && (
+              <Link
+                href="/admin/users"
+                className={`${linkClass} inline-flex items-center gap-1.5 rounded-md border border-purple-500/40 bg-purple-950/40 px-2.5 py-1 font-mono text-xs font-semibold text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.15)] transition-all hover:border-purple-400 hover:bg-purple-900/50 hover:text-purple-200`}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
+                <span>Console Admin</span>
+              </Link>
+            )}
             <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>
             {message && (
               <div role="alert" className="flex w-full items-center gap-3 text-red-200">

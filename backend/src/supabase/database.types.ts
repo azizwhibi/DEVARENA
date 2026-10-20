@@ -375,20 +375,32 @@ export type Database = {
         Returns: Database['public']['Tables']['profiles']['Row'][];
       };
       admin_set_role: {
-        Args: {
-          p_actor: string;
-          p_target: string;
-          p_role: string;
-        };
+        Args:
+          | {
+              target_user_id: string;
+              new_role: string;
+              caller_id: string;
+            }
+          | {
+              p_actor: string;
+              p_target: string;
+              p_role: string;
+            };
         Returns: Database['public']['Tables']['profiles']['Row'][];
       };
       admin_set_status: {
-        Args: {
-          p_actor: string;
-          p_target: string;
-          p_status: string;
-          p_reason: string;
-        };
+        Args:
+          | {
+              target_user_id: string;
+              new_status: string;
+              caller_id: string;
+            }
+          | {
+              p_actor: string;
+              p_target: string;
+              p_status: string;
+              p_reason?: string;
+            };
         Returns: Database['public']['Tables']['profiles']['Row'][];
       };
     };
