@@ -4,9 +4,13 @@ import { connection } from 'next/server';
 import { AdminMarketplace } from '@/components/marketplace/AdminMarketplace';
 import { apiRequest } from '@/lib/api-server';
 import { ApiError, type AuthUser } from '@/lib/api-core';
+import { isMarketplaceOpen } from '@/lib/marketplace/flags';
 export const metadata = { title: 'Marketplace admin | DevArena' };
 
 async function AdminMarketplaceContent() {
+  if (!isMarketplaceOpen()) {
+    return <h1 className="text-3xl font-bold tracking-tight">Bientôt disponible</h1>;
+  }
   await connection();
 
   let user: AuthUser | null = null;

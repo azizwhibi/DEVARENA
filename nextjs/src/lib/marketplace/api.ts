@@ -1,4 +1,5 @@
 import { marketplaceHttp } from './api.http';
+import { isMarketplaceEnabled, isMarketplaceMock } from './flags';
 import {
   MarketplaceError,
   type AdminMarketplaceItem,
@@ -29,9 +30,7 @@ export { MarketplaceError } from './types';
 
 type MarketplaceMock = typeof import('./mock').marketplaceMock;
 
-export function isMarketplaceMock(): boolean {
-  return process.env.NEXT_PUBLIC_MARKETPLACE_MOCK === 'true';
-}
+export { isMarketplaceEnabled, isMarketplaceMock, isMarketplaceOpen } from './flags';
 
 /** Bouton d’achat dérivé ici : les composants n’additionnent ni le prix ni le solde. */
 export function describeOffer(item: MarketplaceItem, balance: number): ItemOffer {
@@ -73,8 +72,9 @@ async function loadMock(): Promise<MarketplaceMock> {
 }
 
 async function implementation(): Promise<MarketplaceApi> {
-  if (!isMarketplaceMock()) return marketplaceHttp;
-  return loadMock();
+  if (isMarketplaceMock()) return loadMock();
+  if (isMarketplaceEnabled()) return marketplaceHttp;
+  throw new MarketplaceError('unavailable', 'Bientôt disponible');
 }
 
 export const marketplaceApi: MarketplaceApi = {

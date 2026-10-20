@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Marketplace
+
+Two public flags, neither is a secret. Leave both `false` to keep the shop closed.
+
+- `NEXT_PUBLIC_MARKETPLACE_MOCK=true` uses simulated data in the browser.
+- `NEXT_PUBLIC_MARKETPLACE_ENABLED=true` calls the Nest API. If both are `true`, the mock wins.
+- If neither is `true`, the header link stays hidden and `/marketplace` plus `/admin/marketplace` show “Bientôt disponible” without a marketplace request.
+
 ## Getting Started
 
 First, run the development server:
