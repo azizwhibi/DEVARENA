@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { EquippedBadge } from '@/components/marketplace/EquippedBadge';
 import { getCountryName } from '@/lib/countries';
 import type { UserProfileData } from './ProfileForm';
 
@@ -36,6 +37,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-2xl font-bold text-zinc-100">{profile.username}</h1>
+              <EquippedBadge replay />
               <span className="rounded-full bg-indigo-950/80 px-2.5 py-0.5 text-xs font-medium text-indigo-400 border border-indigo-800">
                 {profile.role}
               </span>

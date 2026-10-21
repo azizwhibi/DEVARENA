@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiRequest, ApiError } from '@/lib/api';
+import { EquippedBadge } from '@/components/marketplace/EquippedBadge';
 import { isMarketplaceOpen } from '@/lib/marketplace/flags';
 import type { AuthUser } from '@/lib/api-core';
 
@@ -95,7 +96,7 @@ export function AuthHeader() {
         {loading ? <span role="status" className="text-zinc-400">Checking session…</span> : user ? (
           <div className="flex flex-wrap items-center gap-4">
             {isMarketplaceOpen() ? <Link href="/marketplace" aria-current={marketplaceCurrent ? 'page' : undefined} className={`${linkClass} inline-flex min-h-11 items-center px-2 ${marketplaceCurrent ? 'font-semibold text-primary underline decoration-primary underline-offset-4' : ''}`}>Marketplace</Link> : null}
-            {current ? <Link href="/profile" className={`${linkClass} break-all`}>{current.username} · {current.role}</Link>
+            {current ? <Link href="/profile" className={`${linkClass} inline-flex items-center gap-2 break-all`}><EquippedBadge />{current.username} · {current.role}</Link>
               : <span className="text-zinc-400">{message ? 'Account unavailable' : 'Loading account…'}</span>}
             {current?.role === 'admin' && <Link href="/admin/users" className={linkClass}>Administration</Link>}
             <button type="button" onClick={logout} disabled={leaving} className="min-h-11 rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-60">{leaving ? 'Signing out…' : 'Sign out'}</button>

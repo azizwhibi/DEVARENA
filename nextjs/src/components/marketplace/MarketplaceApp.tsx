@@ -19,6 +19,15 @@ import {
 } from '@/lib/marketplace/api';
 
 const kindLabel = { icon: 'Icône', animation: 'Animation', hint: 'Indice' } as const;
+const detailButtonClass = 'inline-flex min-h-11 items-center rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary';
+const actionButtonClass = 'arena-btn inline-flex min-h-11 items-center rounded-lg bg-primary px-4 font-semibold text-zinc-950 hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary';
+
+function StatusPill({ tone, children }: { tone: 'owned' | 'equipped'; children: string }) {
+  const toneClass = tone === 'equipped'
+    ? 'border-green-700 bg-green-950 text-green-50'
+    : 'border-zinc-600 bg-zinc-800 text-zinc-100';
+  return <span className={`inline-flex min-h-8 items-center rounded-full border px-3 text-sm font-medium ${toneClass}`}>{children}</span>;
+}
 const filters: Array<{ id: 'all' | MarketplaceKind; label: string }> = [
   { id: 'all', label: 'Tout' },
   { id: 'icon', label: 'Icônes' },
@@ -74,6 +83,9 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
         setBalance(nextBalance);
         setItems(nextItems);
         setInventory(nextInventory);
+        window.dispatchEvent(new CustomEvent('marketplace-equipped', {
+          detail: { preview: nextInventory.equipped.icon?.preview ?? null },
+        }));
       } catch (caught) {
         if (!cancelled) setError(messageOf(caught));
       } finally {
@@ -94,6 +106,18 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
   function applyInventory(next: Inventory) {
     setInventory(next);
     setItems((current) => current.map((item) => next.items.find((owned) => owned.id === item.id) ?? { ...item, equipped: false }));
+    window.dispatchEvent(new CustomEvent('marketplace-equipped', {
+      detail: { preview: next.equipped.icon?.preview ?? null },
+    }));
+  }
+
+  async function wear(itemId: string) {
+    setError(null);
+    try {
+      applyInventory(await marketplaceApi.equip(itemId));
+    } catch (caught) {
+      setError(messageOf(caught));
+    }
   }
 
   async function reset() {
@@ -142,15 +166,16 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
           Données de démonstration
         </p>
       ) : null}
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="font-mono text-xs tracking-widest text-primary">BOUTIQUE</p>
           <h1 className="mt-1 text-3xl font-bold tracking-tight">Marketplace</h1>
-          <p className="mt-2 text-sm text-zinc-400" aria-live="polite">
-            {balance === null ? 'Solde…' : `${balance} crédits`}
-          </p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col items-start gap-3 sm:items-end">
+          <p aria-live="polite" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/60 bg-zinc-900 px-4 text-sm font-semibold text-zinc-100">
+            {balance === null ? 'Solde…' : <><span className="font-mono text-lg text-primary">{balance}</span> crédits</>}
+          </p>
+          <div className="flex flex-wrap gap-3">
           {admin ? (
             <Link href="/admin/marketplace" className="inline-flex min-h-11 items-center rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
               Gérer les articles
@@ -161,6 +186,7 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
               {resetting ? 'Réinitialisation…' : 'Réinitialiser la démo'}
             </button>
           ) : null}
+          </div>
         </div>
       </header>
       <nav aria-label="Vues de la marketplace" className="flex flex-wrap gap-2">
@@ -199,23 +225,22 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
               const offer = balance === null ? null : describeOffer(item, balance);
               return (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedId(item.id)}
-                    className="arena-card flex h-full w-full flex-col gap-3 rounded-2xl border border-zinc-800 bg-card p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                  >
+                  <article className="arena-card flex h-full flex-col gap-3 rounded-2xl border border-zinc-800 bg-card p-5">
                     <span className="flex h-16 items-center justify-center rounded-xl bg-zinc-950 font-mono text-2xl text-primary" aria-hidden="true">{item.preview}</span>
                     <span className="font-mono text-xs tracking-widest text-muted-foreground">{kindLabel[item.kind]}</span>
-                    <span className="text-lg font-semibold">{item.title}</span>
-                    <span className="text-sm text-zinc-400">{item.price_credits} crédits</span>
-                    <span className="text-sm text-primary">
-                      {offer?.state === 'buy' ? 'Acheter' : null}
-                      {offer?.state === 'insufficient' ? `Il manque ${offer.missing_credits} crédits` : null}
-                      {offer?.state === 'owned' ? 'Possédé' : null}
-                      {offer?.state === 'equipped' ? 'Équipé' : null}
-                      {offer?.state === 'archived' ? 'Retiré' : null}
-                    </span>
-                  </button>
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
+                    <p className="text-sm text-zinc-400">{item.price_credits} crédits</p>
+                    <div className="mt-auto flex flex-wrap items-center gap-2">
+                      {offer?.state === 'buy' ? (
+                        <button type="button" onClick={() => setSelectedId(item.id)} className={actionButtonClass}>Acheter</button>
+                      ) : null}
+                      {offer?.state === 'insufficient' ? <p className="text-sm text-zinc-300">Il manque {offer.missing_credits} crédits</p> : null}
+                      {offer?.state === 'owned' ? <StatusPill tone="owned">Possédé</StatusPill> : null}
+                      {offer?.state === 'equipped' ? <StatusPill tone="equipped">Équipé</StatusPill> : null}
+                      {offer?.state === 'archived' ? <p className="text-sm text-zinc-300">Retiré</p> : null}
+                      <button type="button" onClick={() => setSelectedId(item.id)} className={detailButtonClass}>Détail</button>
+                    </div>
+                  </article>
                 </li>
               );
             })}
@@ -232,7 +257,9 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
           </div>
           {inventory.items.length === 0 ? <p>Tu n’as encore rien acheté.</p> : null}
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {inventory.items.map((item: InventoryItem) => (
+            {inventory.items.map((item: InventoryItem) => {
+              const slot = item.kind === 'icon' || item.kind === 'animation' ? item.kind : null;
+              return (
               <li key={item.id} className="flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-card p-5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="font-semibold">{item.title}</h3>
@@ -241,14 +268,20 @@ export function MarketplaceApp({ userId, view }: { userId: string; view: 'shop' 
                 <p className="text-sm text-zinc-400">{item.description}</p>
                 <p className="text-sm text-zinc-400">Payé {item.price_paid} crédits</p>
                 {item.status === 'archived' ? <p className="text-sm text-accent">Retiré de la boutique, toujours dans ton inventaire.</p> : null}
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => setSelectedId(item.id)} className="inline-flex min-h-11 items-center rounded-lg border border-zinc-600 px-4 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-                    Détail
-                  </button>
-                  {item.equipped ? <span className="inline-flex min-h-11 items-center text-sm text-primary">Équipé</span> : null}
+                <div className="flex flex-wrap items-center gap-2">
+                  {slot ? (
+                    item.equipped ? (
+                      <button type="button" onClick={() => void remove(slot)} className={actionButtonClass}>Retirer</button>
+                    ) : (
+                      <button type="button" onClick={() => void wear(item.id)} className={actionButtonClass}>Équiper</button>
+                    )
+                  ) : null}
+                  <button type="button" onClick={() => setSelectedId(item.id)} className={detailButtonClass}>Détail</button>
+                  {item.equipped ? <StatusPill tone="equipped">Équipé</StatusPill> : <StatusPill tone="owned">Possédé</StatusPill>}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
       ) : null}

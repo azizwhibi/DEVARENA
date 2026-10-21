@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { EquippedMotion } from '@/components/marketplace/EquippedBadge';
 import {
   describeOffer,
   marketplaceApi,
@@ -36,6 +37,8 @@ export function ItemDialog({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PurchaseResult | null>(null);
   const [hint, setHint] = useState<string | null>(null);
+  const [motionToken, setMotionToken] = useState(0);
+  const playedMotion = useRef<string | null>(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -67,6 +70,13 @@ export function ItemDialog({
       cancelled = true;
     };
   }, [itemId]);
+
+  useEffect(() => {
+    if (!item || item.kind !== 'animation' || !item.equipped) return;
+    if (playedMotion.current === item.id) return;
+    playedMotion.current = item.id;
+    setMotionToken((token) => token + 1);
+  }, [item]);
 
   async function buy() {
     setPending(true);
@@ -134,8 +144,12 @@ export function ItemDialog({
         {!item && !error ? <p role="status" className="text-sm text-zinc-400">Chargement…</p> : null}
         {item ? (
           <>
-            <p className="flex h-24 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 font-mono text-3xl text-primary" aria-hidden="true">
-              {item.preview}
+            <p className="flex h-24 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 font-mono text-3xl text-primary">
+              <EquippedMotion
+                preview={item.preview}
+                animationKey={item.kind === 'animation' && item.equipped ? item.animation_key : undefined}
+                playToken={item.kind === 'animation' && item.equipped ? motionToken : 0}
+              />
             </p>
             <p className="font-mono text-xs tracking-widest text-muted-foreground">
               {kindLabel[item.kind]} · {item.price_credits} crédits
@@ -175,7 +189,8 @@ export function ItemDialog({
                   Équiper
                 </button>
               ) : null}
-              {offer?.state === 'equipped' ? <p role="status">Équipé sur ton profil.</p> : null}
+              {offer?.state === 'equipped' ? <p role="status" className="inline-flex min-h-8 items-center rounded-full border border-green-700 bg-green-950 px-3 text-sm font-medium text-green-50">Équipé</p> : null}
+              {offer?.state === 'owned' && item.kind === 'hint' ? <p className="inline-flex min-h-8 items-center rounded-full border border-zinc-600 bg-zinc-800 px-3 text-sm font-medium text-zinc-100">Possédé</p> : null}
             </div>
           </>
         ) : null}
