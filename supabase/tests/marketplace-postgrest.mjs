@@ -6,7 +6,7 @@
 // is not reachable as host.docker.internal from another container:
 //   docker run -d --name devarena-postgrest-test --network bridge -p 127.0.0.1:3002:3000 \
 //     -e PGRST_DB_URI=postgres://postgres@<identity-container-ip>:5432/devarena_identity_test \
-//     -e PGRST_DB_SCHEMAS=public -e PGRST_DB_ANON_ROLE=service_role \
+//     -e PGRST_DB_SCHEMAS=public -e PGRST_DB_ANON_ROLE=anon \
 //     -e PGRST_JWT_SECRET=local-postgrest-test-only-not-a-real-secret \
 //     -e PGRST_SERVER_PORT=3000 postgrest/postgrest:v12.2.3
 //
@@ -99,11 +99,71 @@ function assert(ok, message) {
   console.log(`PASS: ${message}`);
 }
 
-function token() {
+function token(role = 'service_role') {
   const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
-  const body = Buffer.from(JSON.stringify({ role: 'service_role', exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url');
+  const body = Buffer.from(JSON.stringify({ role, exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url');
   const signature = createHmac('sha256', jwtSecret).update(`${header}.${body}`).digest('base64url');
   return `${header}.${body}.${signature}`;
+}
+
+const marketplaceRpcs = [
+  ['purchase_marketplace_item', { p_user_id: buyerId, p_item_id: challengeId }],
+  ['equip_marketplace_item', { p_user_id: buyerId, p_item_id: challengeId }],
+  ['unequip_marketplace_item', { p_user_id: buyerId, p_slot: 'icon' }],
+  ['marketplace_hint_content', { p_user_id: buyerId, p_item_id: challengeId }],
+  ['marketplace_admin_purchased_ids', { p_admin_id: adminId, p_item_ids: [challengeId] }],
+  ['admin_grant_credits', { p_admin_id: adminId, p_user_id: buyerId, p_amount: 1, p_reason: 'denied' }],
+  ['marketplace_admin_save_item', {
+    p_admin_id: adminId, p_item_id: null, p_kind: 'icon', p_title: 'denied', p_description: '',
+    p_price_credits: 1, p_status: 'draft', p_preview: '', p_animation_key: null, p_challenge_id: null, p_hint_body: null,
+  }],
+  ['marketplace_admin_archive_item', { p_admin_id: adminId, p_item_id: challengeId }],
+];
+
+const marketplaceTables = [
+  'marketplace_items',
+  'marketplace_secrets',
+  'marketplace_purchases',
+  'user_equipped_items',
+  'credit_transactions',
+  'credit_wallets',
+];
+
+async function asRole(role, path, body) {
+  const headers = { accept: 'application/json' };
+  if (role) {
+    const bearer = token(role);
+    headers.authorization = `Bearer ${bearer}`;
+    headers.apikey = bearer;
+  }
+  if (body) headers['content-type'] = 'application/json';
+  const response = await fetch(`${postgrestUrl}${path}`, {
+    method: body ? 'POST' : 'GET',
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return { status: response.status, text: await response.text() };
+}
+
+function assertRefused(result, label) {
+  const denied = result.status === 401 || result.status === 403
+    || /permission denied|42501/i.test(result.text);
+  const rows = result.text.trim().startsWith('[');
+  assert(denied && !rows, `${label} is refused without rows, got ${result.status} ${result.text.slice(0, 180)}`);
+}
+
+async function assertClosedTo(role) {
+  const label = role ?? 'anonymous';
+  for (const [fn, args] of marketplaceRpcs) {
+    assertRefused(await asRole(role, `/rpc/${fn}`, args), `${label} ${fn}`);
+  }
+  for (const table of marketplaceTables) {
+    const result = await asRole(role, `/${table}?select=*`);
+    assertRefused(result, `${label} select ${table}`);
+    if (table === 'marketplace_secrets' || table === 'credit_wallets') {
+      assert(!result.text.includes('"balance"') && !result.text.includes('"body"'), `${label} select ${table} returns no row column`);
+    }
+  }
 }
 
 async function raw(fn, args) {
@@ -133,6 +193,8 @@ async function main() {
 }
 
 async function run() {
+  await assertClosedTo('authenticated');
+  await assertClosedTo(null);
   const bearer = token();
   const client = createClient(postgrestUrl, bearer, {
     auth: { persistSession: false, autoRefreshToken: false },
