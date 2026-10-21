@@ -149,6 +149,7 @@ export function ItemDialog({
                 preview={item.preview}
                 animationKey={item.kind === 'animation' && item.equipped ? item.animation_key : undefined}
                 playToken={item.kind === 'animation' && item.equipped ? motionToken : 0}
+                large
               />
             </p>
             <p className="font-mono text-xs tracking-widest text-muted-foreground">
