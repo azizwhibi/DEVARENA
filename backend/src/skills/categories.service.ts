@@ -30,9 +30,9 @@ export class CategoriesService {
   private fail(error: { code?: string; message: string }): never {
     this.logger.error(error.message);
     if (error.code === '23505') {
-      throw new ConflictException('Une categorie avec ce nom existe deja.');
+      throw new ConflictException("A category with this name already exists.");
     }
-    throw new InternalServerErrorException('Une erreur est survenue.');
+    throw new InternalServerErrorException("Something went wrong. Please retry.");
   }
 
   private async audit(
@@ -59,7 +59,7 @@ export class CategoriesService {
       .eq('id', id)
       .maybeSingle();
     if (error) this.fail(error);
-    if (!data) throw new NotFoundException('Categorie introuvable.');
+    if (!data) throw new NotFoundException("Category not found.");
     return data;
   }
 

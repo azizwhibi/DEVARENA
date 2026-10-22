@@ -1,8 +1,8 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { WorkspaceIcon } from "@/components/skills/WorkspaceIcon";
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 import {
   apiRequest,
   difficulties,
@@ -10,22 +10,24 @@ import {
   recordClick,
   types,
   type Resource,
-} from "@/lib/knowledge";
-import styles from "./knowledge.module.css";
+} from '@/lib/knowledge';
+import styles from './knowledge.module.css';
 export function KnowledgeNav() {
   const path = usePathname();
   return (
-    <nav className={styles.nav} aria-label="Connaissances">
+    <nav className={styles.nav} aria-label="Knowledge">
       {[
-        ["/knowledge", "Bibliothèque"],
-        ["/knowledge/saved", "Enregistrés"],
-        ["/knowledge/progress", "Progression"],
+        ['/knowledge', 'Library'],
+        ['/knowledge/saved', 'Saved'],
+        ['/knowledge/progress', 'Progress'],
       ].map(([href, label]) => (
         <Link
           key={href}
           href={href}
-          data-tour={href === '/knowledge/saved' ? 'knowledge-saved' : undefined}
-          aria-current={path === href ? "page" : undefined}
+          data-tour={
+            href === '/knowledge/saved' ? 'knowledge-saved' : undefined
+          }
+          aria-current={path === href ? 'page' : undefined}
         >
           {label}
         </Link>
@@ -35,11 +37,7 @@ export function KnowledgeNav() {
 }
 export function Loading() {
   return (
-    <div
-      className="grid-2"
-      role="status"
-      aria-label="Chargement des ressources"
-    >
+    <div className="grid-2" role="status" aria-label="Loading resources">
       <div className="skeleton skeleton-panel" />
       <div className="skeleton skeleton-panel" />
     </div>
@@ -57,7 +55,7 @@ export function Failure({
       <p>{message}</p>
       <button type="button" className="btn btn-secondary" onClick={retry}>
         <WorkspaceIcon name="refresh" />
-        Réessayer
+        Retry
       </button>
     </div>
   );
@@ -82,17 +80,17 @@ export function Pagination({
         disabled={page <= 1}
         onClick={() => onPage(page - 1)}
       >
-        Précédent
+        Previous
       </button>
       <span>
-        Page {page} sur {count}
+        Page {page} of {count}
       </span>
       <button
         className="btn btn-secondary"
         disabled={page >= count}
         onClick={() => onPage(page + 1)}
       >
-        Suivant
+        Next
       </button>
     </nav>
   );
@@ -102,9 +100,9 @@ export function ResourceMeta({ resource }: { resource: Resource }) {
     <div className={styles.meta}>
       <span>{types[resource.resource_type] ?? resource.resource_type}</span>
       <span>
-        ·{" "}
-        {resource.difficulty === "unknown"
-          ? "Niveau non renseigné"
+        ·{' '}
+        {resource.difficulty === 'unknown'
+          ? 'Level not specified'
           : difficulties[resource.difficulty]}
       </span>
       {resource.technology && <span>· {resource.technology.name}</span>}
@@ -123,14 +121,14 @@ export function BookmarkButton({
 }) {
   const [saved, setSaved] = useState(!!resource.bookmarked),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState('');
   async function toggle() {
     if (busy) return;
     setBusy(true);
-    setError("");
+    setError('');
     try {
-      await apiRequest("/me/knowledge/bookmarks/" + resource.id, {
-        method: saved ? "DELETE" : "PUT",
+      await apiRequest('/me/knowledge/bookmarks/' + resource.id, {
+        method: saved ? 'DELETE' : 'PUT',
       });
       setSaved(!saved);
       if (saved) onRemove?.();
@@ -150,7 +148,7 @@ export function BookmarkButton({
         onClick={toggle}
       >
         <WorkspaceIcon name="bookmark" size={16} />
-        {busy ? "Enregistrement…" : saved ? "Enregistré" : "Enregistrer"}
+        {busy ? 'Saving…' : saved ? 'Saved' : 'Save'}
       </button>
       {error && (
         <p role="alert" className="form-error">
@@ -174,14 +172,14 @@ export function ResourceCard({
   hideBookmark?: boolean;
 }) {
   return (
-    <article className={"card " + styles.resource}>
+    <article className={'card ' + styles.resource}>
       <ResourceMeta resource={resource} />
       <h3>
         <Link
           href={
-            "/knowledge/" +
+            '/knowledge/' +
             resource.id +
-            (recommendationId ? "?recommendation=" + recommendationId : "")
+            (recommendationId ? '?recommendation=' + recommendationId : '')
           }
           onClick={() => recordClick(resource.id, recommendationId)}
         >
@@ -193,8 +191,8 @@ export function ResourceCard({
       {resource.resource_skills?.length > 0 && (
         <div className={styles.meta}>
           {resource.resource_skills.map((link) => (
-            <Link key={link.skill_id} href={"/skills/" + link.skill_id}>
-              {link.skill?.name ?? "Compétence"}
+            <Link key={link.skill_id} href={'/skills/' + link.skill_id}>
+              {link.skill?.name ?? 'Skill'}
             </Link>
           ))}
         </div>
@@ -203,13 +201,13 @@ export function ResourceCard({
         <Link
           className="btn btn-ghost"
           href={
-            "/knowledge/" +
+            '/knowledge/' +
             resource.id +
-            (recommendationId ? "?recommendation=" + recommendationId : "")
+            (recommendationId ? '?recommendation=' + recommendationId : '')
           }
           onClick={() => recordClick(resource.id, recommendationId)}
         >
-          Consulter
+          View
           <WorkspaceIcon name="arrow" size={16} />
         </Link>
         {!hideBookmark && (

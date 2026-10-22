@@ -1,5 +1,6 @@
 import {
   Body,
+  Delete,
   Controller,
   Get,
   Param,
@@ -59,5 +60,12 @@ export class TechnologiesController {
     @Req() req: AuthedRequest,
   ) {
     return this.technologies.setActive(id, true, req.user?.id ?? null);
+  }
+  @Delete(':id')
+  remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request & { user: { id: string } },
+  ) {
+    return this.technologies.setActive(id, false, req.user.id);
   }
 }

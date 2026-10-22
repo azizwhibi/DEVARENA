@@ -1,3 +1,4 @@
+export const instant = false;
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
@@ -30,11 +31,11 @@ async function ProfileContent() {
 
 export default function ProfilePage() {
   return (
-    <main className="mx-auto w-full max-w-[1100px] p-8 max-sm:p-4">
+    <section className="mx-auto w-full max-w-[1300px] p-8 max-sm:p-4">
       <Suspense
         fallback={
           <div
-            className="rounded-xl border border-white/[0.06] bg-[#111827] p-8 text-center text-sm text-[#8B93A7]"
+            className="rounded-xl border border-white/[0.06] bg-[#0F141D] p-8 text-center text-sm text-[#A1AABD]"
             aria-busy="true"
           >
             Loading profile...
@@ -43,6 +44,6 @@ export default function ProfilePage() {
       >
         <ProfileContent />
       </Suspense>
-    </main>
+    </section>
   );
 }

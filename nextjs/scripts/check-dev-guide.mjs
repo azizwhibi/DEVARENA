@@ -66,6 +66,12 @@ check('Corrupt, wrong-version and invalid progress never break onboarding', () =
     storage.setItem(guideStorageKey('broken'), value); assert.deepEqual(readPreferences(storage, 'broken'), defaults);
   }
 });
+check('Saved tours on the removed Coach step resume at the library', () => {
+  storage.setItem(guideStorageKey('legacy'), JSON.stringify({ ...defaults, stepId: 'coach', dismissed: true, motion: 'reduced' }));
+  const prefs = readPreferences(storage, 'legacy');
+  assert.equal(prefs.stepId, 'library'); assert.equal(prefs.dismissed, true); assert.equal(prefs.motion, 'reduced');
+  assert.ok(!steps.some(step => step.route === '/coach'));
+});
 check('Storage access failures gracefully fall back to memory', () => {
   const denied = { getItem() { throw Error('denied'); }, setItem() { throw Error('denied'); } };
   assert.deepEqual(readPreferences(denied, 'a'), defaults); assert.equal(savePreferences(denied, 'a', defaults), false);
@@ -76,7 +82,7 @@ check('Exact route matching cannot mistake resource detail for catalogue', () =>
 check('Spotlights clamp to viewport and ignore invisible targets', () => {
   assert.equal(boundedTargetRect({ left: -300, top: 100, width: 240, height: 40 }, { width: 390, height: 800 }), null);
   const rect = boundedTargetRect({ left: 10, top: 40, width: 1000, height: 1500 }, { width: 390, height: 800 });
-  assert.ok(rect.left >= 6 && rect.top >= 68 && rect.left + rect.width <= 384 && rect.top + rect.height <= 794);
+  assert.ok(rect.left >= 6 && rect.top >= 90 && rect.left + rect.width <= 384 && rect.top + rect.height <= 794);
 });
 check('One-shot gesture durations are finite; idle can loop', () => {
   for (const [gesture, duration] of Object.entries(gestureDuration)) assert.equal(Number.isFinite(duration), gesture !== 'idle');

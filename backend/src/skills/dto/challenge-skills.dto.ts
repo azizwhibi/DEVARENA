@@ -12,12 +12,12 @@ import {
 } from 'class-validator';
 
 export class ChallengeSkillItemDto {
-  @ApiProperty({ description: 'Id de la competence' })
+  @ApiProperty({ description: "Skill ID" })
   @IsUUID()
   skillId: string;
 
   @ApiPropertyOptional({
-    description: 'Poids du lien, de 1 a 3 (1 par defaut)',
+    description: "Skill weight from 1 to 3 (default: 1)",
     minimum: 1,
     maximum: 3,
     default: 1,
@@ -33,7 +33,7 @@ export class SetChallengeSkillsDto {
   @ApiProperty({
     type: [ChallengeSkillItemDto],
     description:
-      'Liste complete des competences du defi (remplace la precedente)',
+      "Complete challenge skill list (replaces existing links)",
   })
   @IsArray()
   @ArrayMaxSize(10)

@@ -1,8 +1,8 @@
-"use client";
-import Link from "next/link";
-import { WorkspaceIcon } from "@/components/skills/WorkspaceIcon";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+'use client';
+import Link from 'next/link';
+import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   apiRequest,
   errorText,
@@ -12,15 +12,15 @@ import {
   useKnowledge,
   type Progress,
   type Resource,
-} from "@/lib/knowledge";
+} from '@/lib/knowledge';
 import {
   BookmarkButton,
   Failure,
   KnowledgeNav,
   Loading,
   ResourceMeta,
-} from "./KnowledgeUI";
-import styles from "./knowledge.module.css";
+} from './KnowledgeUI';
+import styles from './knowledge.module.css';
 export function ResourceContent({
   resource,
   trackClicks = true,
@@ -45,7 +45,7 @@ export function ResourceContent({
         </div>
       )}
       {resource.content && (
-        <div className={"card " + styles.article}>{resource.content}</div>
+        <div className={'card ' + styles.article}>{resource.content}</div>
       )}
       {external && (
         <a
@@ -54,17 +54,17 @@ export function ResourceContent({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
-            if (trackClicks && resource.status === "published")
+            if (trackClicks && resource.status === 'published')
               recordClick(resource.id);
           }}
         >
-          Ouvrir la source
+          Open source
           <WorkspaceIcon name="arrow" size={16} />
         </a>
       )}
       {(resource.source || resource.attribution) && (
         <div className={styles.meta}>
-          <span>Source : {resource.source}</span>
+          <span>Source: {resource.source}</span>
           {resource.attribution && <span>{resource.attribution}</span>}
         </div>
       )}
@@ -82,14 +82,14 @@ function LearningControls({
       resource.progress?.percentage ?? 0,
     ),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState('');
   async function save(value: number) {
     if (busy) return;
     setBusy(true);
-    setError("");
+    setError('');
     try {
-      await apiRequest<Progress>("/me/knowledge/progress/" + resource.id, {
-        method: "PATCH",
+      await apiRequest<Progress>('/me/knowledge/progress/' + resource.id, {
+        method: 'PATCH',
         body: JSON.stringify({ percentage: value }),
       });
       onSaved();
@@ -101,24 +101,24 @@ function LearningControls({
   }
   return (
     <section
-      className={"card " + styles.progress}
-      aria-label="Progression déclarée"
+      className={'card ' + styles.progress}
+      aria-label="Learning progress"
     >
-      <h2 className="section-title">Progression déclarée</h2>
+      <h2 className="section-title">Learning progress</h2>
       {!resource.progress ? (
         <button
           className="btn btn-primary"
           disabled={busy}
           onClick={() => save(0)}
         >
-          Commencer la ressource
+          Start resource
         </button>
-      ) : resource.progress.state === "completed" ? (
+      ) : resource.progress.state === 'completed' ? (
         <>
           <p>
-            Terminée le{" "}
+            Completed on{' '}
             {new Date(resource.progress.completed_at!).toLocaleDateString(
-              "fr-FR",
+              'en-US',
             )}
           </p>
           <button
@@ -126,12 +126,12 @@ function LearningControls({
             disabled={busy}
             onClick={() => save(0)}
           >
-            Reprendre
+            Resume
           </button>
         </>
       ) : (
         <>
-          <label htmlFor="learning-progress">Avancement : {percentage}%</label>
+          <label htmlFor="learning-progress">Progress: {percentage}%</label>
           <input
             id="learning-progress"
             type="range"
@@ -148,20 +148,20 @@ function LearningControls({
               disabled={busy || percentage === resource.progress.percentage}
               onClick={() => save(percentage)}
             >
-              Enregistrer
+              Save
             </button>
             <button
               className="btn btn-primary"
               disabled={busy}
               onClick={() => save(100)}
             >
-              Marquer comme terminée
+              Mark as completed
             </button>
           </div>
         </>
       )}
       <p className="muted">
-        Cette progression ne modifie pas vos scores de compétences.
+        Learning progress does not change your skill scores.
       </p>
       {error && (
         <p role="alert" className="form-error">
@@ -178,15 +178,15 @@ function Feedback({
   resourceId: string;
   recommendationId?: string;
 }) {
-  const [selected, setSelected] = useState(""),
+  const [selected, setSelected] = useState(''),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState('');
   async function submit(feedback: string) {
     setBusy(true);
-    setError("");
+    setError('');
     try {
-      await apiRequest("/me/knowledge/feedback", {
-        method: "POST",
+      await apiRequest('/me/knowledge/feedback', {
+        method: 'POST',
         body: JSON.stringify({
           resource_id: resourceId,
           recommendation_id: recommendationId,
@@ -202,12 +202,12 @@ function Feedback({
   }
   return (
     <section>
-      <h2 className="section-title">Votre avis</h2>
+      <h2 className="section-title">Your feedback</h2>
       <div className={styles.feedback}>
         {Object.entries(feedbackLabels).map(([key, label]) => (
           <button
             className={
-              selected === key ? "btn btn-primary" : "btn btn-secondary"
+              selected === key ? 'btn btn-primary' : 'btn btn-secondary'
             }
             key={key}
             aria-pressed={selected === key}
@@ -220,7 +220,7 @@ function Feedback({
       </div>
       {selected && (
         <p role="status" className="muted">
-          Avis enregistré.
+          Feedback saved.
         </p>
       )}
       {error && (
@@ -233,8 +233,8 @@ function Feedback({
 }
 export function KnowledgeDetail({ id }: { id: string }) {
   const query = useSearchParams();
-  const recommendationId = query.get("recommendation") ?? undefined;
-  const result = useKnowledge<Resource>("/knowledge/resources/" + id);
+  const recommendationId = query.get('recommendation') ?? undefined;
+  const result = useKnowledge<Resource>('/knowledge/resources/' + id);
   if (result.loading)
     return (
       <div className="page-container">
@@ -260,21 +260,21 @@ export function KnowledgeDetail({ id }: { id: string }) {
         </header>
         <ResourceContent resource={resource} />
         <LearningControls
-          key={resource.progress?.updated_at ?? "not-started"}
+          key={resource.progress?.updated_at ?? 'not-started'}
           resource={resource}
           onSaved={result.reload}
         />
         {!!resource.resource_skills.length && (
           <section>
-            <h2 className="section-title">Compétences liées</h2>
+            <h2 className="section-title">Related skills</h2>
             <div className={styles.actions}>
               {resource.resource_skills.map((link) => (
                 <Link
                   className="btn btn-secondary"
                   key={link.skill_id}
-                  href={"/skills/" + link.skill_id}
+                  href={'/skills/' + link.skill_id}
                 >
-                  {link.skill?.name ?? "Compétence"}
+                  {link.skill?.name ?? 'Skill'}
                 </Link>
               ))}
             </div>
@@ -282,13 +282,13 @@ export function KnowledgeDetail({ id }: { id: string }) {
         )}
         {!!resource.challenges?.length && (
           <section>
-            <h2 className="section-title">Défis associés</h2>
+            <h2 className="section-title">Related challenges</h2>
             <div className={styles.actions}>
               {resource.challenges.map((challenge) => (
                 <Link
                   className="btn btn-secondary"
                   key={challenge.id}
-                  href={"/skills/" + challenge.skill_id}
+                  href={'/skills/' + challenge.skill_id}
                 >
                   {challenge.title}
                 </Link>

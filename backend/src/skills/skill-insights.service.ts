@@ -26,7 +26,7 @@ export class SkillInsightsService {
 
   private fail(error: { message: string }): never {
     this.logger.error(error.message);
-    throw new InternalServerErrorException('Une erreur est survenue.');
+    throw new InternalServerErrorException("Something went wrong. Please retry.");
   }
 
   private async getSkillOrThrow(skillId: string, onlyActive: boolean) {
@@ -37,14 +37,14 @@ export class SkillInsightsService {
       .maybeSingle();
     if (error) this.fail(error);
     if (!data || (onlyActive && !data.is_active)) {
-      throw new NotFoundException('Competence introuvable.');
+      throw new NotFoundException("Skill not found.");
     }
     return data;
   }
 
   // Defis lies a une competence, avec l'etat des tentatives du developpeur.
   async challengesForUser(userId: string, skillId: string) {
-    const skill = await this.getSkillOrThrow(skillId, true);
+    const skill = await this.getSkillOrThrow(skillId, false);
 
     const links = await this.db
       .from('challenge_skills')

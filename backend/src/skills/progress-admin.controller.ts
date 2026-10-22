@@ -12,7 +12,6 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../auth/guards';
 import { SupabaseService } from './skills-database.service';
-import { AiCoachService } from './ai/ai-coach.service';
 import {
   ATTEMPT_VALIDATED,
   AttemptValidatedEvent,
@@ -28,7 +27,6 @@ export class ProgressAdminController {
     private readonly progress: SkillProgressService,
     private readonly events: EventEmitter2,
     private readonly supabase: SupabaseService,
-    private readonly coach: AiCoachService,
   ) {}
 
   @Get('users/:userId')
@@ -67,7 +65,6 @@ export class ProgressAdminController {
         new AttemptValidatedEvent(userId, challengeId),
       );
     }
-    this.coach.clearCache(userId);
 
     return { success: true, challengeId, ...result };
   }
@@ -88,7 +85,6 @@ export class ProgressAdminController {
       ATTEMPT_VALIDATED,
       new AttemptValidatedEvent(userId, challengeId),
     );
-    this.coach.clearCache(userId);
 
     return { success: true, challengeId, ...result };
   }

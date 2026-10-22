@@ -10,10 +10,16 @@ export async function proxy(request: NextRequest) {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll(cookiesToSet, headers) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
           response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
-          Object.entries(headers).forEach(([name, value]) => response.headers.set(name, value));
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          );
+          Object.entries(headers).forEach(([name, value]) =>
+            response.headers.set(name, value),
+          );
         },
       },
     },
@@ -27,7 +33,20 @@ export async function proxy(request: NextRequest) {
     // An unverifiable session gets the same redirects as a missing session.
   }
   const { pathname, search } = request.nextUrl;
-  const protectedRoute = ['/profile', '/admin', '/recruiter', '/reset-password', '/dashboard', '/my-skills', '/skills', '/coach', '/arena', '/discover', '/marketplace', '/knowledge'].some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  const protectedRoute = [
+    '/profile',
+    '/admin',
+    '/recruiter',
+    '/reset-password',
+    '/dashboard',
+    '/my-skills',
+    '/skills',
+    '/arena',
+    '/duel',
+    '/discover',
+    '/marketplace',
+    '/knowledge',
+  ].some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
   let destination: URL | undefined;
   if (!authenticated && protectedRoute) {
     destination = new URL('/login', request.url);
@@ -37,15 +56,22 @@ export async function proxy(request: NextRequest) {
   }
   if (destination) {
     const redirected = NextResponse.redirect(destination);
-    response.cookies.getAll().forEach(cookie => redirected.cookies.set(cookie));
+    response.cookies
+      .getAll()
+      .forEach((cookie) => redirected.cookies.set(cookie));
     response = redirected;
   }
-  response.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0');
+  response.headers.set(
+    'Cache-Control',
+    'private, no-cache, no-store, must-revalidate, max-age=0',
+  );
   response.headers.set('Pragma', 'no-cache');
   response.headers.set('Expires', '0');
   return response;
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|apple-icon|icons(?:/|$)|sw\\.js|manifest(?:\\.|/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|apple-icon|icons(?:/|$)|sw\\.js|manifest(?:\\.|/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+  ],
 };

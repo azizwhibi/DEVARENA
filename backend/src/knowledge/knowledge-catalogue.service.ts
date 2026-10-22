@@ -102,7 +102,7 @@ export class KnowledgeCatalogueService {
     if (!admin) req = req.eq('status', 'published');
     const { data, error } = await req.maybeSingle();
     this.store.check(error);
-    if (!data) throw new NotFoundException('Ressource introuvable.');
+    if (!data) throw new NotFoundException('Resource not found.');
     return data;
   }
   async detail(id: string, admin = false) {
@@ -151,7 +151,7 @@ export class KnowledgeCatalogueService {
     if (typeof data.title === 'string') data.title = data.title.trim();
     if (data.title !== undefined && (!data.title || data.title.length < 2))
       throw new BadRequestException(
-        'Le titre doit contenir au moins deux caractères.',
+        'The title must contain at least two characters.',
       );
     if (id) await this.resource(id, true);
     const result = await this.store.db.rpc('knowledge_save_resource', {
@@ -162,17 +162,17 @@ export class KnowledgeCatalogueService {
     });
     this.store.check(result.error);
     const saved = Array.isArray(result.data) ? result.data[0] : result.data;
-    if (!saved?.id) throw new NotFoundException('Ressource non enregistrée.');
+    if (!saved?.id) throw new NotFoundException('Resource not saved.');
     return this.detail(saved.id, true);
   }
   async publish(id: string) {
     const resource = await this.resource(id, true);
     if (!usableResource(resource))
       throw new BadRequestException(
-        'Ajoutez du contenu ou un lien externe valide avant de publier.',
+        'Add content or a valid external link before publishing.',
       );
     if (!resource.title?.trim() || resource.title.trim().length < 2)
-      throw new BadRequestException('Ajoutez un titre.');
+      throw new BadRequestException('Enter a title.');
     const { data, error } = await this.store.db
       .from('knowledge_resources')
       .update({
@@ -206,7 +206,7 @@ export class KnowledgeCatalogueService {
     this.store.check(error);
     if (!data?.length)
       throw new ConflictException(
-        'Seuls les brouillons peuvent être supprimés. Archivez une ressource publiée.',
+        'Only drafts can be deleted. Archive published resources instead.',
       );
     return { deleted: true };
   }

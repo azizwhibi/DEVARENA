@@ -19,16 +19,16 @@ export class KnowledgeStore {
   check(error: { code?: string; message: string } | null): void {
     if (!error) return;
     if (error.code === 'P0002' || error.code === 'PGRST116')
-      throw new NotFoundException('Ressource introuvable.');
+      throw new NotFoundException('Resource not found.');
     if (error.code === '23505')
-      throw new ConflictException('Cette ressource existe déjà.');
+      throw new ConflictException('This resource already exists.');
     if (['23514', '23502', '23503', '22P02'].includes(error.code ?? ''))
       throw new BadRequestException(
-        'Vérifiez les champs et les associations de la ressource.',
+        'Check the resource fields and linked records.',
       );
     this.logger.error(error.message);
     throw new InternalServerErrorException(
-      'Impossible de charger les connaissances. Vérifiez la migration Knowledge.',
+      'Unable to load Knowledge. Check the Knowledge migration.',
     );
   }
 }

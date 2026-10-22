@@ -45,7 +45,6 @@ Open http://localhost:3001 and sign in using an existing Aziz account. Frontend 
 | `/my-skills` | Syrine's skill cards, radar chart and progress |
 | `/skills/[id]` | Skill history and associated challenges |
 | `/discover` | Technologies from the actual skill catalog |
-| `/coach` | Syrine's AI coach, using the signed-in user's data |
 | `/arena` | Syrine's practice questions |
 | `/admin/skills` | Administrator skill and technology management |
 | `/admin/skill-associations` | Administrator challenge links and progress tools |
@@ -53,7 +52,7 @@ Open http://localhost:3001 and sign in using an existing Aziz account. Frontend 
 
 All skill API requests use Aziz's existing session-token and refresh wrapper. Backend skill controllers use Aziz's existing user/admin guards, including suspended-account checks. The original development bypass guards and fixed test user are not imported. Skill styles are scoped to the skill workspace, preserving the account screens' styles. Aziz's existing service worker remains in use; personal skill data is not stored in a shared offline cache.
 
-Practice questions include answers in the browser, so their results do not modify verified scores. Administrative simulation tools remain admin-only. The coach retains its deterministic fallback if an AI provider is unavailable; optional `AI_PROVIDER`, `AI_MODEL` and `AI_API_KEY` settings belong only in `backend/.env`.
+Practice questions include answers in the browser, so their results do not modify verified scores. Administrative simulation tools remain admin-only.
 
 ## Verification
 

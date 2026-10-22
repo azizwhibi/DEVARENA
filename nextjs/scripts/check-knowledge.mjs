@@ -103,7 +103,7 @@ try {
   assert.ok(html.includes("&lt;img"));
   assert.ok(!html.includes("<script>"));
   assert.ok(!html.includes('href="javascript'));
-  assert.ok(html.includes("Niveau non renseigné"));
+  assert.ok(html.includes("Level not specified"));
   assert.ok(!html.includes("null min"));
   const linked = renderToStaticMarkup(
     createElement(ResourceContent, {

@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsOptional,
@@ -8,23 +9,26 @@ import {
 } from 'class-validator';
 
 export class CreateSkillDto {
-  @ApiProperty({ example: 'Jointures SQL' })
+  @ApiProperty({ example: "SQL joins" })
   @IsString()
   @MinLength(2)
   @MaxLength(80)
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   name: string;
 
-  @ApiPropertyOptional({ example: 'INNER, LEFT, agregations' })
+  @ApiPropertyOptional({ example: "INNER, LEFT, aggregations" })
   @IsOptional()
   @IsString()
   @MaxLength(300)
   description?: string;
 
-  @ApiProperty({ description: 'Id de la categorie' })
+  @ApiProperty({ description: "Category ID" })
   @IsUUID()
   categoryId: string;
 
-  @ApiPropertyOptional({ description: 'Id de la technologie' })
+  @ApiPropertyOptional({ description: "Technology ID" })
   @IsOptional()
   @IsUUID()
   technologyId?: string;

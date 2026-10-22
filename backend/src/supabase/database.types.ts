@@ -15,6 +15,39 @@ export type Database = {
   };
   public: {
     Tables: {
+      duel_matches: {
+        Row: {
+          id: string;
+          player1_id: string | null;
+          player2_id: string | null;
+          player1_score: number;
+          player2_score: number;
+          winner_id: string | null;
+          rounds_data: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          player1_id?: string | null;
+          player2_id?: string | null;
+          player1_score?: number;
+          player2_score?: number;
+          winner_id?: string | null;
+          rounds_data?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          player1_id?: string | null;
+          player2_id?: string | null;
+          player1_score?: number;
+          player2_score?: number;
+          winner_id?: string | null;
+          rounds_data?: Json;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       ai_recommendations: {
         Row: {
           content: Json;

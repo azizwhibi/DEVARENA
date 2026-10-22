@@ -120,8 +120,7 @@ export class KnowledgeLearningService {
       .eq('resource_id', resourceId)
       .maybeSingle();
     this.store.check(result.error);
-    if (!result.data)
-      throw new NotFoundException('Recommandation introuvable.');
+    if (!result.data) throw new NotFoundException('Recommendation not found.');
   }
   async feedback(userId: string, dto: FeedbackDto) {
     await this.assertDelivery(userId, dto.resource_id, dto.recommendation_id);

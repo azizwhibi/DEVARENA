@@ -34,17 +34,17 @@ export function parseCsv(input: string): string[][] {
       }
     } else {
       if (closed && char !== '\r')
-        throw new BadRequestException('CSV invalide après un guillemet.');
+        throw new BadRequestException('Invalid CSV after a quotation mark.');
       if (char === '"')
-        throw new BadRequestException('Guillemets CSV invalides.');
+        throw new BadRequestException('Invalid CSV quotation marks.');
       cell += char;
     }
   }
-  if (quoted) throw new BadRequestException('Guillemet CSV non fermé.');
+  if (quoted) throw new BadRequestException('Unclosed CSV quotation mark.');
   row.push(cell);
   if (row.some((value) => value.trim())) rows.push(row);
   if (rows.length > 501)
-    throw new BadRequestException('Import limité à 500 lignes.');
+    throw new BadRequestException('Imports are limited to 500 rows.');
   return rows;
 }
 const DIFFICULTY: Record<string, string> = {
@@ -75,9 +75,9 @@ export function normalizedImport(row: Record<string, string>) {
     title.length < 2 ||
     title.length > 200
   )
-    throw new Error('Identifiant ou titre invalide.');
+    throw new Error('Invalid identifier or title.');
   if ((row.description?.length ?? 0) > 2000)
-    throw new Error('Description trop longue.');
+    throw new Error('Description is too long.');
   if (
     !url ||
     url.length > 2000 ||
@@ -87,27 +87,27 @@ export function normalizedImport(row: Record<string, string>) {
       disallow_auth: true,
     })
   )
-    throw new Error('URL externe HTTP(S) invalide.');
+    throw new Error('Invalid external HTTP(S) URL.');
   const difficulty = DIFFICULTY[(row.difficulty ?? '').trim().toLowerCase()];
-  if (!difficulty) throw new Error('Difficulté inconnue : mapping à vérifier.');
+  if (!difficulty) throw new Error('Unknown difficulty. Check the mapping.');
   let tags: string[];
   if (row.tags?.trim().startsWith('[')) {
     let parsed: unknown;
     try {
       parsed = JSON.parse(row.tags);
     } catch {
-      throw new Error('Tags JSON invalides.');
+      throw new Error('Invalid tags JSON.');
     }
     if (
       !Array.isArray(parsed) ||
       !parsed.every((value) => typeof value === 'string')
     )
-      throw new Error('Les tags doivent être des textes.');
+      throw new Error('Tags must be strings.');
     tags = parsed;
   } else tags = (row.tags ?? '').split(/[;|,]/);
   tags = [...new Set(tags.map((tag) => tag.trim()).filter(Boolean))];
   if (tags.length > 20 || tags.some((tag) => tag.length > 50))
-    throw new Error('Tags trop nombreux ou trop longs.');
+    throw new Error('Too many tags or tag values are too long.');
   return {
     title,
     external_source_id: id,
@@ -140,9 +140,7 @@ export class KnowledgeImportService {
       new Set(headers).size !== headers.length ||
       required.some((header) => !headers.includes(header))
     )
-      throw new BadRequestException(
-        'En-têtes attendus : ' + required.join(', '),
-      );
+      throw new BadRequestException('Expected headers: ' + required.join(', '));
     const report: {
       accepted: number;
       rejected: number;
@@ -159,7 +157,7 @@ export class KnowledgeImportService {
       const entry = rows[index];
       try {
         if (entry.length !== headers.length)
-          throw new Error('Nombre de colonnes incorrect.');
+          throw new Error('Incorrect column count.');
         const resource = normalizedImport(
           Object.fromEntries(headers.map((header, i) => [header, entry[i]])),
         );
@@ -219,7 +217,7 @@ export class KnowledgeImportService {
         report.rows.push({
           line: index + 2,
           status: 'rejected',
-          message: error instanceof Error ? error.message : 'Ligne invalide.',
+          message: error instanceof Error ? error.message : 'Invalid row.',
         });
       }
     }

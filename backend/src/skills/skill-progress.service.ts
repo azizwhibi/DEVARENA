@@ -71,7 +71,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException('Competence introuvable.');
+    if (!skill) throw new NotFoundException("Skill not found.");
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')
@@ -139,7 +139,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException('Competence introuvable.');
+    if (!skill) throw new NotFoundException("Skill not found.");
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')

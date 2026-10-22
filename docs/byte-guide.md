@@ -14,7 +14,7 @@ Start the existing frontend with `npm run dev` from `nextjs/`. Sign in with a de
 - Existing PWA install/offline components: obstacle markers only. The manifest, service-worker registration and cache policy are unchanged.
 - `nextjs/scripts/check-dev-guide.mjs`: focused executable reducer, persistence, account-key and target-wait tests; run with `npm run test:guide`.
 
-The nine steps follow Dashboard, Skills, Technologies, Challenges, Coach, Knowledge, Saved Resources and Marketplace, followed by a celebration and an optional profile-settings link. Descriptions are scripted and make no claims about a particular user's progress. Resource completion remains distinct from measured skill scores.
+The eight steps follow Dashboard, Skills, Technologies, Challenges, Knowledge, Saved Resources and Marketplace, followed by a celebration and an optional profile-settings link. Descriptions are scripted and make no claims about a particular user's progress. Resource completion remains distinct from measured skill scores.
 
 The reducer disables progression while the route or target is pending. Navigation times out after eight seconds; target discovery after three seconds. Missing or hidden targets use a centered card. Mobile drawers are never opened automatically. Visiting another route through a real control closes the current tour and retains its step.
 
@@ -35,3 +35,5 @@ Frontend lint, TypeScript, production build, all 17 guide checks, skills and Kno
 No browser surface was available in this session, so desktop/mobile appearance, actual WebGL output, keyboard focus and OS reduced-motion behavior still need live visual verification. The npm audit reports five existing high-severity entries in the ESLint/fast-glob/braces dependency chain; none belong to the added 3D packages. No automatic dependency downgrade was applied.
 
 Dependency compatibility was checked against npm peer metadata and the [React Three Fiber installation documentation](https://r3f.docs.pmnd.rs/getting-started/installation): Fiber 9 pairs with React 19. Pinned versions are Fiber 9.8.2, Drei 10.7.9, Three 0.186.1 and Three types 0.186.0.
+
+The Coach IA feature has been removed. Older saved tours on its step now continue at the library; the remaining step IDs are unchanged.

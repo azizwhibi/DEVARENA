@@ -1,10 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { SupabaseService } from './skills-database.service';
 import { CatalogQueryDto } from './dto/catalog-query.dto';
 
 @Injectable()
 export class CatalogService {
   constructor(private readonly supabase: SupabaseService) {}
+  async detail(id: string) {
+    const { data, error } = await this.supabase.client
+      .from('skills')
+      .select(
+        'id,name,slug,description,is_active,category:skill_categories(id,name),technology:technologies(id,name)',
+      )
+      .eq('id', id)
+      .maybeSingle();
+    if (error)
+      throw new InternalServerErrorException("Skill unavailable.");
+    if (!data) throw new NotFoundException("Skill not found.");
+    return data;
+  }
 
   async list(query: CatalogQueryDto) {
     const page = query.page ?? 1;

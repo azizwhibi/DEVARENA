@@ -396,7 +396,7 @@ describe('Publication and deterministic recommendations', () => {
       );
       expect(result[0].evidence.level_score).toBeNull();
       expect(result[0].target_skill_id).toBeNull();
-      expect(result[0].explanation).toContain('technologie choisie');
+      expect(result[0].explanation).toContain('technology selected');
     }
   });
   it('uses actual evaluated associations and produces stable ordering', () => {
@@ -415,7 +415,7 @@ describe('Publication and deterministic recommendations', () => {
     );
     expect(result.map((item) => item.resource.id)).toEqual(['r1', 'z']);
     expect(result[0].evidence.level_score).toBe(25);
-    expect(result[0].explanation).toContain('évaluée');
+    expect(result[0].explanation).toContain('measured assessment');
   });
 });
 describe('CSV validation and replay', () => {

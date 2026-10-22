@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ListSkillsDto {
-  @ApiPropertyOptional({ description: 'Recherche par nom' })
+  @ApiPropertyOptional({ description: "Search by name" })
   @IsOptional()
   @IsString()
   q?: string;
@@ -13,7 +13,7 @@ export class ListSkillsDto {
   @IsUUID()
   categoryId?: string;
 
-  @ApiPropertyOptional({ description: 'Inclure les competences desactivees' })
+  @ApiPropertyOptional({ description: "Include archived skills" })
   @IsOptional()
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()

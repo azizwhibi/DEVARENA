@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+'use client';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   apiRequest,
   errorText,
@@ -8,10 +8,10 @@ import {
   useKnowledge,
   type Page,
   type Resource,
-} from "@/lib/knowledge";
-import { Failure, Loading, Pagination } from "./KnowledgeUI";
-import { ResourceContent } from "./KnowledgeDetail";
-import styles from "./knowledge.module.css";
+} from '@/lib/knowledge';
+import { Failure, Loading, Pagination } from './KnowledgeUI';
+import { ResourceContent } from './KnowledgeDetail';
+import styles from './knowledge.module.css';
 type ImportReport = {
   accepted: number;
   rejected: number;
@@ -24,18 +24,18 @@ type ImportReport = {
   }[];
 };
 function ImportResources({ onImported }: { onImported: () => void }) {
-  const [csv, setCsv] = useState(""),
-    [attribution, setAttribution] = useState(""),
-    [error, setError] = useState(""),
+  const [csv, setCsv] = useState(''),
+    [attribution, setAttribution] = useState(''),
+    [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
     [report, setReport] = useState<ImportReport>();
   async function importCsv() {
     setBusy(true);
-    setError("");
+    setError('');
     setReport(undefined);
     try {
-      const result = await apiRequest<ImportReport>("/admin/knowledge/import", {
-        method: "POST",
+      const result = await apiRequest<ImportReport>('/admin/knowledge/import', {
+        method: 'POST',
         body: JSON.stringify({ csv, attribution: attribution.trim() }),
       });
       setReport(result);
@@ -47,47 +47,46 @@ function ImportResources({ onImported }: { onImported: () => void }) {
     }
   }
   return (
-    <details className={"card " + styles.section}>
-      <summary>Importer un catalogue CSV</summary>
+    <details className={'card ' + styles.section}>
+      <summary>Import CSV catalogue</summary>
       <div className={styles.form}>
         <p className="muted">
-          Coursera · Nouveaux brouillons uniquement. Les ressources existantes
-          sont conservées.
+          Coursera · Import new drafts. Existing resources are preserved.
         </p>
         <label>
-          Fichier CSV
+          CSV file
           <input
             type="file"
             accept=".csv,text/csv"
             className={styles.file}
             disabled={busy}
             onChange={async (event) => {
-              setError("");
-              setCsv("");
+              setError('');
+              setCsv('');
               setReport(undefined);
               const file = event.target.files?.[0];
               if (!file) return;
               if (file.size > 80000) {
-                setError("Fichier limité à 80 Ko.");
+                setError('Maximum file size: 80 KB.');
                 return;
               }
               try {
                 setCsv(await file.text());
               } catch {
-                setError("Impossible de lire le fichier.");
+                setError('Unable to read this file.');
               }
             }}
           />
         </label>
         <label>
-          Attribution et provenance
+          Attribution and source
           <input
             className="input"
             maxLength={1000}
             value={attribution}
             onChange={(event) => setAttribution(event.target.value)}
             disabled={busy}
-            placeholder="Indiquez le jeu de données et sa source"
+            placeholder="Enter the dataset name and source"
           />
         </label>
         <button
@@ -96,7 +95,7 @@ function ImportResources({ onImported }: { onImported: () => void }) {
           disabled={busy || !csv || !attribution.trim()}
           onClick={importCsv}
         >
-          {busy ? "Import en cours…" : "Importer comme brouillons"}
+          {busy ? 'Importing…' : 'Import as drafts'}
         </button>
         {error && (
           <p role="alert" className="form-error">
@@ -106,20 +105,20 @@ function ImportResources({ onImported }: { onImported: () => void }) {
         {report && (
           <div className={styles.report} role="status">
             <p>
-              {report.accepted} acceptées · {report.rejected} rejetées ·{" "}
+              {report.accepted} accepted · {report.rejected} rejected ·{' '}
               {report.duplicates} doublons
             </p>
             <ul>
               {report.rows.map((row) => (
                 <li key={row.line}>
-                  Ligne {row.line} ·{" "}
-                  {row.status === "accepted"
-                    ? "Acceptée"
-                    : row.status === "duplicate"
-                      ? "Doublon"
-                      : "Rejetée"}
-                  {row.resource_id ? " · " + row.resource_id : ""}
-                  {row.message ? " · " + row.message : ""}
+                  Row {row.line} ·{' '}
+                  {row.status === 'accepted'
+                    ? 'Accepted'
+                    : row.status === 'duplicate'
+                      ? 'Duplicate'
+                      : 'Rejected'}
+                  {row.resource_id ? ' · ' + row.resource_id : ''}
+                  {row.message ? ' · ' + row.message : ''}
                 </li>
               ))}
             </ul>
@@ -130,16 +129,13 @@ function ImportResources({ onImported }: { onImported: () => void }) {
   );
 }
 function Preview({ id, onClose }: { id: string; onClose: () => void }) {
-  const result = useKnowledge<Resource>("/admin/knowledge/resources/" + id);
+  const result = useKnowledge<Resource>('/admin/knowledge/resources/' + id);
   return (
-    <section
-      className={"card " + styles.section}
-      aria-label="Aperçu administrateur"
-    >
+    <section className={'card ' + styles.section} aria-label="Admin preview">
       <header className="page-header">
-        <h2 className="section-title">Aperçu</h2>
+        <h2 className="section-title">Preview</h2>
         <button className="btn btn-ghost" onClick={onClose}>
-          Fermer
+          Close
         </button>
       </header>
       {result.loading ? (
@@ -158,14 +154,14 @@ function Preview({ id, onClose }: { id: string; onClose: () => void }) {
   );
 }
 export function KnowledgeAdmin() {
-  const [search, setSearch] = useState(""),
-    [q, setQ] = useState(""),
-    [status, setStatus] = useState(""),
+  const [search, setSearch] = useState(''),
+    [q, setQ] = useState(''),
+    [status, setStatus] = useState(''),
     [page, setPage] = useState(1),
-    [preview, setPreview] = useState(""),
+    [preview, setPreview] = useState(''),
     [deleting, setDeleting] = useState<Resource>(),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState('');
   useEffect(() => {
     const timer = setTimeout(() => {
       setQ(search.trim());
@@ -173,28 +169,28 @@ export function KnowledgeAdmin() {
     }, 300);
     return () => clearTimeout(timer);
   }, [search]);
-  const params = new URLSearchParams({ page: String(page), pageSize: "12" });
-  if (q) params.set("q", q);
-  if (status) params.set("status", status);
+  const params = new URLSearchParams({ page: String(page), pageSize: '12' });
+  if (q) params.set('q', q);
+  if (status) params.set('status', status);
   const result = useKnowledge<Page<Resource>>(
-    "/admin/knowledge/resources?" + params.toString(),
+    '/admin/knowledge/resources?' + params.toString(),
   );
   async function action(
     resource: Resource,
-    action: "publish" | "archive" | "delete",
+    action: 'publish' | 'archive' | 'delete',
   ) {
     if (busy) return;
     setBusy(true);
-    setError("");
+    setError('');
     try {
       await apiRequest(
-        "/admin/knowledge/resources/" +
+        '/admin/knowledge/resources/' +
           resource.id +
-          (action === "delete" ? "" : "/" + action),
-        { method: action === "delete" ? "DELETE" : "POST" },
+          (action === 'delete' ? '' : '/' + action),
+        { method: action === 'delete' ? 'DELETE' : 'POST' },
       );
       setDeleting(undefined);
-      if (preview === resource.id) setPreview("");
+      if (preview === resource.id) setPreview('');
       if (result.data?.items.length === 1 && page > 1) setPage(page - 1);
       else result.reload();
     } catch (error) {
@@ -206,25 +202,25 @@ export function KnowledgeAdmin() {
   return (
     <div className="page-container">
       <header className="page-header">
-        <h1 className="page-title">Gestion des ressources</h1>
+        <h1 className="page-title">Resource management</h1>
         <Link href="/admin/knowledge/new" className="btn btn-primary">
-          Nouvelle ressource
+          New resource
         </Link>
       </header>
       <ImportResources onImported={result.reload} />
-      <div className={styles.columns + " " + styles.section}>
+      <div className={styles.columns + ' ' + styles.section}>
         <label>
-          Rechercher
+          Search
           <input
             className="input"
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Titre ou description"
+            placeholder="Title or description"
           />
         </label>
         <label>
-          Statut
+          Status
           <select
             className="input"
             value={status}
@@ -233,7 +229,7 @@ export function KnowledgeAdmin() {
               setPage(1);
             }}
           >
-            <option value="">Tous</option>
+            <option value="">All</option>
             {Object.entries(statuses).map(([key, label]) => (
               <option value={key} key={key}>
                 {label}
@@ -249,25 +245,25 @@ export function KnowledgeAdmin() {
       )}
       {deleting && (
         <div role="alert" className={styles.confirm}>
-          <p>Supprimer le brouillon « {deleting.title} » ?</p>
+          <p>Delete draft “ {deleting.title} ”?</p>
           <button
             className="btn btn-secondary"
             disabled={busy}
             onClick={() => setDeleting(undefined)}
           >
-            Annuler
+            Cancel
           </button>
           <button
             className="btn btn-secondary"
             disabled={busy}
-            onClick={() => action(deleting, "delete")}
+            onClick={() => action(deleting, 'delete')}
           >
-            Supprimer
+            Delete
           </button>
         </div>
       )}
       {preview && (
-        <Preview key={preview} id={preview} onClose={() => setPreview("")} />
+        <Preview key={preview} id={preview} onClose={() => setPreview('')} />
       )}
       <section className={styles.section}>
         {result.loading ? (
@@ -276,15 +272,15 @@ export function KnowledgeAdmin() {
           <Failure message={result.error} retry={result.reload} />
         ) : result.data && !result.data.items.length ? (
           <div className="empty-state">
-            <h2>Aucune ressource</h2>
+            <h2>No resources</h2>
           </div>
         ) : (
           <div className="card table-card">
             <table>
               <thead>
                 <tr>
-                  <th>Ressource</th>
-                  <th>Statut</th>
+                  <th>Resource</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -301,41 +297,41 @@ export function KnowledgeAdmin() {
                       <div className={styles.actions}>
                         <Link
                           className="btn btn-ghost"
-                          href={"/admin/knowledge/" + resource.id + "/edit"}
+                          href={'/admin/knowledge/' + resource.id + '/edit'}
                         >
-                          Modifier
+                          Edit
                         </Link>
                         <button
                           className="btn btn-ghost"
                           onClick={() => setPreview(resource.id)}
                         >
-                          Aperçu
+                          Preview
                         </button>
-                        {resource.status !== "published" && (
+                        {resource.status !== 'published' && (
                           <button
                             className="btn btn-secondary"
                             disabled={busy}
-                            onClick={() => action(resource, "publish")}
+                            onClick={() => action(resource, 'publish')}
                           >
-                            Publier
+                            Publish
                           </button>
                         )}
-                        {resource.status !== "archived" && (
+                        {resource.status !== 'archived' && (
                           <button
                             className="btn btn-ghost"
                             disabled={busy}
-                            onClick={() => action(resource, "archive")}
+                            onClick={() => action(resource, 'archive')}
                           >
-                            Archiver
+                            Archive
                           </button>
                         )}
-                        {resource.status === "draft" && (
+                        {resource.status === 'draft' && (
                           <button
                             className="btn btn-ghost"
                             disabled={busy}
                             onClick={() => setDeleting(resource)}
                           >
-                            Supprimer
+                            Delete
                           </button>
                         )}
                       </div>

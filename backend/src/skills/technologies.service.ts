@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -22,9 +23,9 @@ export class TechnologiesService {
   private fail(error: { code?: string; message: string }): never {
     this.logger.error(error.message);
     if (error.code === '23505') {
-      throw new ConflictException('Une technologie avec ce nom existe deja.');
+      throw new ConflictException("A technology with this name already exists.");
     }
-    throw new InternalServerErrorException('Une erreur est survenue.');
+    throw new InternalServerErrorException("Something went wrong. Please retry.");
   }
 
   private async audit(
@@ -83,11 +84,18 @@ export class TechnologiesService {
       .eq('id', id)
       .maybeSingle();
     if (error) this.fail(error);
-    if (!data) throw new NotFoundException('Technologie introuvable.');
+    if (!data) throw new NotFoundException("Technology not found.");
     return data;
   }
 
   async update(id: string, dto: UpdateTechnologyDto, actorId: string | null) {
+    if (
+      dto.name !== undefined &&
+      (typeof dto.name !== 'string' || dto.name.trim().length < 2)
+    )
+      throw new BadRequestException("Name is required.");
+    if (dto.icon !== undefined && typeof dto.icon !== 'string')
+      throw new BadRequestException("Invalid icon.");
     const before = await this.getOrThrow(id);
 
     const patch: Record<string, unknown> = {};

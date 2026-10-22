@@ -21,7 +21,7 @@ export class CatalogQueryDto {
   @IsUUID()
   technology?: string;
 
-  @ApiPropertyOptional({ description: 'Recherche par nom' })
+  @ApiPropertyOptional({ description: "Search by name" })
   @IsOptional()
   @IsString()
   @MaxLength(80)

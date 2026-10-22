@@ -1,5 +1,5 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
+import { useEffect, useState } from 'react';
 import {
   difficulties,
   types,
@@ -8,24 +8,24 @@ import {
   type Page,
   type Recommendations,
   type Resource,
-} from "@/lib/knowledge";
+} from '@/lib/knowledge';
 import {
   Failure,
   KnowledgeNav,
   Loading,
   Pagination,
   ResourceCard,
-} from "./KnowledgeUI";
-import styles from "./knowledge.module.css";
+} from './KnowledgeUI';
+import styles from './knowledge.module.css';
 export function KnowledgeLibrary() {
-  const [search, setSearch] = useState(""),
-    [q, setQ] = useState(""),
+  const [search, setSearch] = useState(''),
+    [q, setQ] = useState(''),
     [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
-    type: "",
-    difficulty: "",
-    technology: "",
-    skill: "",
+    type: '',
+    difficulty: '',
+    technology: '',
+    skill: '',
   });
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,18 +36,18 @@ export function KnowledgeLibrary() {
   }, [search]);
   const params = new URLSearchParams({
     page: String(page),
-    pageSize: "12",
-    sort: "newest",
+    pageSize: '12',
+    sort: 'newest',
   });
-  if (q) params.set("q", q);
+  if (q) params.set('q', q);
   for (const [key, value] of Object.entries(filters))
     if (value) params.set(key, value);
   const catalogue = useKnowledge<Page<Resource>>(
-    "/knowledge/resources?" + params.toString(),
+    '/knowledge/resources?' + params.toString(),
   );
-  const meta = useKnowledge<Meta>("/knowledge/meta");
+  const meta = useKnowledge<Meta>('/knowledge/meta');
   const recommendations = useKnowledge<Recommendations>(
-    "/me/knowledge/recommendations",
+    '/me/knowledge/recommendations',
   );
   const showRecommended =
     !q && !Object.values(filters).some(Boolean) && page === 1;
@@ -64,20 +64,18 @@ export function KnowledgeLibrary() {
     <div className="page-container">
       <header className="page-header">
         <div>
-          <h1 className="page-title">Connaissances</h1>
-          <p className="page-subtitle">
-            Des ressources pour poursuivre votre apprentissage.
-          </p>
+          <h1 className="page-title">Knowledge</h1>
+          <p className="page-subtitle">Resources for your next skill.</p>
         </div>
       </header>
       <KnowledgeNav />
       <div className={styles.filters}>
         <label className={styles.search}>
-          Rechercher
+          Search
           <input
             type="search"
             className="input"
-            placeholder="Titre ou description"
+            placeholder="Title or description"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
@@ -87,9 +85,9 @@ export function KnowledgeLibrary() {
           <select
             className="input"
             value={filters.type}
-            onChange={(event) => filter("type", event.target.value)}
+            onChange={(event) => filter('type', event.target.value)}
           >
-            <option value="">Tous les formats</option>
+            <option value="">All formats</option>
             {Object.entries(types).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -98,13 +96,13 @@ export function KnowledgeLibrary() {
           </select>
         </label>
         <label>
-          Difficulté
+          Difficulty
           <select
             className="input"
             value={filters.difficulty}
-            onChange={(event) => filter("difficulty", event.target.value)}
+            onChange={(event) => filter('difficulty', event.target.value)}
           >
-            <option value="">Toutes</option>
+            <option value="">All</option>
             {Object.entries(difficulties).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -113,13 +111,13 @@ export function KnowledgeLibrary() {
           </select>
         </label>
         <label>
-          Technologie
+          Technology
           <select
             className="input"
             value={filters.technology}
-            onChange={(event) => filter("technology", event.target.value)}
+            onChange={(event) => filter('technology', event.target.value)}
           >
-            <option value="">Toutes</option>
+            <option value="">All</option>
             {meta.data?.technologies.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -128,13 +126,13 @@ export function KnowledgeLibrary() {
           </select>
         </label>
         <label>
-          Compétence
+          Skill
           <select
             className="input"
             value={filters.skill}
-            onChange={(event) => filter("skill", event.target.value)}
+            onChange={(event) => filter('skill', event.target.value)}
           >
-            <option value="">Toutes</option>
+            <option value="">All</option>
             {meta.data?.skills.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -145,10 +143,7 @@ export function KnowledgeLibrary() {
       </div>
       {meta.error && <Failure message={meta.error} retry={meta.reload} />}
       {showRecommended && (
-        <section
-          className={styles.section}
-          aria-label="Ressources recommandées"
-        >
+        <section className={styles.section} aria-label="Recommended resources">
           {recommendations.loading ? (
             <Loading />
           ) : recommendations.error ? (
@@ -159,7 +154,7 @@ export function KnowledgeLibrary() {
           ) : (
             !!recommendations.data?.items.length && (
               <>
-                <h2 className="section-title">Pour vous</h2>
+                <h2 className="section-title">For you</h2>
                 <div className={styles.cards}>
                   {recommendations.data.items.map((item) => (
                     <ResourceCard
@@ -183,8 +178,16 @@ export function KnowledgeLibrary() {
           <Failure message={catalogue.error} retry={catalogue.reload} />
         ) : catalogue.data && !catalogue.data.items.length ? (
           <div className="empty-state">
-            <h2>{q || Object.values(filters).some(Boolean) ? 'Aucune ressource trouvée' : 'Aucune ressource publiée'}</h2>
-            <p>{q || Object.values(filters).some(Boolean) ? 'Essayez un autre filtre.' : 'Les tutoriels et cours apparaissent après leur publication.'}</p>
+            <h2>
+              {q || Object.values(filters).some(Boolean)
+                ? 'No resources found'
+                : 'No published resources'}
+            </h2>
+            <p>
+              {q || Object.values(filters).some(Boolean)
+                ? 'Try another filter.'
+                : 'Tutorials and courses appear after publication.'}
+            </p>
           </div>
         ) : (
           <>
@@ -192,7 +195,7 @@ export function KnowledgeLibrary() {
               (item) => !recommendedIds.has(item.id),
             ).length && (
               <>
-                <h2 className="section-title">Bibliothèque</h2>
+                <h2 className="section-title">Library</h2>
                 <div className={styles.cards}>
                   {catalogue.data.items
                     .filter((item) => !recommendedIds.has(item.id))

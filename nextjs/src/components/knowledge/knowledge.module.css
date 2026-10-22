@@ -3,7 +3,7 @@
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border);
   padding-bottom: 16px;
 }
 .nav a {
@@ -18,9 +18,9 @@
     background 150ms ease,
     color 150ms ease;
 }
-.nav a[aria-current="page"] {
-  color: #6ee7b7;
-  background: rgba(52, 211, 153, 0.08);
+.nav a[aria-current='page'] {
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.08);
 }
 .cards {
   display: grid;
@@ -127,7 +127,7 @@
   font-size: 14px;
 }
 .skills input {
-  accent-color: #34d399;
+  accent-color: #8b5cf6;
 }
 .contentInput {
   min-height: 240px;
@@ -143,9 +143,9 @@
   flex-direction: column;
   gap: 16px;
 }
-.progress input[type="range"] {
+.progress input[type='range'] {
   width: 100%;
-  accent-color: #34d399;
+  accent-color: #8b5cf6;
 }
 .feedback {
   display: flex;
@@ -156,21 +156,21 @@
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  background: #151b2b;
+  background: #151925;
   display: flex;
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
 }
 .preview {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
   padding-top: 24px;
 }
 .report {
   max-height: 320px;
   overflow: auto;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
   border-radius: 12px;
 }
 .report li {
@@ -212,6 +212,6 @@
 }
 .form summary:focus-visible,
 .section > summary:focus-visible {
-  outline: 2px solid #6ee7b7;
+  outline: 2px solid #c4b5fd;
   outline-offset: 3px;
 }

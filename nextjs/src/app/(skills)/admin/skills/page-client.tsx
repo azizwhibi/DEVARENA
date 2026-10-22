@@ -1,133 +1,360 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { ApiService } from '@/lib/skills/api';
-import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
-import type { AdminTechnology } from '@/lib/skills/api';
-import { AdminSkill } from '@/lib/skills/types';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { ApiService, type AdminTechnology } from '@/lib/skills/api';
+import type { AdminSkill } from '@/lib/skills/types';
 import { SkillFormModal } from '@/components/skills/admin/SkillFormModal';
 import { StatsModal } from '@/components/skills/admin/StatsModal';
 export default function AdminPage() {
-    const [activeTab, setActiveTab] = useState<'skills' | 'technologies'>('skills');
-    // Skills state
-    const [skills, setSkills] = useState<AdminSkill[]>([]);
-    const [loadingSkills, setLoadingSkills] = useState(true);
-    const [searchSkill, setSearchSkill] = useState('');
-    const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
-    const [editingSkill, setEditingSkill] = useState<AdminSkill | undefined>();
-    const [statsSkill, setStatsSkill] = useState<{
-        id: string;
-        name: string;
-    } | null>(null);
-    // Technologies state
-    const [technologies, setTechnologies] = useState<AdminTechnology[]>([]);
-    const [loadingTechs, setLoadingTechs] = useState(true);
-    const [searchTech, setSearchTech] = useState('');
-    const [newTechName, setNewTechName] = useState('');
-    const [isAddingTech, setIsAddingTech] = useState(false);
-    const [toastMessage, setToastMessage] = useState<string | null>(null);
-    const fetchSkills = useCallback(async () => {
-        try {
-            const data = await ApiService.getAdminSkills();
-            setSkills(data);
-        }
-        catch {
-        }
-        finally {
-            setLoadingSkills(false);
-        }
-    }, []);
-    const fetchTechnologies = useCallback(async () => {
-        try {
-            const techs = await ApiService.getAdminTechnologies(true);
-            setTechnologies(techs);
-        }
-        catch {
-        }
-        finally {
-            setLoadingTechs(false);
-        }
-    }, []);
-    useEffect(() => {
-        async function initialize() { await Promise.all([fetchSkills(), fetchTechnologies()]); }
-        void initialize();
-    }, [fetchSkills, fetchTechnologies]);
-    const showToast = (msg: string) => {
-        setToastMessage(msg);
-        setTimeout(() => setToastMessage(null), 3500);
-    };
-    // Toggle skill
-    const handleToggleSkillActive = async (skill: AdminSkill) => {
-        const updated = await ApiService.toggleSkillActive(skill.id, !skill.isActive);
-        if (updated) {
-            setSkills((prev) => prev.map((s) => (s.id === skill.id ? { ...s, isActive: !s.isActive } : s)));
-            showToast(`Statut de "${skill.name}" mis à jour (${!skill.isActive ? 'Actif' : 'Inactif'}).`);
-        }
-    };
-    // Toggle tech
-    const handleToggleTechActive = async (tech: AdminTechnology) => {
-        const updated = await ApiService.toggleTechnologyActive(tech.id, !tech.is_active);
-        if (updated) {
-            setTechnologies((prev) => prev.map((t) => (t.id === tech.id ? { ...t, is_active: !tech.is_active } : t)));
-            showToast(`Technologie "${tech.name}" mise à jour (${!tech.is_active ? 'Actif' : 'Inactif'}).`);
-        }
-    };
-    // Create technology
-    const handleCreateTech = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!newTechName.trim())
-            return;
-        setIsAddingTech(true);
-        try {
-            const created = await ApiService.createTechnology({
-                name: newTechName.trim(),
-                icon: newTechName.trim().toLowerCase().replace(/[^a-z0-9]/g, ''),
-            });
-            if (created) {
-                setTechnologies((prev) => [created, ...prev]);
-                setNewTechName('');
-                showToast(`Technologie "${created.name}" créée et enregistrée en base !`);
-            }
-        }
-        catch {
-            showToast('Erreur lors de la création de la technologie.');
-        }
-        finally {
-            setIsAddingTech(false);
-        }
-    };
-    const handleRecalculate = async (skillId: string, name: string) => {
-        try {
-            await ApiService.recalculateProgress(skillId);
-            showToast(` Recalcul imm\u00E9diat du score pour "${name}" validé !`);
-        }
-        catch {
-            showToast(`Erreur lors du recalcul pour "${name}"`);
-        }
-    };
-    const filteredSkills = skills.filter((s) => s.name.toLowerCase().includes(searchSkill.toLowerCase()) ||
-        s.category.toLowerCase().includes(searchSkill.toLowerCase()) ||
-        s.technology.toLowerCase().includes(searchSkill.toLowerCase()));
-    const filteredTechs = technologies.filter((t) => t.name.toLowerCase().includes(searchTech.toLowerCase()));
-    return <div className="page-container" aria-busy={loadingSkills || loadingTechs}>
-    {toastMessage && <div className="toast" role="status">{toastMessage}</div>}
-    <header className="page-header"><h1 className="page-title">Gestion des compétences</h1>{activeTab === 'skills' && <button type="button" id="btn-ajouter-competence" className="btn btn-primary" onClick={() => { setEditingSkill(undefined); setIsSkillModalOpen(true); }}><WorkspaceIcon name="plus"/>Nouvelle compétence</button>}</header>
-    <div className="tabs" role="tablist" aria-label="Catalogue"><button type="button" role="tab" aria-selected={activeTab === 'skills'} onClick={() => setActiveTab('skills')}>Compétences</button><button type="button" role="tab" aria-selected={activeTab === 'technologies'} onClick={() => setActiveTab('technologies')}>Technologies</button></div>
-    {activeTab === 'skills' ? <>
-      <div className="toolbar"><div className="search-field"><WorkspaceIcon name="search" size={16}/><input className="input" aria-label="Rechercher une compétence" placeholder="Rechercher une compétence" value={searchSkill} onChange={event => setSearchSkill(event.target.value)}/></div></div>
-      {loadingSkills ? <div className="skeleton skeleton-panel" role="status" aria-label="Chargement du catalogue"/> : <div className="card table-card"><table><thead><tr><th>Compétence</th><th>Catégorie</th><th>Technologie</th><th>Défis</th><th>Statut</th><th className="text-right">Actions</th></tr></thead><tbody>
-        {filteredSkills.map(skill => <tr key={skill.id}><td>{skill.name}</td><td>{skill.category}</td><td className="muted">{skill.technology}</td><td>{skill.challengesCount}</td><td><button type="button" className={`badge ${skill.isActive ? 'badge-emerald' : 'badge-muted'}`} onClick={() => handleToggleSkillActive(skill)} title={skill.isActive ? 'Désactiver' : 'Activer'}>{skill.isActive ? 'Actif' : 'Inactif'}</button></td>
-          <td><div className="row-actions"><button type="button" className="btn btn-ghost" aria-label={`Modifier ${skill.name}`} onClick={() => { setEditingSkill(skill); setIsSkillModalOpen(true); }}><WorkspaceIcon name="settings" size={16}/>Modifier</button><button type="button" className="btn btn-ghost" onClick={() => setStatsSkill({ id: skill.id, name: skill.name })}><WorkspaceIcon name="skills" size={16}/>Statistiques</button><button type="button" className="btn btn-ghost" onClick={() => handleRecalculate(skill.id, skill.name)}><WorkspaceIcon name="refresh" size={16}/>Recalculer</button></div></td></tr>)}
-        {!filteredSkills.length && <tr><td colSpan={6} className="filter-empty">Aucune compétence.</td></tr>}
-      </tbody></table></div>}
-    </> : <>
-      <div className="toolbar"><div className="search-field"><WorkspaceIcon name="search" size={16}/><input className="input" aria-label="Rechercher une technologie" placeholder="Rechercher une technologie" value={searchTech} onChange={event => setSearchTech(event.target.value)}/></div>
-        <form className="inline-form" onSubmit={handleCreateTech}><input className="input" aria-label="Nouvelle technologie" placeholder="Nom de la technologie" value={newTechName} onChange={event => setNewTechName(event.target.value)} required/><button type="submit" className="btn btn-primary" disabled={isAddingTech || !newTechName.trim()}><WorkspaceIcon name="plus"/>{isAddingTech ? 'Ajout…' : 'Ajouter'}</button></form></div>
-      {loadingTechs ? <div className="skeleton skeleton-panel" role="status" aria-label="Chargement des technologies"/> : <div className="card table-card"><table><thead><tr><th>Technologie</th><th>Compétences</th><th>Statut</th><th className="text-right">Action</th></tr></thead><tbody>
-        {filteredTechs.map(tech => <tr key={tech.id}><td>{tech.name}</td><td>{tech.skillCount ?? 0}</td><td><span className={`badge ${tech.is_active ? 'badge-emerald' : 'badge-muted'}`}>{tech.is_active ? 'Actif' : 'Inactif'}</span></td><td className="text-right"><button type="button" className="btn btn-ghost" onClick={() => handleToggleTechActive(tech)}>{tech.is_active ? 'Désactiver' : 'Activer'}</button></td></tr>)}
-        {!filteredTechs.length && <tr><td colSpan={4} className="filter-empty">Aucune technologie.</td></tr>}
-      </tbody></table></div>}
-    </>}
-    {isSkillModalOpen && <SkillFormModal key={editingSkill?.id ?? 'new'} skill={editingSkill} onClose={() => { setIsSkillModalOpen(false); setEditingSkill(undefined); }} onSuccess={newSkill => { void fetchSkills(); showToast(`Compétence « ${newSkill.name} » ${editingSkill ? 'modifiée' : 'ajoutée'}.`); }}/>}
-    {statsSkill && <StatsModal skillId={statsSkill.id} skillName={statsSkill.name} onClose={() => setStatsSkill(null)}/>}
-  </div>;
+  const params = useSearchParams();
+  const [tab, setTab] = useState(
+    params.get('tab') === 'technologies' ? 'technologies' : 'skills',
+  );
+  const [skills, setSkills] = useState<AdminSkill[]>([]),
+    [techs, setTechs] = useState<AdminTechnology[]>([]);
+  const [loading, setLoading] = useState(true),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState(''),
+    [notice, setNotice] = useState(''),
+    [q, setQ] = useState('');
+  const [skillForm, setSkillForm] = useState<{ skill?: AdminSkill } | null>(
+      null,
+    ),
+    [stats, setStats] = useState<AdminSkill | null>(null);
+  const [editing, setEditing] = useState<AdminTechnology | null>(null),
+    [name, setName] = useState(''),
+    [icon, setIcon] = useState('');
+  const load = useCallback(async () => {
+    try {
+      const [s, t] = await Promise.all([
+        ApiService.getAdminSkills(),
+        ApiService.getAdminTechnologies(true),
+      ]);
+      setSkills(s);
+      setTechs(t);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Catalogue unavailable.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    async function initialize() {
+      await load();
+    }
+    void initialize();
+  }, [load]);
+  async function run(action: () => Promise<unknown>) {
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      await action();
+      await load();
+      setNotice('Saved.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unable to save.');
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function saveTech(e: FormEvent) {
+    e.preventDefault();
+    if (!name.trim()) return;
+    await run(async () => {
+      if (editing)
+        await ApiService.updateTechnology(editing.id, {
+          name: name.trim(),
+          icon: icon.trim(),
+        });
+      else
+        await ApiService.createTechnology({
+          name: name.trim(),
+          icon: icon.trim(),
+        });
+      setEditing(null);
+      setName('');
+      setIcon('');
+    });
+  }
+  const visibleSkills = skills.filter((s) =>
+    [s.name, s.category, s.technology]
+      .join(' ')
+      .toLocaleLowerCase()
+      .includes(q.toLocaleLowerCase()),
+  );
+  const visibleTechs = techs.filter((t) =>
+    t.name.toLocaleLowerCase().includes(q.toLocaleLowerCase()),
+  );
+  return (
+    <div className="page-container" aria-busy={loading || busy}>
+      <header className="page-header">
+        <h1 className="page-title">Skills and technologies</h1>
+        {tab === 'skills' && (
+          <button className="btn btn-primary" onClick={() => setSkillForm({})}>
+            New skill
+          </button>
+        )}
+      </header>
+      {error && (
+        <p role="alert" className="workspace-alert">
+          {error}
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setError('');
+              void load();
+            }}
+          >
+            Retry
+          </button>
+        </p>
+      )}
+      {notice && <p role="status">{notice}</p>}
+      <nav className="tabs" aria-label="Catalogue">
+        <button
+          aria-pressed={tab === 'skills'}
+          onClick={() => {
+            setTab('skills');
+            setQ('');
+          }}
+        >
+          Skills
+        </button>
+        <button
+          aria-pressed={tab === 'technologies'}
+          onClick={() => {
+            setTab('technologies');
+            setQ('');
+          }}
+        >
+          Technologies
+        </button>
+      </nav>
+      <label>
+        Search
+        <input
+          className="input"
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+      </label>
+      {loading ? (
+        <p role="status">Loading catalogue…</p>
+      ) : tab === 'skills' ? (
+        <div className="card table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th>Category</th>
+                <th>Technology</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleSkills.map((s) => (
+                <tr key={s.id}>
+                  <td>{s.name}</td>
+                  <td>{s.category}</td>
+                  <td>{s.technology || '—'}</td>
+                  <td>{s.isActive ? 'Active' : 'Archived'}</td>
+                  <td>
+                    <div className="row-actions">
+                      <button
+                        className="btn btn-ghost"
+                        disabled={busy}
+                        onClick={() => setSkillForm({ skill: s })}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-ghost"
+                        onClick={() => setStats(s)}
+                      >
+                        Statistics
+                      </button>
+                      {s.isActive ? (
+                        <button
+                          className="btn btn-ghost"
+                          disabled={busy}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                'Remove this skill from the catalogue? Links, results, and history will be preserved.',
+                              )
+                            )
+                              void run(() => ApiService.deleteSkill(s.id));
+                          }}
+                        >
+                          Delete
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-ghost"
+                          disabled={busy}
+                          onClick={() =>
+                            void run(() =>
+                              ApiService.toggleSkillActive(s.id, true),
+                            )
+                          }
+                        >
+                          Restore
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {!visibleSkills.length && (
+                <tr>
+                  <td colSpan={5}>No skills.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <>
+          <form className="card stack-form" onSubmit={saveTech}>
+            <h2 className="section-title">
+              {editing ? 'Edit technology' : 'New technology'}
+            </h2>
+            <label>
+              Name
+              <input
+                required
+                minLength={2}
+                maxLength={60}
+                className="input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label>
+              Icon (optional)
+              <input
+                maxLength={50}
+                className="input"
+                value={icon}
+                onChange={(e) => setIcon(e.target.value)}
+              />
+            </label>
+            <div className="row-actions">
+              <button
+                className="btn btn-primary"
+                disabled={busy || name.trim().length < 2}
+              >
+                Save
+              </button>
+              {editing && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setEditing(null);
+                    setName('');
+                    setIcon('');
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+          <div className="card table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Technology</th>
+                  <th>Skills</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleTechs.map((t) => (
+                  <tr key={t.id}>
+                    <td>{t.name}</td>
+                    <td>{t.skillCount ?? 0}</td>
+                    <td>{t.is_active ? 'Active' : 'Archived'}</td>
+                    <td>
+                      <div className="row-actions">
+                        <button
+                          className="btn btn-ghost"
+                          disabled={busy}
+                          onClick={() => {
+                            setEditing(t);
+                            setName(t.name);
+                            setIcon(t.icon ?? '');
+                          }}
+                        >
+                          Edit
+                        </button>
+                        {t.is_active ? (
+                          <button
+                            className="btn btn-ghost"
+                            disabled={busy}
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  'Remove this technology from the catalogue? Skills and history will be preserved.',
+                                )
+                              )
+                                void run(() =>
+                                  ApiService.deleteTechnology(t.id),
+                                );
+                            }}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-ghost"
+                            disabled={busy}
+                            onClick={() =>
+                              void run(() =>
+                                ApiService.toggleTechnologyActive(t.id, true),
+                              )
+                            }
+                          >
+                            Restore
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {!visibleTechs.length && (
+                  <tr>
+                    <td colSpan={4}>No technologies.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+      {skillForm && (
+        <SkillFormModal
+          key={skillForm.skill?.id ?? 'new'}
+          skill={skillForm.skill}
+          onClose={() => setSkillForm(null)}
+          onSuccess={() => {
+            void load();
+            setNotice('Skill saved.');
+          }}
+        />
+      )}
+      {stats && (
+        <StatsModal
+          skillId={stats.id}
+          skillName={stats.name}
+          onClose={() => setStats(null)}
+        />
+      )}
+    </div>
+  );
 }

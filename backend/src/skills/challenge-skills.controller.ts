@@ -14,7 +14,7 @@ import { AdminGuard } from '../auth/guards';
 import { ChallengeSkillsService } from './challenge-skills.service';
 import { SetChallengeSkillsDto } from './dto/challenge-skills.dto';
 
-type AuthedRequest = Request & { user?: { id: string | null } };
+type AuthedRequest = Request & { user?: { id: string } };
 
 @ApiTags('admin / challenge-skills')
 @ApiBearerAuth()
@@ -34,6 +34,6 @@ export class ChallengeSkillsController {
     @Body() dto: SetChallengeSkillsDto,
     @Req() req: AuthedRequest,
   ) {
-    return this.links.replace(id, dto, req.user?.id ?? null);
+    return this.links.replace(id, dto, req.user!.id);
   }
 }

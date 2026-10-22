@@ -1,6 +1,6 @@
-"use client";
-import { useEffect, useState } from "react";
-import { apiRequest, ApiError } from "@/lib/api";
+'use client';
+import { useEffect, useState } from 'react';
+import { apiRequest, ApiError } from '@/lib/api';
 export { apiRequest };
 export type Reference = { id: string; name: string };
 export type Resource = {
@@ -15,7 +15,7 @@ export type Resource = {
   technology: Reference | null;
   tags: string[];
   estimated_minutes: number | null;
-  status: "draft" | "published" | "archived";
+  status: 'draft' | 'published' | 'archived';
   source: string;
   external_source_id: string | null;
   attribution: string;
@@ -34,7 +34,7 @@ export type Resource = {
 };
 export type Progress = {
   resource_id: string;
-  state: "started" | "completed";
+  state: 'started' | 'completed';
   percentage: number;
   started_at: string;
   updated_at: string;
@@ -61,33 +61,33 @@ export type Meta = {
   technologies: Reference[];
 };
 export const types: Record<string, string> = {
-  article: "Article",
-  tutorial: "Tutoriel",
-  video: "Vidéo",
-  documentation: "Documentation",
-  course: "Cours",
+  article: 'Article',
+  tutorial: 'Tutorial',
+  video: 'Video',
+  documentation: 'Documentation',
+  course: 'Course',
 };
 export const difficulties: Record<string, string> = {
-  unknown: "Non renseignée",
-  beginner: "Débutant",
-  intermediate: "Intermédiaire",
-  advanced: "Avancé",
+  unknown: 'Not specified',
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
 };
 export const statuses: Record<string, string> = {
-  draft: "Brouillon",
-  published: "Publié",
-  archived: "Archivé",
+  draft: 'Draft',
+  published: 'Published',
+  archived: 'Archived',
 };
 export const feedbackLabels: Record<string, string> = {
-  useful: "Utile",
-  not_relevant: "Peu pertinent",
-  too_easy: "Trop facile",
-  too_difficult: "Trop difficile",
+  useful: 'Useful',
+  not_relevant: 'Not relevant',
+  too_easy: 'Too easy',
+  too_difficult: 'Too difficult',
 };
 export function safeExternal(value: string | null | undefined) {
   try {
-    const url = new URL(value ?? "");
-    return ["https:", "http:"].includes(url.protocol) &&
+    const url = new URL(value ?? '');
+    return ['https:', 'http:'].includes(url.protocol) &&
       !url.username &&
       !url.password
       ? url.href
@@ -98,16 +98,16 @@ export function safeExternal(value: string | null | undefined) {
 }
 export function errorText(error: unknown) {
   return error instanceof ApiError && error.problem.errors?.length
-    ? error.problem.errors.join(" ")
+    ? error.problem.errors.join(' ')
     : error instanceof Error
       ? error.message
-      : "Une erreur est survenue.";
+      : 'Something went wrong. Please retry.';
 }
 export function useKnowledge<T>(path: string) {
   const [version, setVersion] = useState(0);
-  const key = path + "#" + version;
+  const key = path + '#' + version;
   const [state, setState] = useState<{ key: string; data?: T; error?: string }>(
-    { key: "" },
+    { key: '' },
   );
   useEffect(() => {
     const controller = new AbortController();
@@ -129,12 +129,12 @@ export function useKnowledge<T>(path: string) {
   };
 }
 export function recordClick(resourceId: string, recommendationId?: string) {
-  void apiRequest("/me/knowledge/events", {
-    method: "POST",
+  void apiRequest('/me/knowledge/events', {
+    method: 'POST',
     body: JSON.stringify({
       resource_id: resourceId,
       recommendation_id: recommendationId,
-      event_type: "click",
+      event_type: 'click',
     }),
   }).catch(() => {
     /* Navigation remains available if optional event delivery fails. */

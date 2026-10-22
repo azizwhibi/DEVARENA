@@ -1,5 +1,7 @@
+import type { Request } from 'express';
 import {
   Body,
+  Delete,
   Controller,
   Get,
   Param,
@@ -35,7 +37,10 @@ export class SkillsController {
   }
 
   @Post()
-  create(@Body() dto: CreateSkillDto, @Req() req: any) {
+  create(
+    @Body() dto: CreateSkillDto,
+    @Req() req: Request & { user: { id: string } },
+  ) {
     return this.skills.create(dto, req.user.id);
   }
 
@@ -43,18 +48,31 @@ export class SkillsController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateSkillDto,
-    @Req() req: any,
+    @Req() req: Request & { user: { id: string } },
   ) {
     return this.skills.update(id, dto, req.user.id);
   }
 
   @Patch(':id/deactivate')
-  deactivate(@Param('id', ParseUUIDPipe) id: string, @Req() req: any) {
+  deactivate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request & { user: { id: string } },
+  ) {
     return this.skills.setActive(id, false, req.user.id);
   }
 
   @Patch(':id/activate')
-  activate(@Param('id', ParseUUIDPipe) id: string, @Req() req: any) {
+  activate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request & { user: { id: string } },
+  ) {
     return this.skills.setActive(id, true, req.user.id);
+  }
+  @Delete(':id')
+  remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request & { user: { id: string } },
+  ) {
+    return this.skills.setActive(id, false, req.user.id);
   }
 }

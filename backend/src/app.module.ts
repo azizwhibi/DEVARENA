@@ -1,3 +1,5 @@
+import { MarketplaceModule } from './marketplace/marketplace.module';
+import { DuelModule } from './duel/duel.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SkillsModule } from './skills/skills.module';
@@ -19,6 +21,8 @@ import { UsersModule } from './users/users.module';
     EventEmitterModule.forRoot(),
     SkillsModule,
     KnowledgeModule,
+    MarketplaceModule,
+    DuelModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

@@ -1,173 +1,391 @@
 'use client';
-import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ApiService } from '@/lib/skills/api';
-import { AdminSkill, SkillProgress } from '@/lib/skills/types';
+import type { AdminSkill } from '@/lib/skills/types';
+type Reference = { id: string; title: string };
+type Developer = { id: string; username: string };
+type Link = { id: string; name: string; weight: number };
 export default function AssociationsPage() {
-    const [skills, setSkills] = useState<AdminSkill[]>([]);
-    const [challenges, setChallenges] = useState<{
-        id: string;
-        title: string;
-    }[]>([]);
-    const [selectedChallengeId, setSelectedChallengeId] = useState('');
-    const [selectedSkillId, setSelectedSkillId] = useState('');
-    const [weight, setWeight] = useState(2);
-    const [challengeAssociations, setChallengeAssociations] = useState<{
-        challengeId: string;
-        challengeTitle: string;
-        skillId: string;
-        skillName: string;
-        weight: number;
-    }[]>([]);
-    // Developer progress
-    const [userProgress, setUserProgress] = useState<SkillProgress[]>([]);
-    const [skillToAttachId, setSkillToAttachId] = useState('');
-    const [toastMsg, setToastMsg] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isAttaching, setIsAttaching] = useState(false);
-    const showToast = (msg: string) => {
-        setToastMsg(msg);
-        setTimeout(() => setToastMsg(null), 4000);
-    };
-    const loadData = useCallback(async () => {
-        try {
-            const [skillsList, devSkills, chs] = await Promise.all([
-                ApiService.getAdminSkills(),
-                ApiService.getMySkills(),
-                ApiService.getChallenges(),
-            ]);
-            setSkills(skillsList);
-            setUserProgress(devSkills);
-            setChallenges(chs);
-            if (chs.length > 0) {
-                setSelectedChallengeId(previous => previous || chs[0].id);
-            }
-            if (skillsList.length > 0) {
-                setSelectedSkillId(previous => previous || skillsList[0].id);
-                setSkillToAttachId(previous => previous || skillsList[0].id);
-            }
-        }
-        catch (e) {
-            console.error(e);
-        }
-    }, []);
-    useEffect(() => {
-        async function initialize() { await loadData(); }
-        void initialize();
-    }, [loadData]);
-    useEffect(() => {
-        if (!selectedChallengeId)
-            return;
-        let active = true;
-        void ApiService.getChallengeSkills(selectedChallengeId).then(result => {
-            if (!active)
-                return;
-            const challengeTitle = challenges.find(challenge => challenge.id === selectedChallengeId)?.title ?? selectedChallengeId;
-            setChallengeAssociations(previous => [
-                ...previous.filter(link => link.challengeId !== selectedChallengeId),
-                ...result.skills.map(skill => ({ challengeId: selectedChallengeId, challengeTitle, skillId: skill.id, skillName: skill.name, weight: skill.weight })),
-            ]);
-        }).catch(() => { });
-        return () => { active = false; };
-    }, [selectedChallengeId, challenges]);
-    // ── PARTIE A : Lier Compétence à un Défi ────────────────────────
-    const handleAssociateToChallenge = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!selectedChallengeId || !selectedSkillId)
-            return;
-        setIsSubmitting(true);
-        try {
-            // 1. Call real backend endpoint PUT /admin/challenges/:id/skills
-            await ApiService.setChallengeSkills(selectedChallengeId, [
-                { skillId: selectedSkillId, weight: Number(weight) },
-            ]);
-            const chTitle = challenges.find((c) => c.id === selectedChallengeId)?.title || selectedChallengeId;
-            const skName = skills.find((s) => s.id === selectedSkillId)?.name || selectedSkillId;
-            const newAssoc = {
-                challengeId: selectedChallengeId,
-                challengeTitle: chTitle,
-                skillId: selectedSkillId,
-                skillName: skName,
-                weight: Number(weight),
-            };
-            setChallengeAssociations((prev) => [
-                newAssoc,
-                ...prev.filter((a) => !(a.challengeId === selectedChallengeId && a.skillId === selectedSkillId)),
-            ]);
-            // 2. Also automatically associate/initialize progress for developer so it appears in PARTIE B!
-            await ApiService.recalculateProgress(selectedSkillId);
-            const updatedProgress = await ApiService.getMySkills();
-            setUserProgress(updatedProgress);
-            showToast(` Succ\u00E8s : "${skName}" liée au défi "${chTitle}" (Poids: ${weight}) et rattachée à la progression du développeur !`);
-        }
-        catch {
-            showToast('Erreur lors de la liaison au défi.');
-        }
-        finally {
-            setIsSubmitting(false);
-        }
-    };
-    // ── PARTIE B : Rattacher Compétence au Développeur ─────────────
-    const handleAttachSkillToDeveloper = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!skillToAttachId)
-            return;
-        setIsAttaching(true);
-        try {
-            const skName = skills.find((s) => s.id === skillToAttachId)?.name || skillToAttachId;
-            await ApiService.recalculateProgress(skillToAttachId);
-            const updated = await ApiService.getMySkills();
-            setUserProgress(updated);
-            showToast(` "${skName}" est désormais rattachée au développeur avec calcul de niveau initialisé !`);
-        }
-        catch {
-            showToast('Erreur lors du rattachement au développeur.');
-        }
-        finally {
-            setIsAttaching(false);
-        }
-    };
-    const handleRecalculateUser = async (skillId: string, skillName: string) => {
-        try {
-            await ApiService.recalculateProgress(skillId);
-            showToast(` Progression recalcul\u00E9e pour "${skillName}" !`);
-            const updated = await ApiService.getMySkills();
-            setUserProgress(updated);
-        }
-        catch {
-            showToast('Erreur lors du recalcul.');
-        }
-    };
-    const handleSimulateValidation = async (challengeId: string, challengeLabel: string) => {
-        try {
-            await ApiService.simulateValidatedChallenge(challengeId);
-            showToast(`Simulation termin?e pour ? ${challengeLabel} ?.`);
-            const updated = await ApiService.getMySkills();
-            setUserProgress(updated);
-        }
-        catch {
-            showToast('Erreur lors de la simulation.');
-        }
-    };
-    return <div className="page-container">
-    {toastMsg && <div className="toast" role="status">{toastMsg}</div>}
-    <header className="page-header"><h1 className="page-title">Associations</h1></header>
-    <div className="grid-2">
-      <section className="card"><h2 className="section-title">Défis et compétences</h2>
-        <form className="stack-form" onSubmit={handleAssociateToChallenge}>
-          <label>Défi<select className="input" value={selectedChallengeId} onChange={event => setSelectedChallengeId(event.target.value)} required>{challenges.map(challenge => <option key={challenge.id} value={challenge.id}>{challenge.title}</option>)}</select></label>
-          <label>Compétence<select className="input" value={selectedSkillId} onChange={event => setSelectedSkillId(event.target.value)} required>{skills.map(skill => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label>
-          <label>Poids<input type="number" className="input" value={weight} min={1} max={3} onChange={event => setWeight(Number(event.target.value))} required/></label>
-          <button type="submit" className="btn btn-primary" disabled={isSubmitting}><WorkspaceIcon name="links"/>{isSubmitting ? 'Enregistrement…' : 'Associer'}</button>
-        </form>
-      </section>
-      <section className="card"><h2 className="section-title">Progression</h2>
-        <form className="stack-form" onSubmit={handleAttachSkillToDeveloper}><label>Compétence<select className="input" value={skillToAttachId} onChange={event => setSkillToAttachId(event.target.value)} required>{skills.map(skill => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label>
-          <button type="submit" className="btn btn-secondary" disabled={isAttaching}><WorkspaceIcon name="plus"/>{isAttaching ? 'Ajout…' : 'Ajouter à ma progression'}</button></form>
-        {challenges.length > 0 && <details className="simulation-tools"><summary>Outils de simulation</summary><div className="stack-form">{challenges.slice(0, 3).map(challenge => <button type="button" key={challenge.id} className="btn btn-ghost" onClick={() => handleSimulateValidation(challenge.id, challenge.title)}><WorkspaceIcon name="play"/>{challenge.title}</button>)}</div></details>}
-      </section>
+  const [skills, setSkills] = useState<AdminSkill[]>([]),
+    [challenges, setChallenges] = useState<Reference[]>([]),
+    [developers, setDevelopers] = useState<Developer[]>([]);
+  const [developer, setDeveloper] = useState(''),
+    [challenge, setChallenge] = useState(''),
+    [search, setSearch] = useState(''),
+    [error, setError] = useState(''),
+    [loading, setLoading] = useState(true);
+  const load = useCallback(async () => {
+    try {
+      const [s, c, d] = await Promise.all([
+        ApiService.getAdminSkills(),
+        ApiService.getChallenges(),
+        ApiService.getDevelopers(),
+      ]);
+      setSkills(s);
+      setChallenges(c);
+      setDevelopers(d.items);
+      setChallenge(c[0]?.id ?? '');
+      setDeveloper(d.items[0]?.id ?? '');
+      setError('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Skill links unavailable.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    async function initialize() {
+      await load();
+    }
+    void initialize();
+  }, [load]);
+  async function find(e: FormEvent) {
+    e.preventDefault();
+    setError('');
+    try {
+      const data = await ApiService.getDevelopers(search);
+      setDevelopers(data.items);
+      setDeveloper(data.items[0]?.id ?? '');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Search unavailable.');
+    }
+  }
+  return (
+    <div className="page-container">
+      <header className="page-header">
+        <h1 className="page-title">Associations</h1>
+      </header>
+      {error && (
+        <div role="alert" className="card">
+          {error}
+          <button className="btn btn-secondary" onClick={() => void load()}>
+            Retry
+          </button>
+        </div>
+      )}
+      {loading ? (
+        <p role="status">Loading…</p>
+      ) : (
+        <div className="grid-2">
+          <section className="card">
+            <h2 className="section-title">Developer skills</h2>
+            <form onSubmit={find} className="inline-form">
+              <input
+                aria-label="Search developers"
+                maxLength={64}
+                className="input"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button className="btn btn-secondary">Search</button>
+            </form>
+            <label>
+              Developer
+              <select
+                className="input"
+                value={developer}
+                onChange={(e) => setDeveloper(e.target.value)}
+              >
+                <option value="">Select</option>
+                {developers.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.username}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {!developers.length && <p>No developers found.</p>}
+            {developer && (
+              <DeveloperSkills
+                key={developer}
+                userId={developer}
+                skills={skills}
+              />
+            )}
+          </section>
+          <section className="card">
+            <h2 className="section-title">Challenge skills</h2>
+            <label>
+              Challenge
+              <select
+                className="input"
+                value={challenge}
+                onChange={(e) => setChallenge(e.target.value)}
+              >
+                <option value="">Select</option>
+                {challenges.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {!challenges.length && <p>No challenges available.</p>}
+            {challenge && (
+              <ChallengeSkills
+                key={challenge}
+                challengeId={challenge}
+                skills={skills}
+              />
+            )}
+          </section>
+        </div>
+      )}
     </div>
-    {challengeAssociations.length > 0 && <section className="section-block"><h2 className="section-title section-gap">Associations existantes</h2><div className="card table-card"><table><thead><tr><th>Défi</th><th>Compétence</th><th>Poids</th></tr></thead><tbody>{challengeAssociations.map((association, index) => <tr key={`${association.challengeId}-${association.skillId}-${index}`}><td>{association.challengeTitle}</td><td>{association.skillName}</td><td>{association.weight}</td></tr>)}</tbody></table></div></section>}
-    {userProgress.length > 0 && <section className="section-block"><h2 className="section-title section-gap">Mes niveaux</h2><div className="card table-card"><table><thead><tr><th>Compétence</th><th>Score</th><th>Défis validés</th><th className="text-right">Action</th></tr></thead><tbody>{userProgress.map(progress => <tr key={progress.skillId}><td>{progress.name}</td><td>{progress.levelScore === null ? 'Non évaluée' : `${progress.levelScore}%`}</td><td>{progress.validatedAttempts}</td><td className="text-right"><button type="button" className="btn btn-ghost" onClick={() => handleRecalculateUser(progress.skillId, progress.name)}><WorkspaceIcon name="refresh" size={16}/>Recalculer</button></td></tr>)}</tbody></table></div></section>}
-  </div>;
+  );
+}
+function DeveloperSkills({
+  userId,
+  skills,
+}: {
+  userId: string;
+  skills: AdminSkill[];
+}) {
+  const [assigned, setAssigned] = useState<AdminSkill[]>([]),
+    [selected, setSelected] = useState(''),
+    [loading, setLoading] = useState(true),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState('');
+  const load = useCallback(async () => {
+    try {
+      setAssigned(await ApiService.getDeveloperSkills(userId));
+      setError('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Assignments unavailable.');
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
+  useEffect(() => {
+    async function initialize() {
+      await load();
+    }
+    void initialize();
+  }, [load]);
+  async function change(id: string, active: boolean) {
+    setBusy(true);
+    setError('');
+    try {
+      await ApiService.setDeveloperSkill(userId, id, active);
+      await load();
+      setSelected('');
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : 'Unable to update the assignment.',
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="stack-form">
+      <p className="muted">
+        Assignments do not create scores. Removing an assignment preserves
+        assessments and history.
+      </p>
+      {error && (
+        <p role="alert">
+          {error}
+          <button className="btn btn-ghost" onClick={() => void load()}>
+            Retry
+          </button>
+        </p>
+      )}
+      {loading ? (
+        <p role="status">Loading…</p>
+      ) : (
+        <>
+          <label>
+            Skill
+            <select
+              className="input"
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+            >
+              <option value="">Select</option>
+              {skills
+                .filter(
+                  (s) => s.isActive && !assigned.some((a) => a.id === s.id),
+                )
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <button
+            className="btn btn-primary"
+            disabled={busy || !selected}
+            onClick={() => void change(selected, true)}
+          >
+            Assign
+          </button>
+          <ul>
+            {assigned.map((s) => (
+              <li key={s.id}>
+                {s.name}
+                {!s.isActive ? ' · Archived' : ''}
+                <button
+                  className="btn btn-ghost"
+                  disabled={busy}
+                  onClick={() => void change(s.id, false)}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!assigned.length && <p>No assigned skills.</p>}
+        </>
+      )}
+    </div>
+  );
+}
+function ChallengeSkills({
+  challengeId,
+  skills,
+}: {
+  challengeId: string;
+  skills: AdminSkill[];
+}) {
+  const [links, setLinks] = useState<Link[]>([]),
+    [selected, setSelected] = useState(''),
+    [loading, setLoading] = useState(true),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState(''),
+    [notice, setNotice] = useState('');
+  const load = useCallback(async () => {
+    try {
+      setLinks((await ApiService.getChallengeSkills(challengeId)).skills);
+      setError('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Skill links unavailable.');
+    } finally {
+      setLoading(false);
+    }
+  }, [challengeId]);
+  useEffect(() => {
+    async function initialize() {
+      await load();
+    }
+    void initialize();
+  }, [load]);
+  async function save() {
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      await ApiService.replaceChallengeSkills(
+        challengeId,
+        links.map((s) => ({ skillId: s.id, weight: s.weight })),
+      );
+      setNotice('Links saved. Existing assessments are preserved.');
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unable to save.');
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="stack-form">
+      {error && (
+        <p role="alert">
+          {error}
+          <button className="btn btn-ghost" onClick={() => void load()}>
+            Retry
+          </button>
+        </p>
+      )}
+      {notice && <p role="status">{notice}</p>}
+      {loading ? (
+        <p role="status">Loading…</p>
+      ) : (
+        <>
+          <label>
+            Skill
+            <select
+              className="input"
+              value={selected}
+              disabled={busy}
+              onChange={(e) => setSelected(e.target.value)}
+            >
+              <option value="">Select</option>
+              {skills
+                .filter((s) => s.isActive && !links.some((l) => l.id === s.id))
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <button
+            className="btn btn-secondary"
+            disabled={!selected || busy || links.length >= 10}
+            onClick={() => {
+              const s = skills.find((s) => s.id === selected);
+              if (s)
+                setLinks([...links, { id: s.id, name: s.name, weight: 1 }]);
+              setSelected('');
+            }}
+          >
+            Add to challenge
+          </button>
+          <ul>
+            {links.map((l) => (
+              <li key={l.id}>
+                <span>{l.name}</span>
+                <label>
+                  Weight
+                  <input
+                    aria-label={'Weight for ' + l.name}
+                    className="input"
+                    type="number"
+                    min={1}
+                    max={3}
+                    value={l.weight}
+                    disabled={busy}
+                    onChange={(e) =>
+                      setLinks(
+                        links.map((item) =>
+                          item.id === l.id
+                            ? { ...item, weight: Number(e.target.value) }
+                            : item,
+                        ),
+                      )
+                    }
+                  />
+                </label>
+                <button
+                  className="btn btn-ghost"
+                  disabled={busy}
+                  onClick={() =>
+                    setLinks(links.filter((item) => item.id !== l.id))
+                  }
+                >
+                  Unlink
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!links.length && <p>No linked skills.</p>}
+          <button
+            className="btn btn-primary"
+            disabled={
+              busy ||
+              links.some(
+                (l) =>
+                  !Number.isInteger(l.weight) || l.weight < 1 || l.weight > 3,
+              )
+            }
+            onClick={() => void save()}
+          >
+            {busy ? 'Saving…' : 'Save links'}
+          </button>
+        </>
+      )}
+    </div>
+  );
 }

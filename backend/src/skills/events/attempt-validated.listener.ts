@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { SupabaseService } from '../skills-database.service';
 import { SkillProgressService } from '../skill-progress.service';
-import { AiCoachService } from '../ai/ai-coach.service';
 import {
   ATTEMPT_VALIDATED,
   AttemptValidatedEvent,
@@ -15,7 +14,6 @@ export class AttemptValidatedListener {
   constructor(
     private readonly supabase: SupabaseService,
     private readonly progress: SkillProgressService,
-    private readonly coach: AiCoachService,
   ) {}
 
   @OnEvent(ATTEMPT_VALIDATED, { async: true })
@@ -30,7 +28,6 @@ export class AttemptValidatedListener {
       for (const row of data ?? []) {
         await this.progress.recalculate(event.userId, row.skill_id as string);
       }
-      this.coach.clearCache(event.userId);
     } catch (err) {
       // Le recalcul ne doit jamais faire echouer la soumission.
       this.logger.error(`Recalcul echoue : ${String(err)}`);

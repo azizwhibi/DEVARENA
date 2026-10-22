@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
@@ -6,11 +7,14 @@ export class CreateTechnologyDto {
   @IsString()
   @MinLength(2)
   @MaxLength(60)
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   name: string;
 
   @ApiPropertyOptional({
     example: 'postgresql',
-    description: "Nom d'icone (optionnel)",
+    description: "Icon name (optional)",
   })
   @IsOptional()
   @IsString()

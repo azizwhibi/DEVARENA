@@ -66,12 +66,12 @@ export function rankResources(
             ? 0
             : -4);
       const explanation = gap
-        ? 'Renforce une compétence évaluée en cours de développement.'
+        ? 'Builds a skill with a measured assessment in progress.'
         : interest
-          ? 'Correspond à une technologie choisie dans votre profil.'
+          ? 'Matches a technology selected in your profile.'
           : target
-            ? 'Approfondit une compétence déjà évaluée.'
-            : 'Une ressource publiée à découvrir.';
+            ? 'Deepens a skill you have already assessed.'
+            : 'A published resource to explore.';
       return {
         resource,
         score,

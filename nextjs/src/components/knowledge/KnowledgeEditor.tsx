@@ -1,7 +1,7 @@
-"use client";
-import Link from "next/link";
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import Link from 'next/link';
+import { useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   apiRequest,
   difficulties,
@@ -10,38 +10,38 @@ import {
   useKnowledge,
   type Meta,
   type Resource,
-} from "@/lib/knowledge";
-import { Failure, Loading } from "./KnowledgeUI";
-import { ResourceContent } from "./KnowledgeDetail";
-import styles from "./knowledge.module.css";
+} from '@/lib/knowledge';
+import { Failure, Loading } from './KnowledgeUI';
+import { ResourceContent } from './KnowledgeDetail';
+import styles from './knowledge.module.css';
 function ResourceForm({ initial }: { initial?: Resource }) {
   const router = useRouter(),
-    meta = useKnowledge<Meta>("/knowledge/meta");
-  const [title, setTitle] = useState(initial?.title ?? ""),
-    [description, setDescription] = useState(initial?.description ?? ""),
-    [content, setContent] = useState(initial?.content ?? ""),
-    [external, setExternal] = useState(initial?.external_url ?? ""),
-    [format, setFormat] = useState(initial?.resource_type ?? "article"),
-    [difficulty, setDifficulty] = useState(initial?.difficulty ?? "unknown"),
-    [technology, setTechnology] = useState(initial?.technology_id ?? ""),
-    [tags, setTags] = useState(initial?.tags.join(", ") ?? ""),
+    meta = useKnowledge<Meta>('/knowledge/meta');
+  const [title, setTitle] = useState(initial?.title ?? ''),
+    [description, setDescription] = useState(initial?.description ?? ''),
+    [content, setContent] = useState(initial?.content ?? ''),
+    [external, setExternal] = useState(initial?.external_url ?? ''),
+    [format, setFormat] = useState(initial?.resource_type ?? 'article'),
+    [difficulty, setDifficulty] = useState(initial?.difficulty ?? 'unknown'),
+    [technology, setTechnology] = useState(initial?.technology_id ?? ''),
+    [tags, setTags] = useState(initial?.tags.join(', ') ?? ''),
     [minutes, setMinutes] = useState(
-      initial?.estimated_minutes?.toString() ?? "",
+      initial?.estimated_minutes?.toString() ?? '',
     ),
-    [source, setSource] = useState(initial?.source ?? "manual"),
-    [attribution, setAttribution] = useState(initial?.attribution ?? ""),
+    [source, setSource] = useState(initial?.source ?? 'manual'),
+    [attribution, setAttribution] = useState(initial?.attribution ?? ''),
     [skillIds, setSkillIds] = useState(
       initial?.resource_skills.map((link) => link.skill_id) ?? [],
     ),
     [preview, setPreview] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState('');
   const skills = [...(meta.data?.skills ?? [])];
   for (const link of initial?.resource_skills ?? [])
     if (!skills.some((item) => item.id === link.skill_id))
       skills.push({
         id: link.skill_id,
-        name: link.skill?.name ?? "Compétence inactive",
+        name: link.skill?.name ?? 'Archived skill',
       });
   const technologies = [...(meta.data?.technologies ?? [])];
   if (
@@ -60,13 +60,13 @@ function ResourceForm({ initial }: { initial?: Resource }) {
     tags: [
       ...new Set(
         tags
-          .split(",")
+          .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
       ),
     ],
     estimated_minutes: minutes ? Number(minutes) : null,
-    source: source.trim() || "manual",
+    source: source.trim() || 'manual',
     attribution: attribution.trim(),
     skill_ids: skillIds,
   };
@@ -74,13 +74,13 @@ function ResourceForm({ initial }: { initial?: Resource }) {
     event.preventDefault();
     if (busy) return;
     setBusy(true);
-    setError("");
+    setError('');
     try {
       await apiRequest<Resource>(
-        "/admin/knowledge/resources" + (initial ? "/" + initial.id : ""),
-        { method: initial ? "PATCH" : "POST", body: JSON.stringify(values) },
+        '/admin/knowledge/resources' + (initial ? '/' + initial.id : ''),
+        { method: initial ? 'PATCH' : 'POST', body: JSON.stringify(values) },
       );
-      router.push("/admin/knowledge");
+      router.push('/admin/knowledge');
     } catch (error) {
       setError(errorText(error));
       setBusy(false);
@@ -89,8 +89,8 @@ function ResourceForm({ initial }: { initial?: Resource }) {
   const previewResource = {
     ...initial,
     ...values,
-    id: initial?.id ?? "preview",
-    status: "draft",
+    id: initial?.id ?? 'preview',
+    status: 'draft',
     technology: technologies.find((item) => item.id === technology) ?? null,
     resource_skills: skillIds.map((id) => ({
       skill_id: id,
@@ -101,10 +101,10 @@ function ResourceForm({ initial }: { initial?: Resource }) {
     <div className="page-container">
       <header className="page-header">
         <h1 className="page-title">
-          {initial ? "Modifier la ressource" : "Nouvelle ressource"}
+          {initial ? 'Edit resource' : 'New resource'}
         </h1>
         <Link className="btn btn-ghost" href="/admin/knowledge">
-          Retour aux ressources
+          Back to resources
         </Link>
       </header>
       {error && (
@@ -113,10 +113,10 @@ function ResourceForm({ initial }: { initial?: Resource }) {
         </p>
       )}
       {meta.error && <Failure message={meta.error} retry={meta.reload} />}
-      <form className={"card " + styles.form} onSubmit={submit}>
+      <form className={'card ' + styles.form} onSubmit={submit}>
         <fieldset disabled={busy || !meta.data} className={styles.form}>
           <label>
-            Titre
+            Title
             <input
               className="input"
               value={title}
@@ -152,7 +152,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
               </select>
             </label>
             <label>
-              Difficulté
+              Difficulty
               <select
                 className="input"
                 value={difficulty}
@@ -166,13 +166,13 @@ function ResourceForm({ initial }: { initial?: Resource }) {
               </select>
             </label>
             <label>
-              Technologie
+              Technology
               <select
                 className="input"
                 value={technology}
                 onChange={(event) => setTechnology(event.target.value)}
               >
-                <option value="">Aucune</option>
+                <option value="">None</option>
                 {technologies.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
@@ -181,7 +181,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
               </select>
             </label>
             <label>
-              Temps estimé (minutes)
+              Estimated time (minutes)
               <input
                 className="input"
                 type="number"
@@ -189,12 +189,12 @@ function ResourceForm({ initial }: { initial?: Resource }) {
                 max={100000}
                 value={minutes}
                 onChange={(event) => setMinutes(event.target.value)}
-                placeholder="Non renseigné"
+                placeholder="Not specified"
               />
             </label>
           </div>
           <label>
-            Tags séparés par des virgules
+            Comma-separated tags
             <input
               className="input"
               value={tags}
@@ -203,7 +203,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
             />
           </label>
           <label>
-            Lien externe
+            External link
             <input
               className="input"
               type="url"
@@ -214,9 +214,9 @@ function ResourceForm({ initial }: { initial?: Resource }) {
             />
           </label>
           <label>
-            Contenu en texte brut
+            Plain text content
             <textarea
-              className={"input " + styles.contentInput}
+              className={'input ' + styles.contentInput}
               value={content}
               onChange={(event) => setContent(event.target.value)}
               maxLength={80000}
@@ -231,7 +231,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
                 onChange={(event) => setSource(event.target.value)}
                 maxLength={80}
                 readOnly={
-                  initial?.source === "coursera" && !!initial.external_source_id
+                  initial?.source === 'coursera' && !!initial.external_source_id
                 }
               />
             </label>
@@ -246,11 +246,11 @@ function ResourceForm({ initial }: { initial?: Resource }) {
             </label>
           </div>
           <fieldset>
-            <legend className="section-title">Compétences liées</legend>
+            <legend className="section-title">Related skills</legend>
             {meta.loading ? (
               <Loading />
             ) : !skills.length ? (
-              <p className="muted">Aucune compétence disponible.</p>
+              <p className="muted">No skills available.</p>
             ) : (
               <div className={styles.skills}>
                 {skills.map((item) => (
@@ -279,11 +279,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
             type="submit"
             disabled={busy || !meta.data || title.trim().length < 2}
           >
-            {busy
-              ? "Enregistrement…"
-              : initial
-                ? "Enregistrer"
-                : "Créer le brouillon"}
+            {busy ? 'Saving…' : initial ? 'Save' : 'Create draft'}
           </button>
           <button
             className="btn btn-secondary"
@@ -291,12 +287,12 @@ function ResourceForm({ initial }: { initial?: Resource }) {
             onClick={() => setPreview(!preview)}
             aria-expanded={preview}
           >
-            {preview ? "Fermer l’aperçu" : "Aperçu"}
+            {preview ? 'Close preview' : 'Preview'}
           </button>
         </div>
         {preview && (
           <section className={styles.preview}>
-            <h2 className="page-title">{title || "Sans titre"}</h2>
+            <h2 className="page-title">{title || 'Untitled'}</h2>
             <div className={styles.detail}>
               <ResourceContent resource={previewResource} trackClicks={false} />
             </div>
@@ -307,7 +303,7 @@ function ResourceForm({ initial }: { initial?: Resource }) {
   );
 }
 function ExistingEditor({ id }: { id: string }) {
-  const result = useKnowledge<Resource>("/admin/knowledge/resources/" + id);
+  const result = useKnowledge<Resource>('/admin/knowledge/resources/' + id);
   if (result.loading)
     return (
       <div className="page-container">

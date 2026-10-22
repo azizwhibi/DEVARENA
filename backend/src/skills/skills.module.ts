@@ -1,3 +1,9 @@
+import { AssignmentsService } from './assignments.service';
+import {
+  AssignmentsController,
+  MyAssignmentsController,
+  PracticeDirectoryController,
+} from './assignments.controller';
 import { AuthModule } from '../auth/auth.module';
 import { SupabaseModule } from '../supabase/supabase.module';
 import { SupabaseService } from './skills-database.service';
@@ -17,10 +23,6 @@ import { TechnologiesService } from './technologies.service';
 import { ChallengeSkillsController } from './challenge-skills.controller';
 import { ChallengeSkillsService } from './challenge-skills.service';
 import { AttemptValidatedListener } from './events/attempt-validated.listener';
-import { AI_PROVIDER_TOKEN } from './ai/ai-provider.interface';
-import { HttpAiProvider } from './ai/http-ai-provider';
-import { AiCoachService } from './ai/ai-coach.service';
-import { AiCoachController } from './ai/ai-coach.controller';
 
 import {
   MeSkillChallengesController,
@@ -31,6 +33,9 @@ import { SkillInsightsService } from './skill-insights.service';
 @Module({
   imports: [AuthModule, SupabaseModule],
   controllers: [
+    AssignmentsController,
+    MyAssignmentsController,
+    PracticeDirectoryController,
     SkillsDirectoryController,
     SkillsController,
     MeSkillsController,
@@ -41,10 +46,10 @@ import { SkillInsightsService } from './skill-insights.service';
     ChallengeSkillsController,
     MeSkillChallengesController,
     SkillStatsController,
-    AiCoachController,
   ],
   exports: [SkillProgressService],
   providers: [
+    AssignmentsService,
     SupabaseService,
     SkillsService,
     SkillProgressService,
@@ -54,13 +59,6 @@ import { SkillInsightsService } from './skill-insights.service';
     ChallengeSkillsService,
     AttemptValidatedListener,
     SkillInsightsService,
-    // AI Coach : le token symbolique découple l'interface de l'implémentation
-    HttpAiProvider,
-    {
-      provide: AI_PROVIDER_TOKEN,
-      useExisting: HttpAiProvider,
-    },
-    AiCoachService,
   ],
 })
 export class SkillsModule {}

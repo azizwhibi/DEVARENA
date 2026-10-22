@@ -1,6 +1,6 @@
 # Knowledge Management
 
-The Knowledge module adds a French learning library to the existing Next.js workspace and a NestJS module registered in AppModule. It reuses Aziz's session-aware API client, UserGuard/AdminGuard, problem-details responses and server Supabase connection. Syrine's measured skill data is read through SkillProgressService; the existing Coach and scoring implementation are preserved. No package dependencies were added for Knowledge.
+The Knowledge module adds an English learning library to the existing Next.js workspace and a NestJS module registered in AppModule. It reuses Aziz's session-aware API client, UserGuard/AdminGuard, problem-details responses and server Supabase connection. Syrine's measured skill data is read through SkillProgressService; the existing scoring implementation is preserved. AI Coach was removed at the user's request. No package dependencies were added for Knowledge.
 
 ## Database and deployment
 
@@ -35,7 +35,7 @@ Frontend placeholders:
     NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLIC_PUBLISHABLE_KEY
 
-Never put the service-role key in a NEXT_PUBLIC variable. Knowledge needs no Kaggle, Gemini or embedding credentials. Existing AI Coach configuration remains independent. JSON requests are bounded at 256 KiB to accommodate resource text and escaped CSV payloads.
+Never put the service-role key in a NEXT_PUBLIC variable. Knowledge needs no Kaggle, Gemini or embedding credentials. The Python/model recommendation service is not part of this integration. JSON requests are bounded at 256 KiB to accommodate resource text and escaped CSV payloads.
 
 Backend terminal:
 

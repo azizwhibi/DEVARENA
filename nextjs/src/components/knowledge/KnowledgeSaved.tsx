@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 import {
   apiRequest,
   errorText,
@@ -7,26 +7,26 @@ import {
   type Page,
   type Progress,
   type Resource,
-} from "@/lib/knowledge";
+} from '@/lib/knowledge';
 import {
   Failure,
   KnowledgeNav,
   Loading,
   Pagination,
   ResourceCard,
-} from "./KnowledgeUI";
-import styles from "./knowledge.module.css";
+} from './KnowledgeUI';
+import styles from './knowledge.module.css';
 type RecordItem = Partial<Progress> & {
   resource_id: string;
   resource: Resource | null;
   created_at?: string;
 };
-export function KnowledgeSaved({ kind }: { kind: "bookmarks" | "progress" }) {
+export function KnowledgeSaved({ kind }: { kind: 'bookmarks' | 'progress' }) {
   const [page, setPage] = useState(1),
-    [error, setError] = useState(""),
-    [busy, setBusy] = useState("");
+    [error, setError] = useState(''),
+    [busy, setBusy] = useState('');
   const result = useKnowledge<Page<RecordItem>>(
-    "/me/knowledge/" + kind + "?page=" + page + "&pageSize=12",
+    '/me/knowledge/' + kind + '?page=' + page + '&pageSize=12',
   );
   function removed() {
     if (result.data?.items.length === 1 && page > 1) setPage(page - 1);
@@ -34,23 +34,21 @@ export function KnowledgeSaved({ kind }: { kind: "bookmarks" | "progress" }) {
   }
   async function remove(id: string) {
     setBusy(id);
-    setError("");
+    setError('');
     try {
-      await apiRequest("/me/knowledge/bookmarks/" + id, { method: "DELETE" });
+      await apiRequest('/me/knowledge/bookmarks/' + id, { method: 'DELETE' });
       removed();
     } catch (error) {
       setError(errorText(error));
     } finally {
-      setBusy("");
+      setBusy('');
     }
   }
   return (
     <div className="page-container">
       <header className="page-header">
         <h1 className="page-title">
-          {kind === "bookmarks"
-            ? "Ressources enregistrées"
-            : "Progression d’apprentissage"}
+          {kind === 'bookmarks' ? 'Saved resources' : 'Learning progress'}
         </h1>
       </header>
       <KnowledgeNav />
@@ -66,9 +64,9 @@ export function KnowledgeSaved({ kind }: { kind: "bookmarks" | "progress" }) {
       ) : result.data && !result.data.items.length ? (
         <div className="empty-state">
           <h2>
-            {kind === "bookmarks"
-              ? "Aucune ressource enregistrée"
-              : "Aucune ressource commencée"}
+            {kind === 'bookmarks'
+              ? 'No saved resources'
+              : 'No resources started'}
           </h2>
         </div>
       ) : (
@@ -81,48 +79,48 @@ export function KnowledgeSaved({ kind }: { kind: "bookmarks" | "progress" }) {
                     resource={{
                       ...item.resource,
                       bookmarked:
-                        kind === "bookmarks" ? true : item.resource.bookmarked,
+                        kind === 'bookmarks' ? true : item.resource.bookmarked,
                     }}
-                    hideBookmark={kind === "progress"}
+                    hideBookmark={kind === 'progress'}
                     onRemove={removed}
                   />
                 ) : (
                   <div className="card">
-                    <h2>Ressource indisponible</h2>
-                    {kind === "bookmarks" && (
+                    <h2>Resource unavailable</h2>
+                    {kind === 'bookmarks' && (
                       <button
                         className="btn btn-secondary"
                         disabled={busy === item.resource_id}
                         onClick={() => remove(item.resource_id)}
                       >
-                        Retirer des enregistrements
+                        Remove bookmark
                       </button>
                     )}
                   </div>
                 )}
-                {kind === "progress" && (
+                {kind === 'progress' && (
                   <div className="card">
                     <p>
-                      {item.state === "completed" ? "Terminée" : "En cours"} ·{" "}
-                      {item.percentage}%
+                      {item.state === 'completed' ? 'Completed' : 'In progress'}{' '}
+                      · {item.percentage}%
                     </p>
                     <div className="progress-track">
                       <div
                         className="progress-fill"
-                        style={{ width: String(item.percentage) + "%" }}
+                        style={{ width: String(item.percentage) + '%' }}
                       />
                     </div>
                     <p className="muted">
-                      Commencée le{" "}
-                      {new Date(item.started_at!).toLocaleDateString("fr-FR")}
+                      Started on{' '}
+                      {new Date(item.started_at!).toLocaleDateString('en-US')}
                       {item.completed_at
-                        ? " · Terminée le " +
+                        ? ' · Completed on ' +
                           new Date(item.completed_at).toLocaleDateString(
-                            "fr-FR",
+                            'en-US',
                           )
-                        : " · Mise à jour le " +
+                        : ' · Updated on ' +
                           new Date(item.updated_at!).toLocaleDateString(
-                            "fr-FR",
+                            'en-US',
                           )}
                     </p>
                   </div>
