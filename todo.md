@@ -508,6 +508,7 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 **Scope:** S
 
 ### T28: Service worker + offline page
+**Implementation status 2026-10-20:** `public/sw.js` upgraded to `devarena-v2` with expanded precache list (`/offline`, `/manifest.webmanifest`, `/favicon.ico`, `/apple-icon`, `/icons/*`, public SVGs, `/workers/code-runner.worker.js`). Fixed asset classification so icons and static assets are matched and served from cache storage offline. Navigations remain network-first with `/offline` fallback and are never stored in cache storage (preserving privacy floor). Added `SKIP_WAITING` listener and automatic cache purge on activate. `RegisterSW.tsx` enhanced with dev-testing toggle, waiting worker update prompt, and `controllerchange` auto-reload. Terminal-styled `OfflineDashboard` component implemented at `/offline` with live connectivity detection and reconnection retry. Automated routing and manifest test suite in `scripts/check-pwa.mjs` expanded and passing.
 **Description:**
 - `public/sw.js` cache policy:
   - precache `/offline` and the icons
@@ -518,8 +519,8 @@ Rejected: SEC-01 (no bypass code exists yet; the boot check ships *with* the byp
 - Registered in production only.
 - `next.config.ts` headers per the bundled PWA guide (sw.js `no-cache` + CSP, global `nosniff`/`DENY`/referrer).
 **Acceptance:**
-- [ ] Offline reload of any page → `/offline`
-- [ ] After browsing `/profile` and `/admin/users` logged in, Cache Storage contains only `/_next/static/*`, icons and `/offline`
+- [x] Offline reload of any page → `/offline`
+- [x] After browsing `/profile` and `/admin/users` logged in, Cache Storage contains only `/_next/static/*`, icons and `/offline`
 **Verify:** `npm run build && npm start`; DevTools Offline + Cache Storage inspection
 **Dependencies:** T27
 **Files:** `nextjs/public/sw.js`, `nextjs/src/app/offline/page.tsx`, `nextjs/src/components/pwa/RegisterSW.tsx`, `nextjs/next.config.ts`
