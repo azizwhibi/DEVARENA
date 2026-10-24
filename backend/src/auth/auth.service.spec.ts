@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { assertSafeAuthConfig } from './auth-config';
 import {
   AdminGuard,
+  DeveloperGuard,
   OptionalAuthGuard,
   RecruiterGuard,
   UserGuard,
@@ -272,6 +273,36 @@ describe('auth guards', () => {
     await expect(
       new RecruiterGuard(s.auth).canActivate(context('Bearer a.jwt.token').ctx),
     ).resolves.toBe(true);
+  });
+  it('accepts an active developer on DeveloperGuard', async () => {
+    const s = setup();
+    const { req, ctx } = context('Bearer a.jwt.token');
+    await expect(new DeveloperGuard(s.auth).canActivate(ctx)).resolves.toBe(
+      true,
+    );
+    expect(req.user?.role).toBe('developer');
+  });
+  it('denies an active recruiter on DeveloperGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'recruiter' },
+      error: null,
+    });
+    const { ctx } = context('Bearer a.jwt.token');
+    await expect(
+      new DeveloperGuard(s.auth).canActivate(ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+  it('denies an active admin on DeveloperGuard', async () => {
+    const s = setup();
+    s.maybeSingle.mockResolvedValue({
+      data: { ...user, role: 'admin' },
+      error: null,
+    });
+    const { ctx } = context('Bearer a.jwt.token');
+    await expect(
+      new DeveloperGuard(s.auth).canActivate(ctx),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
   it('accepts an active admin on RecruiterGuard', async () => {
     const s = setup();

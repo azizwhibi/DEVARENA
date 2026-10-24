@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 import { useSkillsAccount } from '@/components/skills/SkillsWorkspace';
 import { ApiService } from '@/lib/skills/api';
@@ -9,6 +10,16 @@ import type { AdminSkill } from '@/lib/skills/types';
 type Technology = { id: string; name: string };
 export default function DiscoverPage() {
   const account = useSkillsAccount();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (account.role === 'admin') {
+      router.replace('/admin/users');
+    } else if (account.role === 'recruiter') {
+      router.replace('/recruiter');
+    }
+  }, [account.role, router]);
+
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [selected, setSelected] = useState<Technology | null>(null);
   const [skills, setSkills] = useState<{
@@ -25,6 +36,10 @@ export default function DiscoverPage() {
   const [retry, setRetry] = useState(0);
   const [skillRetry, setSkillRetry] = useState(0);
   useEffect(() => {
+    if (account.role !== 'developer') {
+      setLoading(false);
+      return;
+    }
     let active = true;
     void ApiService.getTechnologies()
       .then((items) => {
@@ -74,19 +89,19 @@ export default function DiscoverPage() {
     skillError && skillError.technologyId === selectedId
       ? skillError.message
       : '';
+
+  if (account.role !== 'developer') {
+    return (
+      <div className="page-container">
+        <p role="status">Redirecting to your workspace…</p>
+      </div>
+    );
+  }
+
   return (
     <div className="page-container">
       <header className="page-header">
         <h1 className="page-title">Technologies</h1>
-        {account.role === 'admin' && (
-          <Link
-            href="/admin/skills?tab=technologies"
-            className="btn btn-secondary"
-          >
-            <WorkspaceIcon name="settings" />
-            Manage technologies
-          </Link>
-        )}
       </header>
       <label className="form-group">
         Search

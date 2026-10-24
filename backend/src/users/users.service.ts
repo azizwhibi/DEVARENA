@@ -202,11 +202,11 @@ export class UsersService {
       bio: profile.bio,
       country: profile.country,
       institution: profile.institution,
-      technologies,
+      technologies: isDeveloper ? technologies : [],
       visibility: profile.visibility,
       createdAt: profile.created_at,
-      devScore: isDeveloper ? null : null,
-      tier: isDeveloper ? null : null,
+      devScore: null,
+      tier: null,
     };
   }
 
@@ -218,6 +218,22 @@ export class UsersService {
       this.assertValidAvatarUrl(dto.avatarUrl, userId);
     }
 
+    let isDeveloper = true;
+    try {
+      const fromProfiles = this.supabase.client.from('profiles');
+      if (typeof fromProfiles?.select === 'function') {
+        const { data: profileRow } = await fromProfiles
+          .select('role')
+          .eq('id', userId)
+          .maybeSingle();
+        if (profileRow?.role) {
+          isDeveloper = profileRow.role === 'developer';
+        }
+      }
+    } catch {
+      // non-fatal in mocked or transient query errors
+    }
+
     const patch: { [key: string]: Json | undefined } = {};
     if (dto.username !== undefined) patch.username = dto.username;
     if (dto.bio !== undefined) patch.bio = dto.bio;
@@ -226,7 +242,8 @@ export class UsersService {
     if (dto.visibility !== undefined) patch.visibility = dto.visibility;
     if (dto.avatarUrl !== undefined) patch.avatar_url = dto.avatarUrl;
 
-    const techIds = dto.technologyIds !== undefined ? dto.technologyIds : null;
+    const techIds =
+      isDeveloper && dto.technologyIds !== undefined ? dto.technologyIds : null;
 
     if (techIds !== null) {
       this.memoryProfileTechs.set(userId, techIds);
@@ -237,6 +254,8 @@ export class UsersService {
       } catch {
         // non-fatal
       }
+    } else if (!isDeveloper) {
+      this.memoryProfileTechs.delete(userId);
     }
 
     let rpcError: { code?: string; message: string } | null = null;

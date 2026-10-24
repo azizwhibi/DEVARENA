@@ -83,13 +83,21 @@ function testDemoAccounts() {
   assert.equal(developer.target, '/profile');
 }
 
-// 3. Proxy route protection for /recruiter
+// 3. Proxy route protection for /recruiter, /invitations, /messages
 function testProxyRouteProtection() {
   const proxyPath = resolve(__dirname, '../src/proxy.ts');
   const proxyContent = readFileSync(proxyPath, 'utf8');
   assert.ok(
     proxyContent.includes("'/recruiter'"),
     'proxy.ts must include /recruiter in protectedRoute',
+  );
+  assert.ok(
+    proxyContent.includes("'/invitations'"),
+    'proxy.ts must include /invitations in protectedRoute',
+  );
+  assert.ok(
+    proxyContent.includes("'/messages'"),
+    'proxy.ts must include /messages in protectedRoute',
   );
 }
 
@@ -149,6 +157,77 @@ function testLoginFormPersonaHandling() {
   );
 }
 
+// 8. Navigation isolation in SkillsWorkspace
+function testWorkspaceNavigationIsolation() {
+  const wsPath = resolve(__dirname, '../src/components/skills/SkillsWorkspace.tsx');
+  const wsContent = readFileSync(wsPath, 'utf8');
+  assert.ok(
+    wsContent.includes("account?.role === 'admin'") &&
+    wsContent.includes("[{ title: 'Administration', links: administration }]"),
+    'SkillsWorkspace must show strictly administration links for admin',
+  );
+  assert.ok(
+    wsContent.includes("account?.role === 'recruiter'") &&
+    wsContent.includes("recruiterNavigation"),
+    'SkillsWorkspace must show strictly recruiter links for recruiter',
+  );
+  assert.ok(
+    wsContent.includes("href: '/recruiter'") &&
+    wsContent.includes("href: '/invitations'") &&
+    wsContent.includes("href: '/messages'"),
+    'recruiterNavigation must include Candidate Hub, Invitations, and Messages',
+  );
+}
+
+// 9. Profile & Settings role boundaries
+function testProfileRoleBoundaries() {
+  const headerPath = resolve(__dirname, '../src/components/profile/ProfileHeader.tsx');
+  const headerContent = readFileSync(headerPath, 'utf8');
+  assert.ok(
+    headerContent.includes('isDeveloper && <ProfileProgress'),
+    'ProfileHeader must render ProfileProgress only for developers',
+  );
+  assert.ok(
+    headerContent.includes('isDeveloper && profile.technologies.length > 0'),
+    'ProfileHeader must render technologies chips only for developers',
+  );
+  assert.ok(
+    headerContent.includes('Recruiter Talent Hub'),
+    'ProfileHeader must render Recruiter Talent Hub for recruiters',
+  );
+  assert.ok(
+    headerContent.includes('Administration & Moderation'),
+    'ProfileHeader must render Administration & Moderation for admins',
+  );
+
+  const formPath = resolve(__dirname, '../src/components/profile/ProfileForm.tsx');
+  const formContent = readFileSync(formPath, 'utf8');
+  assert.ok(
+    formContent.includes('{isDeveloper && (') &&
+    formContent.includes('Skills & Technologies'),
+    'ProfileForm must show Skills & Technologies only for developers',
+  );
+}
+
+// 10. Developer challenges access protection
+function testChallengesAccessProtection() {
+  const arenaPath = resolve(__dirname, '../src/app/(skills)/arena/page-client.tsx');
+  const arenaContent = readFileSync(arenaPath, 'utf8');
+  assert.ok(
+    arenaContent.includes("router.replace('/recruiter')") &&
+    arenaContent.includes("router.replace('/admin/users')"),
+    'Arena page must redirect non-developers to their role workspace',
+  );
+
+  const dashboardPath = resolve(__dirname, '../src/app/(skills)/dashboard/page-client.tsx');
+  const dashboardContent = readFileSync(dashboardPath, 'utf8');
+  assert.ok(
+    dashboardContent.includes("router.replace('/admin/users')") &&
+    dashboardContent.includes("router.replace('/recruiter')"),
+    'Dashboard page must redirect non-developers to their role workspace',
+  );
+}
+
 await testRoleDestinations();
 testDemoAccounts();
 testProxyRouteProtection();
@@ -156,5 +235,8 @@ testHeaderLinks();
 testRegisterFormRecruiterRole();
 testProxyNextRedirection();
 testLoginFormPersonaHandling();
+testWorkspaceNavigationIsolation();
+testProfileRoleBoundaries();
+testChallengesAccessProtection();
 
-console.log('PASS: 21 role-based sign-in and recruiter navigation assertions');
+console.log('PASS: 32 role-based sign-in, navigation, and role-workflow boundary assertions');

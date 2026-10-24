@@ -92,9 +92,11 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
   const countryOptions = getCountryOptions();
+  const isDeveloper = profile.role === 'developer';
 
   // Fetch available technologies
   useEffect(() => {
+    if (!isDeveloper) return;
     let active = true;
     apiRequest<TechnologyOption[]>('/technologies')
       .then((data) => {
@@ -141,14 +143,17 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
         ? customInstitution.trim() || null
         : selectedInstPreset || null;
 
-    const payload = {
+    const payload: Record<string, unknown> = {
       username: username.trim(),
       bio: bio.trim() || null,
       country: country || null,
       institution: institutionValue,
       visibility,
-      technologyIds: selectedTechIds,
     };
+
+    if (isDeveloper) {
+      payload.technologyIds = selectedTechIds;
+    }
 
     try {
       const updated = await apiRequest<UserProfileData>('/me/profile', {
@@ -379,45 +384,47 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
           )}
         </div>
 
-        {/* Technologies Multi-select */}
-        <div>
-          <div className="flex justify-between items-center mb-1">
-            <span className="block text-sm font-medium text-zinc-200">
-              Skills & Technologies
-            </span>
-            <span className="text-xs text-[#A1AABD]">
-              {selectedTechIds.length}/20 selected
-            </span>
+        {/* Technologies Multi-select (Developers only) */}
+        {isDeveloper && (
+          <div>
+            <div className="flex justify-between items-center mb-1">
+              <span className="block text-sm font-medium text-zinc-200">
+                Skills & Technologies
+              </span>
+              <span className="text-xs text-[#A1AABD]">
+                {selectedTechIds.length}/20 selected
+              </span>
+            </div>
+            <p className="text-xs text-zinc-400 mb-2.5">
+              Select the skills and technologies you specialize in. These will be highlighted on your profile and shown to recruiters.
+            </p>
+            <div
+              role="group"
+              aria-label="Skills & Technologies"
+              className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 rounded-md border border-white/[0.06] bg-[#090C11]/60"
+            >
+              {availableTechnologies.map((tech) => {
+                const isSelected = selectedTechIds.includes(tech.id);
+                return (
+                  <button
+                    type="button"
+                    key={tech.id}
+                    onClick={() => handleTechToggle(tech.id)}
+                    aria-pressed={isSelected}
+                    disabled={saving}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 ${
+                      isSelected
+                        ? 'bg-violet-600 text-white hover:bg-violet-500'
+                        : 'bg-[#151925] text-zinc-300 hover:bg-zinc-700'
+                    }`}
+                  >
+                    {tech.name} {isSelected && '✓'}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <p className="text-xs text-zinc-400 mb-2.5">
-            Select the skills and technologies you specialize in. These will be highlighted on your profile and shown to recruiters.
-          </p>
-          <div
-            role="group"
-            aria-label="Skills & Technologies"
-            className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 rounded-md border border-white/[0.06] bg-[#090C11]/60"
-          >
-            {availableTechnologies.map((tech) => {
-              const isSelected = selectedTechIds.includes(tech.id);
-              return (
-                <button
-                  type="button"
-                  key={tech.id}
-                  onClick={() => handleTechToggle(tech.id)}
-                  aria-pressed={isSelected}
-                  disabled={saving}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 ${
-                    isSelected
-                      ? 'bg-violet-600 text-white hover:bg-violet-500'
-                      : 'bg-[#151925] text-zinc-300 hover:bg-zinc-700'
-                  }`}
-                >
-                  {tech.name} {isSelected && '✓'}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        )}
 
         {/* Visibility Toggle */}
         <fieldset className="rounded-lg border border-white/[0.06] bg-[#090C11]/40 p-4">

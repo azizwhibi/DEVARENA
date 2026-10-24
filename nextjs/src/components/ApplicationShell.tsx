@@ -16,6 +16,8 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
     '/profile',
     '/admin',
     '/recruiter',
+    '/invitations',
+    '/messages',
   ].some((path) => pathname === path || pathname.startsWith(path + '/'));
   return workspace ? <SkillsWorkspace>{children}</SkillsWorkspace> : children;
 }

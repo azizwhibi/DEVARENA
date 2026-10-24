@@ -278,6 +278,57 @@ describe('UsersService & DTO validation', () => {
           NotFoundException,
         );
       });
+
+      it('returns empty technologies for admin and recruiter profiles', async () => {
+        const mockAdminProfile = {
+          id: userId,
+          email: 'admin@example.test',
+          username: 'adminuser',
+          role: 'admin',
+          avatar_url: null,
+          bio: 'Admin bio',
+          country: 'FR',
+          institution: 'Admin Org',
+          visibility: 'private',
+          created_at: '2026-10-18T00:00:00Z',
+        };
+
+        const mockTechRows = [
+          {
+            technology_id: 'a0000000-0000-4000-8000-000000000001',
+            technologies: {
+              id: 'a0000000-0000-4000-8000-000000000001',
+              name: 'TypeScript',
+            },
+          },
+        ];
+
+        mockSupabase.client.from.mockImplementation((table: string) => {
+          if (table === 'profiles') {
+            return {
+              select: () => ({
+                eq: () => ({
+                  maybeSingle: jest
+                    .fn()
+                    .mockResolvedValue({ data: mockAdminProfile, error: null }),
+                }),
+              }),
+            };
+          }
+          if (table === 'profile_technologies') {
+            return {
+              select: () => ({
+                eq: () => Promise.resolve({ data: mockTechRows, error: null }),
+              }),
+            };
+          }
+          return {};
+        });
+
+        const res = await service.getProfile(userId);
+        expect(res.role).toBe('admin');
+        expect(res.technologies).toEqual([]);
+      });
     });
 
     describe('updateProfile', () => {
@@ -319,6 +370,49 @@ describe('UsersService & DTO validation', () => {
         expect(mockSupabase.client.rpc).toHaveBeenCalledWith('update_profile', {
           p_id: userId,
           p_patch: { username: 'new_username' },
+          p_technology_ids: null,
+        });
+      });
+
+      it('does not send technology IDs to RPC when non-developer updates profile', async () => {
+        const mockRecruiterProfile = {
+          id: userId,
+          role: 'recruiter',
+        };
+        mockSupabase.client.from.mockReturnValue({
+          select: () => ({
+            eq: () => ({
+              maybeSingle: jest
+                .fn()
+                .mockResolvedValue({ data: mockRecruiterProfile, error: null }),
+            }),
+          }),
+        });
+        mockSupabase.client.rpc.mockResolvedValue({ error: null });
+        jest.spyOn(service, 'getProfile').mockResolvedValue({
+          id: userId,
+          email: 'recruiter@example.test',
+          username: 'recruiter1',
+          role: 'recruiter',
+          avatarUrl: null,
+          bio: 'Recruiter bio',
+          country: null,
+          institution: null,
+          technologies: [],
+          visibility: 'public',
+          createdAt: '2026-10-18T00:00:00Z',
+          devScore: null,
+          tier: null,
+        });
+
+        await service.updateProfile(userId, {
+          bio: 'Recruiter bio',
+          technologyIds: ['a0000000-0000-4000-8000-000000000001'],
+        });
+
+        expect(mockSupabase.client.rpc).toHaveBeenCalledWith('update_profile', {
+          p_id: userId,
+          p_patch: { bio: 'Recruiter bio' },
           p_technology_ids: null,
         });
       });

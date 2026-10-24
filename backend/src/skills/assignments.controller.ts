@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { AdminGuard, UserGuard } from '../auth/guards';
+import { AdminGuard, DeveloperGuard } from '../auth/guards';
 import { AssignmentsService } from './assignments.service';
 type AuthRequest = Request & { user: { id: string } };
 @Controller('admin/developers')
@@ -35,7 +35,7 @@ export class AssignmentsController {
   }
 }
 @Controller('me/skill-assignments')
-@UseGuards(UserGuard)
+@UseGuards(DeveloperGuard)
 export class MyAssignmentsController {
   constructor(private readonly assignments: AssignmentsService) {}
   @Get() list(@Req() req: AuthRequest) {
@@ -43,7 +43,7 @@ export class MyAssignmentsController {
   }
 }
 @Controller('skill-challenges')
-@UseGuards(UserGuard)
+@UseGuards(DeveloperGuard)
 export class PracticeDirectoryController {
   constructor(private readonly assignments: AssignmentsService) {}
   @Get() list(@Req() req: AuthRequest) {

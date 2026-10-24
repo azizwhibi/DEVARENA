@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Swords,
   Bot,
@@ -35,14 +36,24 @@ export function DuelArena() {
   const finished = s.phase === 'finished';
   const win = s.winnerId === account.id,
     draw = s.winnerId === null;
-  if (account.role === 'recruiter')
+  const router = useRouter();
+
+  useEffect(() => {
+    if (account.role === 'admin') {
+      router.replace('/admin/users');
+    } else if (account.role === 'recruiter') {
+      router.replace('/recruiter');
+    }
+  }, [account.role, router]);
+
+  if (account.role !== 'developer')
     return (
       <div className="page-container">
         <h1 className="page-title">Battle Code</h1>
         <div className="empty-state">
           <Swords size={20} strokeWidth={1.5} />
           <h2>Developer access required</h2>
-          <p>Sign in with a developer account to play battles.</p>
+          <p>Redirecting to your workspace…</p>
         </div>
       </div>
     );

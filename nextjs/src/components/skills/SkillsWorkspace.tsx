@@ -29,6 +29,11 @@ const administration = [
   { href: '/admin/skill-associations', label: 'Associations', icon: 'links' },
   { href: '/admin/users', label: 'Users', icon: 'users' },
 ] as const;
+const recruiterNavigation = [
+  { href: '/recruiter', label: 'Candidate Hub', icon: 'users' },
+  { href: '/invitations', label: 'Interview Requests', icon: 'links' },
+  { href: '/messages', label: 'Live Messages', icon: 'chat' },
+] as const;
 export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   useWorkspaceDialogs();
@@ -53,11 +58,10 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
   const adminRoute = pathname.startsWith('/admin');
   const groups =
     account?.role === 'admin'
-      ? [
-          { title: '', links: navigation },
-          { title: 'Administration', links: administration },
-        ]
-      : [{ title: '', links: navigation }];
+      ? [{ title: 'Administration', links: administration }]
+      : account?.role === 'recruiter'
+        ? [{ title: 'Talent & Recruiting', links: recruiterNavigation }]
+        : [{ title: '', links: navigation }];
   return (
     <div className="skills-workspace">
       <div className="app-shell">
@@ -147,7 +151,7 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
           <div className={styles.footer}>
-            {(account?.role === 'admin' || account?.role === 'recruiter') && (
+            {account?.role === 'admin' && (
               <Link href="/recruiter" className={styles.link}>
                 <WorkspaceIcon name="users" />
                 <span className={styles.label}>Candidate hub</span>
@@ -212,8 +216,15 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
           ) : adminRoute && account.role !== 'admin' ? (
             <div className="page-container">
               <h1 className="page-title">Access restricted</h1>
-              <Link href="/dashboard" className="btn btn-ghost">
-                Back to dashboard
+              <Link
+                href={
+                  account.role === 'recruiter' ? '/recruiter' : '/dashboard'
+                }
+                className="btn btn-ghost"
+              >
+                {account.role === 'recruiter'
+                  ? 'Back to candidate hub'
+                  : 'Back to dashboard'}
               </Link>
             </div>
           ) : (

@@ -27,8 +27,10 @@ export async function proxy(request: NextRequest) {
   );
 
   let authenticated = false;
+  let claimsData: { user_metadata?: { role?: string } } | null = null;
   try {
     const { data, error } = await supabase.auth.getClaims();
+    claimsData = (data?.claims as { user_metadata?: { role?: string } }) ?? null;
     authenticated = !error && Boolean(data?.claims.sub);
   } catch {
     // An unverifiable session gets the same redirects as a missing session.
@@ -38,6 +40,8 @@ export async function proxy(request: NextRequest) {
     '/profile',
     '/admin',
     '/recruiter',
+    '/invitations',
+    '/messages',
     '/reset-password',
     '/dashboard',
     '/my-skills',
@@ -55,7 +59,11 @@ export async function proxy(request: NextRequest) {
   } else if (authenticated && ['/', '/login', '/register'].includes(pathname)) {
     const rawNext = request.nextUrl.searchParams.get('next');
     const safe = safeNext(rawNext);
-    destination = new URL(safe !== '/' ? safe : '/dashboard', request.url);
+    let defaultDest = '/dashboard';
+    const roleClaim = claimsData?.user_metadata?.role;
+    if (roleClaim === 'admin') defaultDest = '/admin/users';
+    else if (roleClaim === 'recruiter') defaultDest = '/recruiter';
+    destination = new URL(safe !== '/' ? safe : defaultDest, request.url);
   }
   if (destination) {
     const redirected = NextResponse.redirect(destination);

@@ -27,6 +27,7 @@ import {
   Play,
   Grid2X2,
   Swords,
+  MessageSquare,
 } from 'lucide-react';
 const icons = {
   knowledge: BookOpen,
@@ -38,6 +39,7 @@ const icons = {
   practice: Code2,
   users: Users,
   links: Link2,
+  chat: MessageSquare,
   arrow: ArrowRight,
   menu: Menu,
   close: X,

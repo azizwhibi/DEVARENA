@@ -11,6 +11,15 @@ import { useSkillsAccount } from '@/components/skills/SkillsWorkspace';
 export default function ProfilePage() {
   const account = useSkillsAccount();
   const router = useRouter();
+
+  useEffect(() => {
+    if (account.role === 'admin') {
+      router.replace('/admin/users');
+    } else if (account.role === 'recruiter') {
+      router.replace('/recruiter');
+    }
+  }, [account.role, router]);
+
   const [error, setError] = useState('');
   const [skills, setSkills] = useState<SkillProgress[]>([]);
   const [isLoadingSkills, setIsLoadingSkills] = useState(true);
@@ -19,6 +28,10 @@ export default function ProfilePage() {
   >('all');
   const [viewMode, setViewMode] = useState<'cards' | 'radar'>('cards');
   const loadData = useCallback(async () => {
+    if (account.role !== 'developer') {
+      setIsLoadingSkills(false);
+      return;
+    }
     try {
       const skillsData = await ApiService.getMySkills();
       setSkills(skillsData);
@@ -27,13 +40,21 @@ export default function ProfilePage() {
     } finally {
       setIsLoadingSkills(false);
     }
-  }, []);
+  }, [account.role]);
   useEffect(() => {
     async function initialize() {
       await loadData();
     }
     void initialize();
   }, [loadData]);
+
+  if (account.role !== 'developer') {
+    return (
+      <div className="page-container">
+        <p role="status">Redirecting to your workspace…</p>
+      </div>
+    );
+  }
   const filteredSkills = useMemo(() => {
     switch (selectedFilter) {
       case 'evaluated':

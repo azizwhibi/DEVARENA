@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 import { useSkillsAccount } from '@/components/skills/SkillsWorkspace';
 import { useSkillSummary } from '@/components/skills/useSkillSummary';
@@ -10,6 +11,16 @@ import { marketplaceApi } from '@/lib/marketplace/api';
 import styles from './dashboard.module.css';
 export default function DashboardPage() {
   const account = useSkillsAccount();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (account.role === 'admin') {
+      router.replace('/admin/users');
+    } else if (account.role === 'recruiter') {
+      router.replace('/recruiter');
+    }
+  }, [account.role, router]);
+
   const { skills, evaluated, average, history, pending, error, available } =
     useSkillSummary();
   const [balance, setBalance] = useState<number | null>(null);
@@ -19,6 +30,7 @@ export default function DashboardPage() {
   const [catalogFailure, setCatalogFailure] = useState(false);
   const [today, setToday] = useState<Date | null>(null);
   useEffect(() => {
+    if (account.role !== 'developer') return;
     let active = true;
     // The date is calculated after hydration so server and browser time zones cannot disagree.
     const timer = window.setTimeout(() => setToday(new Date()), 0);
@@ -46,6 +58,15 @@ export default function DashboardPage() {
   const hour = today?.getHours() ?? 12;
   const greeting =
     hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
+  if (account.role !== 'developer') {
+    return (
+      <div className="p-8 text-center" role="status">
+        Redirecting to your workspace…
+      </div>
+    );
+  }
+
   return (
     <div className={styles.dashboard}>
       <header className={styles.heading}>

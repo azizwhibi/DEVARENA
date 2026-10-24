@@ -1,18 +1,35 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ApiService } from '@/lib/skills/api';
+import { useAccount } from '@/components/AccountProvider';
 import { ChallengeModal } from '@/components/skills/arena/ChallengeModal';
 type Challenge = Awaited<
   ReturnType<typeof ApiService.getPracticeChallenges>
 >[number];
 export default function ArenaPage() {
+  const { account } = useAccount();
+  const router = useRouter();
   const [items, setItems] = useState<Challenge[]>([]),
     [practice, setPractice] = useState<Challenge | null>(null),
     [error, setError] = useState(''),
     [loading, setLoading] = useState(true),
     [retry, setRetry] = useState(0);
+
   useEffect(() => {
+    if (account?.role === 'recruiter') {
+      router.replace('/recruiter');
+    } else if (account?.role === 'admin') {
+      router.replace('/admin/users');
+    }
+  }, [account?.role, router]);
+
+  useEffect(() => {
+    if (account && account.role !== 'developer') {
+      setLoading(false);
+      return;
+    }
     let active = true;
     void ApiService.getPracticeChallenges()
       .then((data) => {
@@ -30,7 +47,15 @@ export default function ArenaPage() {
     return () => {
       active = false;
     };
-  }, [retry]);
+  }, [retry, account]);
+
+  if (account && account.role !== 'developer') {
+    return (
+      <div className="page-container">
+        <p role="status">Redirecting to your workspace…</p>
+      </div>
+    );
+  }
   return (
     <div className="page-container">
       <header className="page-header">

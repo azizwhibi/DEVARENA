@@ -11,6 +11,23 @@ export function AuthHeader() {
   const [leaving, setLeaving] = useState(false);
   const [logoutFailure, setLogoutFailure] = useState('');
   const displayName = account?.username ?? user?.email ?? 'Account';
+  const homeHref =
+    account?.role === 'admin'
+      ? '/admin/users'
+      : account?.role === 'recruiter'
+        ? '/recruiter'
+        : user
+          ? '/dashboard'
+          : '/';
+  const statusText =
+    account?.role === 'admin'
+      ? 'Administrator workspace'
+      : account?.role === 'recruiter'
+        ? 'Talent & recruitment workspace'
+        : account
+          ? 'Your developer workspace'
+          : 'Build. Practice. Progress.';
+
   async function logout() {
     setLeaving(true);
     try {
@@ -27,7 +44,7 @@ export function AuthHeader() {
     <header className={styles.header}>
       <nav aria-label="Account navigation" className={styles.nav}>
         <Link
-          href={user ? '/dashboard' : '/'}
+          href={homeHref}
           className={styles.brand}
           aria-label="DevArena home"
         >
@@ -37,7 +54,7 @@ export function AuthHeader() {
           <span className={styles.brandText}>DEVARENA</span>
         </Link>
         <div className={styles.status}>
-          {account ? 'Your developer workspace' : 'Build. Practice. Progress.'}
+          {statusText}
         </div>
         <div className={styles.right}>
           {loading ? (
@@ -84,12 +101,27 @@ export function AuthHeader() {
                   <WorkspaceIcon name="settings" />
                   Settings
                 </Link>
-                {(account?.role === 'recruiter' ||
-                  account?.role === 'admin') && (
-                  <Link href="/recruiter" className={styles.item}>
+                {account?.role === 'admin' && (
+                  <Link href="/admin/users" className={styles.item}>
                     <WorkspaceIcon name="users" />
-                    Candidate hub
+                    User moderation
                   </Link>
+                )}
+                {account?.role === 'recruiter' && (
+                  <>
+                    <Link href="/recruiter" className={styles.item}>
+                      <WorkspaceIcon name="users" />
+                      Candidate hub
+                    </Link>
+                    <Link href="/invitations" className={styles.item}>
+                      <WorkspaceIcon name="links" />
+                      Interview requests
+                    </Link>
+                    <Link href="/messages" className={styles.item}>
+                      <WorkspaceIcon name="chat" />
+                      Live messages
+                    </Link>
+                  </>
                 )}
                 <button
                   type="button"

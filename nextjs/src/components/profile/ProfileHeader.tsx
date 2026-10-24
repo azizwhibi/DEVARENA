@@ -7,6 +7,9 @@ import type { UserProfileData } from './ProfileForm';
 import { ProfileProgress } from './ProfileProgress';
 export function ProfileHeader({ profile }: { profile: UserProfileData }) {
   const countryName = getCountryName(profile.country);
+  const isDeveloper = profile.role === 'developer';
+  const isAdmin = profile.role === 'admin';
+  const isRecruiter = profile.role === 'recruiter';
   return (
     <div className="profile-overview">
       <section className="profile-identity">
@@ -23,10 +26,12 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
             )}
           </div>
           <div className="profile-actions">
-            <Link href="/marketplace?view=inventory" className="ui-button">
-              <Palette size={16} strokeWidth={1.5} aria-hidden="true" />
-              Customize
-            </Link>
+            {isDeveloper && (
+              <Link href="/marketplace?view=inventory" className="ui-button">
+                <Palette size={16} strokeWidth={1.5} aria-hidden="true" />
+                Customize
+              </Link>
+            )}
             <Link href="/profile/settings" className="ui-button">
               <Settings2 size={16} strokeWidth={1.5} aria-hidden="true" />
               Edit profile
@@ -34,7 +39,7 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
           </div>
           <div className="profile-name">
             <h1>{profile.username}</h1>
-            <EquippedBadge replay />
+            {isDeveloper && <EquippedBadge replay />}
             <span className="badge">{profile.role}</span>
             <span className="badge">
               {profile.visibility === 'public' ? 'Public' : 'Private'}
@@ -56,7 +61,7 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
             )}
           </div>
           {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-          {profile.technologies.length > 0 && (
+          {isDeveloper && profile.technologies.length > 0 && (
             <div className="profile-technologies">
               {profile.technologies.map((t) => (
                 <span className="badge" key={t.id}>
@@ -65,7 +70,7 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
               ))}
             </div>
           )}
-          {(profile.devScore !== null || profile.tier !== null) && (
+          {isDeveloper && (profile.devScore !== null || profile.tier !== null) && (
             <div className="profile-verified-values">
               {profile.devScore !== null && (
                 <span>Dev Score: {profile.devScore}</span>
@@ -75,7 +80,49 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
           )}
         </div>
       </section>
-      <ProfileProgress createdAt={profile.createdAt} />
+      {isDeveloper && <ProfileProgress createdAt={profile.createdAt} />}
+      {isRecruiter && (
+        <div className="profile-panels">
+          <section className="ui-card">
+            <h2 className="ui-label">Recruiter Talent Hub</h2>
+            <p className="text-xs text-[#A1AABD] mt-1 mb-4">
+              Search for developer talent, filter by tech stack or school, and send direct interview requests.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/recruiter" className="ui-button">
+                Candidate hub
+              </Link>
+              <Link href="/invitations" className="ui-button">
+                Interview requests
+              </Link>
+              <Link href="/messages" className="ui-button">
+                Live messages
+              </Link>
+            </div>
+          </section>
+        </div>
+      )}
+      {isAdmin && (
+        <div className="profile-panels">
+          <section className="ui-card">
+            <h2 className="ui-label">Administration & Moderation</h2>
+            <p className="text-xs text-[#A1AABD] mt-1 mb-4">
+              Manage platform users, roles, skill taxonomies, and learning resources.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/admin/users" className="ui-button">
+                Manage users
+              </Link>
+              <Link href="/admin/skills" className="ui-button">
+                Skill management
+              </Link>
+              <Link href="/admin/knowledge" className="ui-button">
+                Knowledge base
+              </Link>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
