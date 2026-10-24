@@ -96,9 +96,9 @@
     "semantic_hash": "c489c1abdea7208d5e5bfbaf49cd9a97"
   },
   "backend/src/main.ts": {
-    "mtime": 1792874491.5620112,
-    "seen": 1792874981.019721,
-    "ast_hash": "14a35fa5377d7d5f09929ee5efc44487",
+    "mtime": 1792877192.8486018,
+    "seen": 1792877443.8524418,
+    "ast_hash": "18e4ebbd0fff6517f9c7a864d53e1931",
     "semantic_hash": ""
   },
   "backend/src/supabase/database.types.ts": {
@@ -198,9 +198,9 @@
     "semantic_hash": "03a50f8c69c4fb4f545f6ee2097260fe"
   },
   "nextjs/src/proxy.ts": {
-    "mtime": 1792874895.4560769,
-    "seen": 1792874981.0328753,
-    "ast_hash": "6892f7c7c439bf3a85d083119c5975ac",
+    "mtime": 1792875263.2270765,
+    "seen": 1792877443.9045463,
+    "ast_hash": "9e8e5c76575e4e8215921ad5bfb1bb9c",
     "semantic_hash": ""
   },
   "nextjs/tsconfig.json": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/auth/LoginForm.tsx": {
-    "mtime": 1792871961.1123092,
-    "seen": 1792872380.1474867,
-    "ast_hash": "f4f7cd3b6a3e8c82d9d5b6d8af3aa904",
+    "mtime": 1792877343.922776,
+    "seen": 1792877443.8785553,
+    "ast_hash": "32a59e48167c01589e8992e853a79c6f",
     "semantic_hash": ""
   },
   "nextjs/src/hooks/useAuth.ts": {
@@ -516,9 +516,9 @@
     "semantic_hash": ""
   },
   "todo.md": {
-    "mtime": 1792874223.1290386,
-    "seen": 1792874981.0378752,
-    "ast_hash": "eedcf62c3127d8e307bd302be24577e1",
+    "mtime": 1792876844.2313073,
+    "seen": 1792877443.9146469,
+    "ast_hash": "90ccebebada201674da059d3338b4fb9",
     "semantic_hash": ""
   },
   "nextjs/public/sw.js": {
@@ -660,15 +660,15 @@
     "semantic_hash": ""
   },
   "backend/src/users/users.service.spec.ts": {
-    "mtime": 1792874322.6385963,
-    "seen": 1792874981.0237358,
-    "ast_hash": "6713dd6a36c94ba54894fc1fa9b09d6e",
+    "mtime": 1792877186.4628098,
+    "seen": 1792877443.8638227,
+    "ast_hash": "14667140241eb47b2a5bbef04ca8a1b3",
     "semantic_hash": ""
   },
   "backend/src/users/users.service.ts": {
-    "mtime": 1792874412.6882195,
-    "seen": 1792874981.0237358,
-    "ast_hash": "4ad25cf23bc154ec4134e7ad5c30f17a",
+    "mtime": 1792877218.5754066,
+    "seen": 1792877443.8638241,
+    "ast_hash": "015f46e53078fa83d7c70e48fe7368b0",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-profile.mjs": {
@@ -786,15 +786,15 @@
     "semantic_hash": ""
   },
   "backend/scripts/seed-roles.mjs": {
-    "mtime": 1792493177.879904,
-    "seen": 1792493628.7936845,
-    "ast_hash": "fa5b5191a319a2e0c3571e7ea116838b",
+    "mtime": 1792877296.2417214,
+    "seen": 1792877443.848089,
+    "ast_hash": "27db6a74befccb0f781fc5a801b30897",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-role-login.mjs": {
-    "mtime": 1792874865.9371147,
-    "seen": 1792874981.027758,
-    "ast_hash": "71503c645240030aa7aada1691f01605",
+    "mtime": 1792877383.8034556,
+    "seen": 1792877443.8681033,
+    "ast_hash": "7017fbbb7a6eb11ac971405a72be10c2",
     "semantic_hash": ""
   },
   "nextjs/src/app/recruiter/page.tsx": {
@@ -1170,9 +1170,9 @@
     "semantic_hash": ""
   },
   "backend/src/skills/assignments.controller.ts": {
-    "mtime": 1792874491.6193602,
-    "seen": 1792874981.021736,
-    "ast_hash": "01d8f9ff514713d5afcbbb18bc7ec7b2",
+    "mtime": 1792875294.4960258,
+    "seen": 1792877443.85622,
+    "ast_hash": "c80369d1247684b6044fcefbdb78e137",
     "semantic_hash": ""
   },
   "backend/src/skills/assignments.service.ts": {
@@ -1620,9 +1620,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/AccountProvider.tsx": {
-    "mtime": 1792874491.1144536,
-    "seen": 1792874981.0298615,
-    "ast_hash": "3d10453fc135ac3599e7553ae7980815",
+    "mtime": 1792877358.6603117,
+    "seen": 1792877443.8765574,
+    "ast_hash": "29ec37c71be5721d3e5005fe7c91ed66",
     "semantic_hash": ""
   },
   "nextjs/src/components/ApplicationShell.tsx": {
@@ -1806,9 +1806,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/SkillsWorkspace.tsx": {
-    "mtime": 1792874510.4534228,
-    "seen": 1792874981.0308754,
-    "ast_hash": "5175ced0054bce87c898944d376723f1",
+    "mtime": 1792875285.188479,
+    "seen": 1792877443.8930478,
+    "ast_hash": "dedd94779d5adb20a8807a2d00af9a2c",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/WorkspaceIcon.tsx": {
@@ -1992,15 +1992,21 @@
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1792874170.6691062,
-    "seen": 1792874981.0378752,
-    "ast_hash": "e0ea3b8ab338e8c748d1ed01b4c9448a",
+    "mtime": 1792876817.7863197,
+    "seen": 1792877443.9146397,
+    "ast_hash": "cb382678f7451678545d5fca47531217",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1792874185.898212,
-    "seen": 1792874981.0378752,
-    "ast_hash": "0dafabeda6d4789ccaf212d71b87fc9d",
+    "mtime": 1792876829.8716822,
+    "seen": 1792877443.9146435,
+    "ast_hash": "c9e7d8e1ed55a4ec5a06bf1793f45922",
+    "semantic_hash": ""
+  },
+  "SPEC-account-availability.md": {
+    "mtime": 1792876794.6385,
+    "seen": 1792877443.906845,
+    "ast_hash": "a96863fd8f0c2ef37b2e6775c33d446b",
     "semantic_hash": ""
   }
 }

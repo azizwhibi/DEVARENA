@@ -48,7 +48,14 @@ export function LoginForm({
         destination = preferredTarget;
       } else {
         destination = await resolveRoleDestination(next, async () => {
-          const me = await request<AuthUser>('/me', authData.session.access_token);
+          const metaRole = authData.user?.user_metadata?.role as
+            | AuthUser['role']
+            | undefined;
+          if (metaRole) return metaRole;
+          const me = await request<AuthUser>(
+            '/me',
+            authData.session.access_token,
+          );
           return me.role;
         });
       }

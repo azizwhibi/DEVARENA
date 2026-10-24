@@ -10,8 +10,21 @@ async function bootstrap() {
   assertSafeAuthConfig(process.env);
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useBodyParser('json', { limit: '256kb' });
+  const allowedOrigins = [
+    process.env.FRONTEND_ORIGIN?.replace(/\/$/, ''),
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
+  ].filter(Boolean) as string[];
+
   app.enableCors({
-    origin: process.env.FRONTEND_ORIGIN ?? 'http://localhost:3001',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
+    credentials: true,
   });
   app.useGlobalPipes(
     new ValidationPipe({

@@ -1,34 +1,31 @@
-# Implementation Plan: Role-Specific Workflows & Profile Boundaries (`role-workflows`)
+# Implementation Plan: Demo Account Sign-In & Account Availability Resilience (`account-availability`)
 
-Reference Spec: `SPEC-role-workflows.md`  
-Status: **APPROVED BY USER** · Checkpoint: **Checkpoint I**  
+Reference Spec: `SPEC-account-availability.md`  
+Status: **PROPOSED** · Checkpoint: **Checkpoint J**  
 
 ## 1. Overview & Objectives
 
-Enforce role-specific workflows, navigation, and profile boundaries:
-- **Admin**: Only sees and accesses admin workflows (`/admin/users`, `/admin/skills`, `/admin/skill-associations`, `/admin/knowledge`, `/admin/marketplace`). Profile & settings have zero skills or technologies.
-- **Recruiter**: Only sees and accesses recruiter workflows (`/recruiter`, `/invitations`, `/messages`). Recruiter does not have technologies and does not play or pass challenges. Profile & settings have zero skills or technologies.
-- **Developer**: Retains full coding arena, challenges, skills progress, technologies specialization, and radar charts.
+Resolve the "Account unavailable. Try again shortly." error occurring after logging into demo accounts by hardening backend CORS, ensuring full profile contract compliance, synchronizing demo auth metadata, and enhancing `AccountProvider` network error resilience.
 
 ---
 
 ## 2. Dependency Graph & Vertical Slices
 
 ```
-T30 (Backend Role-Based Profile & Guard Isolation)
+T34 (Backend CORS & Profile Contract Hardening)
   │
-  ├──► T31 (Role-Specific Application Shell & Navigation)
+  ├──► T35 (Demo Auth Metadata & Role Sync)
   │
-  ├──► T32 (Profile & Settings Role Isolation)
+  ├──► T36 (Frontend AccountProvider Resilience & Diagnostic Messaging)
   │
-  └──► T33 (Route Access Control & Challenge Enforcement)
+  └──► T37 (Automated Verification & Integration Suite)
 ```
 
 Implementation Order:
-1. **T30**: Backend profile data contract & guard enforcement.
-2. **T31**: Frontend shell navigation (`SkillsWorkspace.tsx`, `AuthHeader.tsx`, `ApplicationShell.tsx`, `role-login.ts`).
-3. **T32**: Frontend profile presentation & settings (`ProfileHeader.tsx`, `ProfileForm.tsx`).
-4. **T33**: Route gates & challenge redirects (`/arena`, `/duel`, `/dashboard`, `proxy.ts`, test scripts).
+1. **T34**: Backend CORS multi-origin support (`localhost:3001` + `127.0.0.1:3001`) and `status` field in `UserProfileResponse`.
+2. **T35**: Demo user metadata sync (`user_metadata.role`) in `seed-roles.mjs` and edge proxy fallback in `proxy.ts`.
+3. **T36**: Frontend `AccountProvider` transient retry, actionable network error diagnosis, and `LoginForm` preferred target validation.
+4. **T37**: Automated test updates in `check-role-login.mjs` and full verification gate.
 
 ---
 
@@ -36,16 +33,16 @@ Implementation Order:
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Existing developers lose skills or technologies | High | Explicit check: `profile.role === 'developer'` preserves all technologies, radar charts, and dev score progression. |
-| Recruiter enters challenge via direct link | Med | Page-level check in `/arena` and `/duel` redirects non-developers to `/recruiter`; backend `/skill-challenges` enforces role. |
-| Admin enters dashboard via direct link | Low | Server-side / client-side check redirects admin to `/admin/users`. |
-| Hydration mismatch on role-dependent navigation | Low | `useAccount()` already provides authenticated state after hydration; Server Components pass role to initial renders. |
+| Permissive CORS allows unauthorized origins | Med | Whitelist strictly to `localhost:3001`, `127.0.0.1:3001`, and configured `FRONTEND_ORIGIN`. |
+| User metadata spoofing | Low | Database `public.profiles.role` remains authoritative in all backend guards (Rule 5). |
+| Endless retry loops in `AccountProvider` | Low | Limit transient automatic retries to 1 attempt before falling back to manual retry. |
 
 ---
 
-## 4. Verification Checkpoint (Checkpoint I)
+## 4. Verification Checkpoint (Checkpoint J)
 
-- Backend: `npm --prefix backend test` (all 226+ tests pass).
-- Frontend Auth & RBAC: `npm --prefix nextjs run test:auth` (all test scripts pass).
-- Frontend Build & Typecheck: `npx tsc -p nextjs --noEmit && npm --prefix nextjs run build`.
-- Review Receipt emitted per Rule 10 before requesting human approval per Rule 11.
+- Backend Tests: `npm --prefix backend test` (18 suites passing).
+- Backend Build: `npm --prefix backend run build` (clean build).
+- Frontend Auth Suite: `npm --prefix nextjs run test:auth` (all scenarios passing).
+- Frontend Typecheck: `npx tsc -p nextjs --noEmit` (0 errors).
+- Live Demo Verification: Verify all 3 demo accounts (`admin`, `recruiter`, `developer`) authenticate and hydrate cleanly without errors.

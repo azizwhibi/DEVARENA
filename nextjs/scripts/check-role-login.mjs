@@ -228,6 +228,34 @@ function testChallengesAccessProtection() {
   );
 }
 
+// 11. AccountProvider resilience and backend connectivity diagnosis
+function testAccountProviderResilience() {
+  const providerPath = resolve(__dirname, '../src/components/AccountProvider.tsx');
+  const providerContent = readFileSync(providerPath, 'utf8');
+  assert.ok(
+    providerContent.includes('Unable to connect to backend API server'),
+    'AccountProvider must provide actionable diagnosis when backend is unreachable',
+  );
+  assert.ok(
+    providerContent.includes('isRetry') && providerContent.includes('setTimeout'),
+    'AccountProvider must include automatic transient retry for network errors',
+  );
+
+  const loginPath = resolve(__dirname, '../src/components/auth/LoginForm.tsx');
+  const loginContent = readFileSync(loginPath, 'utf8');
+  assert.ok(
+    loginContent.includes('metaRole'),
+    'LoginForm must leverage user_metadata.role for instant redirect resolution',
+  );
+
+  const mainPath = resolve(__dirname, '../../backend/src/main.ts');
+  const mainContent = readFileSync(mainPath, 'utf8');
+  assert.ok(
+    mainContent.includes('127.0.0.1:3001') && mainContent.includes('localhost:3001'),
+    'Backend main.ts must permit both localhost and 127.0.0.1 origins',
+  );
+}
+
 await testRoleDestinations();
 testDemoAccounts();
 testProxyRouteProtection();
@@ -238,5 +266,6 @@ testLoginFormPersonaHandling();
 testWorkspaceNavigationIsolation();
 testProfileRoleBoundaries();
 testChallengesAccessProtection();
+testAccountProviderResilience();
 
-console.log('PASS: 32 role-based sign-in, navigation, and role-workflow boundary assertions');
+console.log('PASS: 36 role-based sign-in, navigation, and role-workflow boundary assertions');

@@ -85,6 +85,7 @@ export async function seedRoles() {
           user_metadata: {
             username: item.username,
             visibility: item.visibility,
+            role: item.role,
           },
         });
       if (createError) {
@@ -100,6 +101,11 @@ export async function seedRoles() {
         {
           password: item.password,
           email_confirm: true,
+          user_metadata: {
+            username: item.username,
+            visibility: item.visibility,
+            role: item.role,
+          },
         },
       );
       if (updateError) {

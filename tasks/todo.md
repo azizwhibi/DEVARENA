@@ -1,95 +1,74 @@
-# Tasks: `role-workflows`
+# Tasks: `account-availability`
 
-Plan: `tasks/plan.md` · Spec: `SPEC-role-workflows.md`
+Plan: `tasks/plan.md` · Spec: `SPEC-account-availability.md`
 
 ---
 
-## Phase 9 — Role-Specific Workflows & Boundaries
+## Phase 10 — Demo Account Sign-In & Account Availability Resilience
 
-### T30: Backend Role-Based Profile & Guard Isolation
+### T34: Backend CORS Multi-Origin & Profile Contract Hardening
 **Description:**
+- In `backend/src/main.ts`:
+  - Update CORS configuration to permit `http://localhost:3001`, `http://127.0.0.1:3001`, and `process.env.FRONTEND_ORIGIN` with `credentials: true`.
 - In `backend/src/users/users.service.ts`:
-  - `getProfile`: for non-developers (`role !== 'developer'`), return `technologies: []`, `devScore: null`, `tier: null`.
-  - `updateProfile`: if caller's role is not `'developer'`, ignore `technologyIds` so non-developers cannot associate technologies.
-- In `backend/src/auth/guards.ts`:
-  - Add `DeveloperGuard` requiring `req.user?.role === 'developer'`.
-- In `backend/src/skills/assignments.controller.ts`:
-  - Enforce `DeveloperGuard` on `PracticeDirectoryController` (`/skill-challenges`) so recruiters cannot fetch or pass practice challenges.
+  - In `getProfile()`: include `status: profile.status` in `UserProfileResponse` return object so it strictly conforms to `AuthUser` contract (`status: 'active' | 'suspended'`).
+- In `backend/src/users/users.service.spec.ts`:
+  - Add assertions verifying `status: 'active'` is returned by `getProfile()`.
 **Acceptance:**
-- [x] Non-developer profile returns empty technologies array and null devScore/tier
-- [x] Recruiter cannot fetch practice challenges (`/skill-challenges` returns 403 Forbidden)
-- [x] Developer profile retains technologies and access
+- [x] Backend CORS cleanly accepts preflight and requests from both `localhost:3001` and `127.0.0.1:3001`
+- [x] `UserProfileResponse` includes `status` field matching profile status
+- [x] Unit tests pass
 **Verify:** `npm --prefix backend test` green; `npm --prefix backend run build` green
-**Files:** `backend/src/users/users.service.ts`, `backend/src/users/users.service.spec.ts`, `backend/src/auth/guards.ts`, `backend/src/auth/guards.spec.ts`, `backend/src/skills/assignments.controller.ts`
+**Files:** `backend/src/main.ts`, `backend/src/users/users.service.ts`, `backend/src/users/users.service.spec.ts`
 **Scope:** S
 
-### T31: Role-Specific Application Shell & Navigation
+### T35: Demo Auth Metadata & Role Sync
 **Description:**
-- In `nextjs/src/components/skills/SkillsWorkspace.tsx`:
-  - If `account?.role === 'admin'`: show ONLY `administration` links (`/admin/users`, `/admin/skills`, `/admin/skill-associations`, `/admin/knowledge`, `/admin/marketplace`). Hide developer links.
-  - If `account?.role === 'recruiter'`: show ONLY `recruiter` links (`/recruiter` Candidate Hub, `/invitations` Interview Requests, `/messages` Live Messages). Hide developer and admin links.
-  - If `account?.role === 'developer'`: show developer `navigation` links (`/dashboard`, `/my-skills`, `/discover`, `/arena`, `/knowledge`, `/marketplace`, `/duel`).
-- In `nextjs/src/components/AuthHeader.tsx`:
-  - Brand link routes to role-specific destination: Admin → `/admin/users`, Recruiter → `/recruiter`, Developer → `/dashboard`.
-- In `nextjs/src/components/ApplicationShell.tsx`:
-  - Add `/invitations` and `/messages` to `workspace` routes so recruiter keeps workspace shell.
-- In `nextjs/src/lib/role-login.ts`:
-  - Update `resolveRoleDestination` and demo accounts.
-**Acceptance:**
-- [x] Admin sidebar contains only the 5 admin links
-- [x] Recruiter sidebar contains only Candidate Hub, Invitations, Messages
-- [x] Developer sidebar contains only developer links
-- [x] Brand link navigates to correct role home
-**Verify:** `npm --prefix nextjs run test:auth`; `npx tsc -p nextjs --noEmit`
-**Files:** `nextjs/src/components/skills/SkillsWorkspace.tsx`, `nextjs/src/components/AuthHeader.tsx`, `nextjs/src/components/ApplicationShell.tsx`, `nextjs/src/lib/role-login.ts`
-**Scope:** S
-
-### T32: Profile & Settings Role Isolation
-**Description:**
-- In `nextjs/src/components/profile/ProfileHeader.tsx`:
-  - When `profile.role !== 'developer'`:
-    - Do not render `technologies` chips, `EquippedBadge`, `Customize` button, or `devScore`/`tier`.
-    - Do not render `<ProfileProgress />` (radar chart, Developer DNA, proficiency metrics).
-  - When `profile.role === 'recruiter'`:
-    - Render a clean Recruiter Activity card with quick actions: Candidate Hub, Invitations, Messages.
-  - When `profile.role === 'admin'`:
-    - Render an Admin Management card with quick actions: User Moderation, Skills Management, Knowledge Resources.
-- In `nextjs/src/components/profile/ProfileForm.tsx`:
-  - When `profile.role !== 'developer'`:
-    - Hide the "Skills & Technologies" section (no technology picker chips, no counter).
-**Acceptance:**
-- [x] Admin /profile and /profile/settings show 0 skills and 0 technologies
-- [x] Recruiter /profile and /profile/settings show 0 skills and 0 technologies; shows recruiter quick actions
-- [x] Developer /profile retains full radar chart, technologies, badges, and progress
-**Verify:** `npm --prefix nextjs run test:auth`; `npx tsc -p nextjs --noEmit`
-**Files:** `nextjs/src/components/profile/ProfileHeader.tsx`, `nextjs/src/components/profile/ProfileForm.tsx`
-**Scope:** S
-
-### T33: Route Access Control & Challenge Enforcement
-**Description:**
-- In `nextjs/src/app/(skills)/arena/page.tsx` & `page-client.tsx`:
-  - Non-developers (recruiter, admin) are redirected to their role home (`/recruiter` or `/admin/users`).
-- In `nextjs/src/app/(skills)/duel/page.tsx`:
-  - Non-developers are redirected to their role home.
-- In `nextjs/src/app/(skills)/dashboard/page.tsx` & `page-client.tsx`:
-  - Admin is redirected to `/admin/users`; recruiter is redirected to `/recruiter`.
-- In `nextjs/src/app/(skills)/my-skills/page.tsx` & `discover/page.tsx`:
-  - Non-developers are redirected to their role home.
+- In `backend/scripts/seed-roles.mjs`:
+  - Ensure `user_metadata` for demo accounts is updated with `{ role: item.role, username: item.username, visibility: item.visibility }`.
+  - Run `node backend/scripts/seed-roles.mjs` against Supabase to synchronize demo auth metadata.
 - In `nextjs/src/proxy.ts`:
-  - Default authed destination routes to `resolveRoleDestination`.
-- Automated test scripts:
-  - Add comprehensive test assertions in `nextjs/scripts/check-role-login.mjs` and `nextjs/scripts/check-profile.mjs`.
+  - Handle missing role claims gracefully so uninitialized metadata does not cause erroneous redirect loops.
 **Acceptance:**
-- [x] Recruiter visiting `/arena` or `/duel` or `/dashboard` is redirected to `/recruiter`
-- [x] Admin visiting `/arena` or `/duel` or `/dashboard` is redirected to `/admin/users`
-- [x] Automated auth & RBAC test suite passes completely
-**Verify:** `npm --prefix backend test`; `npm --prefix nextjs run test:auth`; `npm --prefix nextjs run build`
-**Files:** `nextjs/src/app/(skills)/arena/page.tsx`, `nextjs/src/app/(skills)/duel/page.tsx`, `nextjs/src/app/(skills)/dashboard/page.tsx`, `nextjs/src/proxy.ts`, `nextjs/scripts/check-role-login.mjs`, `nextjs/scripts/check-profile.mjs`
-**Scope:** M
+- [x] Supabase auth user metadata for demo users contains explicit `role`
+- [x] `proxy.ts` edge middleware correctly routes authenticated users to their designated role home
+**Verify:** `npm --prefix backend run seed:roles`; `npm --prefix nextjs run test:auth`
+**Files:** `backend/scripts/seed-roles.mjs`, `nextjs/src/proxy.ts`
+**Scope:** S
 
-## ✅ Checkpoint I — role-workflows done
-- [x] All 4 tasks T30–T33 completed
-- [x] Full test suites green (backend 231 tests + frontend test:auth 32 RBAC assertions + frontend build 37 routes)
+### T36: Frontend AccountProvider Resilience & Diagnostic Messaging
+**Description:**
+- In `nextjs/src/components/AccountProvider.tsx`:
+  - Add transient automatic retry: if the initial fetch fails due to network connection refusal / transient timeout, retry once after a short delay (e.g. 500ms) before declaring failure.
+  - Diagnostic feedback: differentiate network offline errors (`fetch failed`, `ERR_CONNECTION_REFUSED`) from `account_suspended`, displaying a clear message: `"Unable to connect to backend API server (localhost:3000). Please ensure the backend is running."`
+  - Ensure retry button cleanly resets error state and re-executes fetch.
+- In `nextjs/src/components/auth/LoginForm.tsx`:
+  - Ensure demo login reliably retains `demo.target` destination.
+**Acceptance:**
+- [x] Network connection drops or delays trigger a quick retry before showing failure
+- [x] Network failure message clearly indicates backend unreachable instead of ambiguous "Account unavailable"
+- [x] Demo login cleanly navigates to designated role target
+**Verify:** `npm --prefix nextjs run test:auth`; `npx tsc -p nextjs --noEmit`
+**Files:** `nextjs/src/components/AccountProvider.tsx`, `nextjs/src/components/auth/LoginForm.tsx`
+**Scope:** S
+
+### T37: Automated Verification & Integration Suite
+**Description:**
+- In `nextjs/scripts/check-role-login.mjs`:
+  - Add test assertions covering network resilience fallback, CORS host flexibility, and demo account destination integrity.
+- Run full verification suite across backend and frontend.
+**Acceptance:**
+- [x] `npm --prefix backend test` passes (all 18 suites)
+- [x] `npm --prefix nextjs run test:auth` passes (all scenarios)
+- [x] `npx tsc -p nextjs --noEmit` passes (0 errors)
+- [x] Live demo accounts log in and hydrate cleanly
+**Verify:** Standard verification commands green
+**Files:** `nextjs/scripts/check-role-login.mjs`
+**Scope:** S
+
+## ✅ Checkpoint J — account-availability done
+- [x] All 4 tasks T34–T37 completed
+- [x] Full test suites green (backend + frontend test:auth + typecheck)
 - [x] Review receipt emitted per Rule 10
 - [x] Human approval granted per Rule 11
 - [x] Git Commit & Push executed per Rule 11

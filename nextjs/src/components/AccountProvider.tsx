@@ -10,6 +10,18 @@ const AccountContext = createContext<ReturnType<typeof useAccountState> | null>(
   null,
 );
 
+function formatAccountError(error: unknown): string {
+  if (error instanceof ApiError) {
+    if (error.problem?.code === 'account_suspended') return 'Account suspended';
+    if (error.status === 404) return 'Account profile not found';
+    return 'Account unavailable. Try again shortly.';
+  }
+  const host = process.env.NEXT_PUBLIC_API_URL
+    ? new URL(process.env.NEXT_PUBLIC_API_URL).host
+    : 'localhost:3000';
+  return `Unable to connect to backend API server (${host}). Please ensure the backend is running.`;
+}
+
 function useAccountState() {
   const auth = useAuth();
   const userId = auth.user?.id;
@@ -19,27 +31,41 @@ function useAccountState() {
     message: string;
   } | null>(null);
   const [retryKey, setRetryKey] = useState(0);
+
   useEffect(() => {
     if (!userId) return;
     const controller = new AbortController();
-    void apiRequest<Account>('/me/profile', { signal: controller.signal })
-      .then((value) => {
+    let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const fetchProfile = async (isRetry = false) => {
+      try {
+        const value = await apiRequest<Account>('/me/profile', {
+          signal: controller.signal,
+        });
         if (controller.signal.aborted) return;
         if (value.id !== userId) throw new Error('Account could not be loaded');
         setProfile(value);
         setFailure(null);
-      })
-      .catch((error) => {
-        if (!controller.signal.aborted)
-          setFailure({
-            id: userId,
-            message:
-              error instanceof ApiError &&
-              error.problem.code === 'account_suspended'
-                ? 'Account suspended'
-                : 'Account unavailable. Try again shortly.',
-          });
-      });
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        // If first attempt failed with a network or transient error, retry once automatically after 600ms
+        if (!isRetry && !(error instanceof ApiError)) {
+          retryTimeout = setTimeout(() => {
+            if (!controller.signal.aborted) {
+              void fetchProfile(true);
+            }
+          }, 600);
+          return;
+        }
+        setFailure({
+          id: userId,
+          message: formatAccountError(error),
+        });
+      }
+    };
+
+    void fetchProfile(false);
+
     const updated = (event: Event) => {
       const value = (event as CustomEvent<Account>).detail;
       if (value?.id === userId) {
@@ -52,6 +78,7 @@ function useAccountState() {
     window.addEventListener('profile-updated', updated);
     return () => {
       controller.abort();
+      if (retryTimeout) clearTimeout(retryTimeout);
       window.removeEventListener('profile-updated', updated);
     };
   }, [userId, retryKey]);

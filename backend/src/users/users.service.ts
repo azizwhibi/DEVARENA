@@ -78,6 +78,7 @@ export interface UserProfileResponse {
   email: string;
   username: string;
   role: string;
+  status: 'active' | 'suspended';
   avatarUrl: string | null;
   bio: string | null;
   country: string | null;
@@ -129,7 +130,7 @@ export class UsersService {
     const { data: profile, error: profileErr } = await this.supabase.client
       .from('profiles')
       .select(
-        'id,email,username,role,avatar_url,bio,country,institution,visibility,created_at',
+        'id,email,username,role,status,avatar_url,bio,country,institution,visibility,created_at',
       )
       .eq('id', userId)
       .maybeSingle();
@@ -192,12 +193,15 @@ export class UsersService {
     }
 
     const isDeveloper = profile.role === 'developer';
+    const status: 'active' | 'suspended' =
+      profile.status === 'suspended' ? 'suspended' : 'active';
 
     return {
       id: profile.id,
       email: profile.email,
       username: profile.username,
       role: profile.role,
+      status,
       avatarUrl: profile.avatar_url,
       bio: profile.bio,
       country: profile.country,
@@ -668,6 +672,14 @@ export class UsersService {
           // Non-fatal if audit_log mock table is absent
         }
 
+        try {
+          await this.supabase.client.auth?.admin?.updateUserById?.(targetId, {
+            user_metadata: { role },
+          });
+        } catch {
+          // Non-fatal if auth admin is unmocked or offline
+        }
+
         return {
           id: target.id,
           email: target.email,
@@ -679,6 +691,14 @@ export class UsersService {
       }
 
       throw new InternalServerErrorException(rpcError.message);
+    }
+
+    try {
+      await this.supabase.client.auth?.admin?.updateUserById?.(targetId, {
+        user_metadata: { role },
+      });
+    } catch {
+      // Non-fatal if auth admin is unmocked or offline
     }
 
     const row = (Array.isArray(rpcData) ? rpcData[0] : rpcData) as Record<

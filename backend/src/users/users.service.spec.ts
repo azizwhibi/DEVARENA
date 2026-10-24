@@ -203,6 +203,7 @@ describe('UsersService & DTO validation', () => {
           email: 'test@example.test',
           username: 'testuser',
           role: 'developer',
+          status: 'active',
           avatar_url: 'https://avatars.githubusercontent.com/test',
           bio: 'My bio',
           country: 'FR',
@@ -249,6 +250,7 @@ describe('UsersService & DTO validation', () => {
           email: 'test@example.test',
           username: 'testuser',
           role: 'developer',
+          status: 'active',
           avatarUrl: 'https://avatars.githubusercontent.com/test',
           bio: 'My bio',
           country: 'FR',
@@ -261,6 +263,33 @@ describe('UsersService & DTO validation', () => {
           devScore: null,
           tier: null,
         });
+      });
+
+      it('returns status suspended when profile is suspended', async () => {
+        const mockSuspended = {
+          id: userId,
+          email: 'suspended@example.test',
+          username: 'suspendeduser',
+          role: 'developer',
+          status: 'suspended',
+          avatar_url: null,
+          bio: null,
+          country: null,
+          institution: null,
+          visibility: 'public',
+          created_at: '2026-10-18T00:00:00Z',
+        };
+        mockSupabase.client.from.mockReturnValue({
+          select: () => ({
+            eq: () => ({
+              maybeSingle: jest
+                .fn()
+                .mockResolvedValue({ data: mockSuspended, error: null }),
+            }),
+          }),
+        });
+        const res = await service.getProfile(userId);
+        expect(res.status).toBe('suspended');
       });
 
       it('throws NotFoundException when profile does not exist', async () => {
@@ -352,6 +381,7 @@ describe('UsersService & DTO validation', () => {
           email: 'test@example.test',
           username: 'new_username',
           role: 'developer',
+          status: 'active',
           avatarUrl: null,
           bio: null,
           country: null,
@@ -394,6 +424,7 @@ describe('UsersService & DTO validation', () => {
           email: 'recruiter@example.test',
           username: 'recruiter1',
           role: 'recruiter',
+          status: 'active',
           avatarUrl: null,
           bio: 'Recruiter bio',
           country: null,
@@ -436,6 +467,7 @@ describe('UsersService & DTO validation', () => {
           email: 'test@example.test',
           username: 'new_username',
           role: 'developer',
+          status: 'active',
           avatarUrl: null,
           bio: 'new bio',
           country: null,
