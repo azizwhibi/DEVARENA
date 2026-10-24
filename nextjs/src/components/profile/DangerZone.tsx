@@ -54,11 +54,15 @@ export function DangerZone({ currentUsername }: DangerZoneProps) {
       <p className="mt-2 text-sm text-zinc-300">
         Deleting your account is permanent and cannot be undone.
       </p>
-      <ul className="mt-2 list-disc list-inside text-xs text-zinc-400 space-y-1">
-        <li>Your profile, credentials, and uploaded avatar will be permanently erased.</li>
+      <ul className="mt-2 list-disc list-inside text-xs text-[#A1AABD] space-y-1">
         <li>
-          Past challenge attempts are preserved anonymously for platform statistics, with
-          your identity, submitted code, and free-text answers completely scrubbed.
+          Your profile, credentials, and uploaded avatar will be permanently
+          erased.
+        </li>
+        <li>
+          Past challenge attempts are preserved anonymously for platform
+          statistics, with your identity, submitted code, and free-text answers
+          completely scrubbed.
         </li>
       </ul>
 
@@ -69,7 +73,10 @@ export function DangerZone({ currentUsername }: DangerZoneProps) {
             className="block text-sm font-medium text-zinc-200"
           >
             To confirm, type your username{' '}
-            <span className="font-mono font-bold text-red-300">{currentUsername}</span>:
+            <span className="font-mono font-semibold text-red-300">
+              {currentUsername}
+            </span>
+            :
           </label>
           <input
             id="confirm-delete-username"
@@ -78,7 +85,7 @@ export function DangerZone({ currentUsername }: DangerZoneProps) {
             onChange={(e) => setConfirmInput(e.target.value)}
             disabled={loading}
             placeholder={currentUsername}
-            className="mt-2 w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+            className="mt-2 w-full rounded-md border border-white/[0.12] bg-[#0F141D] px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             required
           />
         </div>

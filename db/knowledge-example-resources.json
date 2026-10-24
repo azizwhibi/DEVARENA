@@ -1,0 +1,77 @@
+{
+  "purpose": "Example learning resources explicitly requested by the user; no synthetic user activity.",
+  "resources": [
+    {
+      "external_source_id": "devarena-example-inner-join-v1",
+      "title": "Comprendre INNER JOIN",
+      "description": "Relier deux tables avec une clé commune et comprendre les lignes conservées par une jointure interne.",
+      "resource_type": "tutorial",
+      "difficulty": "beginner",
+      "technology_name": "PostgreSQL",
+      "tags": [
+        "sql",
+        "jointures",
+        "bases de données"
+      ],
+      "content": "Une jointure INNER JOIN combine les lignes de deux tables lorsque la condition de jointure est vraie. Une ligne sans correspondance n’apparaît pas dans le résultat.\n\nExemple pédagogique : une table clients contient id et nom ; une table commandes contient id, client_id et montant. Pour afficher chaque commande avec le nom de son client :\n\nSELECT c.nom, co.id AS commande_id, co.montant\nFROM clients AS c\nINNER JOIN commandes AS co ON co.client_id = c.id;\n\nLes alias c et co rendent les références aux colonnes plus courtes. La condition ON relie chaque commande à son client. Si un client a trois commandes, son nom apparaît sur trois lignes. Un client sans commande n’apparaît pas.\n\nPour filtrer les résultats, ajoutez une condition WHERE après la jointure :\n\nWHERE co.montant >= 100;\n\nPour conserver aussi les clients sans commande, utilisez LEFT JOIN depuis clients. Les colonnes provenant de commandes seront alors NULL pour les clients sans correspondance.\n\nÀ essayer dans une base d’exercice : créez deux clients, ajoutez deux commandes au premier et aucune au second, puis comparez INNER JOIN et LEFT JOIN. Ces noms de tables servent uniquement à l’exemple ; aucune table de votre application n’est créée ou modifiée par cette ressource.",
+      "external_url": null,
+      "estimated_minutes": null,
+      "source": "devarena",
+      "attribution": "Contenu pédagogique original rédigé pour DevArena. Exemples de code destinés à l’apprentissage ; aucune activité utilisateur simulée."
+    },
+    {
+      "external_source_id": "devarena-example-react-state-v1",
+      "title": "Gérer un état avec React",
+      "description": "Créer un compteur avec useState et mettre à jour sa valeur depuis un événement utilisateur.",
+      "resource_type": "article",
+      "difficulty": "beginner",
+      "technology_name": "React",
+      "tags": [
+        "react",
+        "état",
+        "useState"
+      ],
+      "content": "Un composant React peut conserver une valeur entre ses rendus avec le hook useState. Le hook renvoie la valeur actuelle et une fonction pour demander sa mise à jour.\n\nDans un composant interactif Next.js, utilisez une frontière client :\n\n'use client';\nimport { useState } from 'react';\n\nexport default function Compteur() {\n  const [compteur, setCompteur] = useState(0);\n\n  return (\n    <button onClick={() => setCompteur(valeur => valeur + 1)}>\n      Compteur : {compteur}\n    </button>\n  );\n}\n\nAu premier rendu, compteur vaut 0. Le clic appelle setCompteur avec une fonction qui calcule la prochaine valeur à partir de la précédente. React programme alors un nouveau rendu.\n\nQuand la prochaine valeur dépend de l’ancienne, cette forme fonctionnelle évite de dépendre d’une valeur capturée lors d’un rendu précédent. Ne modifiez pas directement une variable d’état en espérant que l’interface se mette à jour.\n\nAppelez les hooks au niveau supérieur du composant : pas dans une boucle, une condition ou un gestionnaire de clic.\n\nÀ essayer : ajoutez un bouton « Réinitialiser » qui appelle setCompteur(0). Le résultat de cet exercice est un apprentissage personnel ; il ne valide pas automatiquement un défi DevArena.",
+      "external_url": null,
+      "estimated_minutes": null,
+      "source": "devarena",
+      "attribution": "Contenu pédagogique original rédigé pour DevArena. Exemples de code destinés à l’apprentissage ; aucune activité utilisateur simulée."
+    },
+    {
+      "external_source_id": "devarena-example-async-await-v1",
+      "title": "Utiliser async/await",
+      "description": "Attendre une requête asynchrone et distinguer une erreur HTTP d’une réponse réussie.",
+      "resource_type": "tutorial",
+      "difficulty": "intermediate",
+      "technology_name": "JavaScript",
+      "tags": [
+        "javascript",
+        "async-await",
+        "gestion des erreurs"
+      ],
+      "content": "Une fonction déclarée async renvoie une promesse. Dans cette fonction, await attend le résultat d’une promesse sans bloquer le thread JavaScript pendant l’attente réseau.\n\nVoici une fonction réutilisable qui charge des données JSON depuis une URL fournie par l’appelant :\n\nasync function chargerJson(url) {\n  const reponse = await fetch(url);\n\n  if (!reponse.ok) {\n    throw new Error('Erreur HTTP : ' + reponse.status);\n  }\n\n  return await reponse.json();\n}\n\nLe code appelant peut gérer l’échec avec try/catch :\n\ntry {\n  const donnees = await chargerJson(urlDeVotreApi);\n  console.log(donnees);\n} catch (erreur) {\n  console.error('Chargement impossible', erreur);\n}\n\nCet appel doit lui-même se trouver dans une fonction async ou dans un contexte prenant en charge await au niveau supérieur. urlDeVotreApi est une variable d’exercice, pas une route fournie par DevArena.\n\nfetch ne rejette pas automatiquement sa promesse pour une réponse HTTP 404 ou 500. Le test reponse.ok est donc nécessaire pour traiter ces statuts comme des erreurs. Une réponse JSON mal formée peut aussi faire échouer reponse.json().\n\nÀ essayer : testez une réponse réussie puis une réponse HTTP d’erreur dans votre environnement d’exercice. Dans une interface, affichez un état de chargement et une action de nouvelle tentative.",
+      "external_url": null,
+      "estimated_minutes": null,
+      "source": "devarena",
+      "attribution": "Contenu pédagogique original rédigé pour DevArena. Exemples de code destinés à l’apprentissage ; aucune activité utilisateur simulée."
+    },
+    {
+      "external_source_id": "devarena-example-git-branch-v1",
+      "title": "Créer une branche Git",
+      "description": "Isoler une modification dans une branche et vérifier son état avant de créer un commit.",
+      "resource_type": "documentation",
+      "difficulty": "beginner",
+      "technology_name": null,
+      "tags": [
+        "git",
+        "branches",
+        "versionnement"
+      ],
+      "content": "Une branche Git désigne une ligne de travail. Elle permet de préparer une modification sans déplacer directement la branche principale.\n\nDans un dépôt d’exercice, commencez par vérifier la branche et les fichiers modifiés :\n\ngit status\ngit branch --show-current\n\nCréez une branche et placez-vous dessus :\n\ngit switch -c feature/ma-ressource\n\nEffectuez ensuite une petite modification, puis examinez-la :\n\ngit diff\ngit status\n\nAjoutez uniquement les fichiers voulus à la zone de préparation, puis créez un commit :\n\ngit add chemin/du/fichier\ngit commit -m \"Ajoute une ressource de formation\"\n\nVérifiez les changements préparés avec git diff --staged avant le commit si nécessaire. Le commit enregistre les changements déjà préparés ; il ne publie pas automatiquement votre travail sur un serveur distant.\n\nPour revenir à une branche existante, utilisez git switch suivi de son nom. Si des modifications locales empêchent le changement de branche, examinez-les et conservez-les avant de continuer.\n\nÀ essayer : créez une branche dans un dépôt de test, modifiez un fichier et observez git status avant et après le commit. Cette ressource ne lance aucune commande Git à votre place.",
+      "external_url": null,
+      "estimated_minutes": null,
+      "source": "devarena",
+      "attribution": "Contenu pédagogique original rédigé pour DevArena. Exemples de code destinés à l’apprentissage ; aucune activité utilisateur simulée."
+    }
+  ]
+}

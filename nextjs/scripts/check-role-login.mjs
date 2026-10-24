@@ -102,8 +102,8 @@ function testHeaderLinks() {
     'AuthHeader.tsx must link to /recruiter for recruiters and admins',
   );
   assert.ok(
-    headerContent.includes('Recruiter Portal'),
-    'AuthHeader.tsx must display Recruiter Portal label',
+    headerContent.includes('Candidate hub'),
+    'AuthHeader.tsx must display Candidate hub label',
   );
 }
 

@@ -1,3 +1,4 @@
+export const instant = false;
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
@@ -28,8 +29,11 @@ async function AdminUsersContent() {
 
   if (user.role !== 'admin') {
     return (
-      <div role="alert" className="rounded-xl border border-red-800 bg-red-950/40 p-8 text-center">
-        <h1 className="text-xl font-bold text-red-400">Not authorized</h1>
+      <div
+        role="alert"
+        className="rounded-xl border border-red-800 bg-red-950/40 p-8 text-center"
+      >
+        <h1 className="text-xl font-semibold text-red-400">Not authorized</h1>
         <p className="mt-2 text-sm text-zinc-300">
           Admin access is required to view this page.
         </p>
@@ -42,11 +46,11 @@ async function AdminUsersContent() {
 
 export default function AdminUsersPage() {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <section className="mx-auto w-full max-w-[1300px] p-8 max-sm:p-4">
       <Suspense
         fallback={
           <div
-            className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-8 text-center text-sm text-zinc-400"
+            className="rounded-xl border border-white/[0.06] bg-[#0F141D] p-8 text-center text-sm text-[#A1AABD]"
             aria-busy="true"
           >
             Checking admin access…
@@ -55,6 +59,6 @@ export default function AdminUsersPage() {
       >
         <AdminUsersContent />
       </Suspense>
-    </main>
+    </section>
   );
 }

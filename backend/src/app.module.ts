@@ -1,3 +1,8 @@
+import { MarketplaceModule } from './marketplace/marketplace.module';
+import { DuelModule } from './duel/duel.module';
+import { KnowledgeModule } from './knowledge/knowledge.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { SkillsModule } from './skills/skills.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -5,7 +10,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { MessagingModule } from './messaging/messaging.module';
 
 @Module({
   imports: [
@@ -14,7 +18,11 @@ import { MessagingModule } from './messaging/messaging.module';
     SupabaseModule,
     AuthModule,
     UsersModule,
-    MessagingModule,
+    EventEmitterModule.forRoot(),
+    SkillsModule,
+    KnowledgeModule,
+    MarketplaceModule,
+    DuelModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
