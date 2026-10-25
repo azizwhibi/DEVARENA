@@ -5,7 +5,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { apiRequest, ApiError } from '@/lib/api';
 import type { AuthUser } from '@/lib/api-core';
 
-export type Account = AuthUser & { username: string; avatarUrl?: string | null };
+export type Account = AuthUser & {
+  username: string;
+  avatarUrl?: string | null;
+  devScore?: number | null;
+  tier?: string | null;
+};
 const AccountContext = createContext<ReturnType<typeof useAccountState> | null>(
   null,
 );

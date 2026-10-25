@@ -43,49 +43,53 @@ export class ProgressAdminController {
     return this.progress.recalculate(userId, skillId);
   }
 
-  // Enregistre une tentative de défi (succès -> +score, échec -> -score) avec trace en historique
+  // Enregistre une tentative de défi et déclenche le recalcul dynamique
   @Post('users/:userId/challenges/:challengeId/attempt')
   @HttpCode(200)
   async recordAttempt(
     @Param('userId', new ParseUUIDPipe()) userId: string,
     @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
-    @Body() body?: { isSuccess?: boolean; skillId?: string },
+    @Body() body?: { isSuccess?: boolean; skillId?: string; accuracy?: number },
   ) {
     const isSuccess = body?.isSuccess ?? true;
-    const result = await this.progress.applyAttemptResult(
-      userId,
-      challengeId,
-      isSuccess,
-      body?.skillId,
-    );
+    const accuracy =
+      body?.accuracy != null ? Number(body.accuracy) : isSuccess ? 1.0 : 0.0;
+    const isValidated = Boolean(isSuccess && accuracy > 0);
 
-    if (isSuccess) {
+    const { error } = await this.supabase.client.from('attempts').insert({
+      user_id: userId,
+      challenge_id: challengeId,
+      accuracy,
+      is_validated: isValidated,
+    });
+    if (error) throw error;
+
+    if (isValidated) {
       this.events.emit(
         ATTEMPT_VALIDATED,
         new AttemptValidatedEvent(userId, challengeId),
       );
     }
 
-    return { success: true, challengeId, ...result };
+    return {
+      success: true,
+      challengeId,
+      userId,
+      isSuccess: isValidated,
+      accuracy,
+    };
   }
 
-  // Simulation d'un defi resolu avec succes : enregistre la tentative et met a jour le score en direct
+  // Simulation d'un defi resolu avec succes : enregistre la tentative et déclenche le recalcul dynamique
   @Post('users/:userId/challenges/:challengeId/simulate-validated')
   @HttpCode(200)
   async simulate(
     @Param('userId', new ParseUUIDPipe()) userId: string,
     @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
   ) {
-    const result = await this.progress.applyAttemptResult(
-      userId,
-      challengeId,
-      true,
-    );
-    this.events.emit(
-      ATTEMPT_VALIDATED,
-      new AttemptValidatedEvent(userId, challengeId),
-    );
-
-    return { success: true, challengeId, ...result };
+    return this.recordAttempt(userId, challengeId, {
+      isSuccess: true,
+      accuracy: 1.0,
+    });
   }
 }

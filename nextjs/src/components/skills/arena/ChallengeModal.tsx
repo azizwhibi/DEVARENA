@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
+import { apiRequest } from '@/lib/api';
 export interface ChallengeModalProps {
   challengeId: string;
   challengeTitle?: string;
@@ -1404,8 +1405,11 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
   challengeTitle = 'DevArena technical challenge',
   category = 'Debugging',
   difficulty = 'medium',
+  points,
   skillId,
   onClose,
+  onSuccess,
+  onFailure,
 }) => {
   const bank = resolveBank(challengeId, challengeTitle, skillId);
   const [currentQuestion, setCurrentQuestion] = useState<Question>(() =>
@@ -1452,21 +1456,43 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
     const chosen = currentQuestion.options.find((o) => o.id === selectedOption);
     const isSuccess = chosen?.isCorrect ?? false;
     try {
-      // Answers are in the browser, so practice must not write verified scores.
+      const isUuid =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          challengeId,
+        );
+      if (isUuid) {
+        await apiRequest(
+          `/me/skills/challenges/${encodeURIComponent(challengeId)}/attempt`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              isSuccess,
+              accuracy: isSuccess ? 1.0 : 0.0,
+            }),
+          },
+        );
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('skill-progress-updated'));
+        }
+      }
       if (isSuccess) {
         setApiMsg(
-          'Correct answer. Practice completed without changing your verified score.',
+          'Correct answer! Your skill progress and Dev Score have been updated.',
         );
+        onSuccess?.(points ?? 10);
       } else {
         setApiMsg(
-          'Incorrect answer. Review the explanation and retry. Your verified score is unchanged.',
+          'Incorrect answer. Review the explanation and retry. Attempt recorded.',
         );
+        onFailure?.(0);
       }
     } catch {
       if (isSuccess) {
-        setApiMsg('Practice completed.');
+        setApiMsg('Correct answer! Practice attempt completed.');
+        onSuccess?.(points ?? 10);
       } else {
-        setApiMsg('Practice completed.');
+        setApiMsg('Incorrect answer. Review the explanation and retry.');
+        onFailure?.(0);
       }
     } finally {
       setIsSubmitting(false);

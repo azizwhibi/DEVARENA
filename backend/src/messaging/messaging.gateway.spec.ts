@@ -103,5 +103,60 @@ describe('MessagingGateway', () => {
       expect(senderWs.send).toHaveBeenCalledWith(expectedPayload);
       expect(recipientWs.send).toHaveBeenCalledWith(expectedPayload);
     });
+
+    it('broadcasts user_typing only to partner in conversation', async () => {
+      const senderId = 'user-1';
+      const partnerId = 'user-2';
+      const conversationId = 'conv-200';
+
+      (mockMessagingService.getConversationParticipantIds as jest.Mock).mockResolvedValueOnce([
+        senderId,
+        partnerId,
+      ]);
+
+      const senderWs = { readyState: 1, send: jest.fn() };
+      const partnerWs = { readyState: 1, send: jest.fn() };
+
+      (gateway as any).userSockets.set(senderId, new Set([senderWs]));
+      (gateway as any).userSockets.set(partnerId, new Set([partnerWs]));
+
+      await (gateway as any).handleClientMessage(senderId, {
+        event: 'typing',
+        data: { conversationId, isTyping: true },
+      });
+
+      expect(senderWs.send).not.toHaveBeenCalled();
+      expect(partnerWs.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          event: 'user_typing',
+          data: { conversationId, userId: senderId, isTyping: true },
+        }),
+      );
+    });
+
+    it('ignores send_message if conversationId or content is missing', async () => {
+      await (gateway as any).handleClientMessage('user-1', {
+        event: 'send_message',
+        data: { conversationId: '', content: '' },
+      });
+
+      expect(mockMessagingService.saveMessage).not.toHaveBeenCalled();
+    });
+
+    it('unregisters socket correctly on close', () => {
+      const ws1 = { readyState: 1, send: jest.fn() } as any;
+      const ws2 = { readyState: 1, send: jest.fn() } as any;
+
+      (gateway as any).registerSocket('user-1', ws1);
+      (gateway as any).registerSocket('user-1', ws2);
+
+      expect((gateway as any).userSockets.get('user-1').size).toBe(2);
+
+      (gateway as any).unregisterSocket('user-1', ws1);
+      expect((gateway as any).userSockets.get('user-1').size).toBe(1);
+
+      (gateway as any).unregisterSocket('user-1', ws2);
+      expect((gateway as any).userSockets.has('user-1')).toBe(false);
+    });
   });
 });

@@ -8,6 +8,7 @@ import { useSkillSummary } from '@/components/skills/useSkillSummary';
 import { HistoryChart } from '@/components/skills/profile/HistoryChart';
 import { ApiService } from '@/lib/skills/api';
 import { marketplaceApi } from '@/lib/marketplace/api';
+import { listReceivedInvitations, type InvitationItem } from '@/lib/messaging';
 import styles from './dashboard.module.css';
 export default function DashboardPage() {
   const account = useSkillsAccount();
@@ -21,12 +22,22 @@ export default function DashboardPage() {
     }
   }, [account.role, router]);
 
-  const { skills, evaluated, average, history, pending, error, available } =
-    useSkillSummary();
+  const {
+    skills,
+    evaluated,
+    average,
+    devScore,
+    tier,
+    history,
+    pending,
+    error,
+    available,
+  } = useSkillSummary();
   const [balance, setBalance] = useState<number | null>(null);
   const [challenge, setChallenge] = useState<
     Awaited<ReturnType<typeof ApiService.getPracticeChallenges>>[number] | null
   >(null);
+  const [pendingInvitations, setPendingInvitations] = useState<InvitationItem[]>([]);
   const [catalogFailure, setCatalogFailure] = useState(false);
   const [today, setToday] = useState<Date | null>(null);
   useEffect(() => {
@@ -38,6 +49,15 @@ export default function DashboardPage() {
       .getBalance()
       .then((value) => {
         if (active) setBalance(value);
+      })
+      .catch(() => {});
+    void listReceivedInvitations()
+      .then((invites) => {
+        if (active) {
+          setPendingInvitations(
+            (invites || []).filter((i) => i.status === 'pending'),
+          );
+        }
       })
       .catch(() => {});
     void ApiService.getPracticeChallenges()
@@ -92,6 +112,33 @@ export default function DashboardPage() {
           {error}
         </p>
       )}
+      {pendingInvitations.length > 0 && (
+        <section
+          className="mb-6 rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5 flex flex-wrap items-center justify-between gap-4"
+          aria-labelledby="invitations-alert-title"
+        >
+          <div>
+            <h2
+              id="invitations-alert-title"
+              className="text-base font-semibold text-zinc-100 flex items-center gap-2"
+            >
+              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              {pendingInvitations.length} Pending Interview Request
+              {pendingInvitations.length > 1 ? 's' : ''}
+            </h2>
+            <p className="mt-1 text-xs text-zinc-300">
+              Recruiters are interested in your profile. Review their requests and
+              connect.
+            </p>
+          </div>
+          <Link
+            href="/invitations"
+            className="rounded-lg bg-emerald-500 px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-emerald-400"
+          >
+            Review Requests →
+          </Link>
+        </section>
+      )}
       {pending ? (
         <div
           className="analysis-skeleton"
@@ -110,16 +157,18 @@ export default function DashboardPage() {
             >
               <div className={styles.cardBody}>
                 <h2 id="score-title" className="ui-label">
-                  Average skill proficiency
+                  Dev Score & Tier
                 </h2>
                 <div className={styles.scoreValue}>
-                  {average === null ? '—' : average}
-                  <span>{average !== null ? '%' : ''}</span>
+                  {devScore === null ? '—' : devScore}
+                  <span>{devScore !== null ? '%' : ''}</span>
                 </div>
                 <p className={styles.subtitle}>
-                  {evaluated.length
-                    ? 'Based on assessed skills'
-                    : 'No verified assessments yet'}
+                  {tier
+                    ? `${tier} Tier • Median proficiency across assessed skills`
+                    : evaluated.length
+                      ? 'Based on assessed skills'
+                      : 'No verified assessments yet'}
                 </p>
                 <div className={styles.chartHeading}>
                   <span className="ui-label">Assessment history</span>

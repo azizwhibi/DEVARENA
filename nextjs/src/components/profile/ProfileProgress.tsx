@@ -4,8 +4,16 @@ import { useSkillSummary } from '@/components/skills/useSkillSummary';
 import { RadarChart } from '@/components/skills/profile/RadarChart';
 
 export function ProfileProgress({ createdAt }: { createdAt: string }) {
-  const { skills, evaluated, average, pending, error, available } =
-    useSkillSummary();
+  const {
+    skills,
+    evaluated,
+    average,
+    devScore,
+    tier,
+    pending,
+    error,
+    available,
+  } = useSkillSummary();
   if (pending)
     return (
       <div
@@ -33,8 +41,12 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
           <dd>{available ? evaluated.length : '—'}</dd>
         </div>
         <div>
-          <dt>Average proficiency</dt>
-          <dd>{average === null ? '—' : average + '%'}</dd>
+          <dt>Dev Score (Median)</dt>
+          <dd>
+            {devScore === null
+              ? '—'
+              : `${devScore}%${tier ? ` (${tier})` : ''}`}
+          </dd>
         </div>
       </dl>
       <div className="profile-panels">
@@ -52,7 +64,11 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
           <div className="identity-detail">
             <span>Assessment</span>
             <strong>
-              {evaluated.length ? 'Measured proficiency' : 'Not yet assessed'}
+              {tier
+                ? `${tier} Tier`
+                : evaluated.length
+                  ? 'Measured proficiency'
+                  : 'Not yet assessed'}
             </strong>
           </div>
           <Link href="/my-skills" className="ui-button">

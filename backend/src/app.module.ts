@@ -1,3 +1,5 @@
+import { RankingsModule } from './rankings/rankings.module';
+import { MessagingModule } from './messaging/messaging.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { DuelModule } from './duel/duel.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
@@ -23,6 +25,8 @@ import { UsersModule } from './users/users.module';
     KnowledgeModule,
     MarketplaceModule,
     DuelModule,
+    MessagingModule,
+    RankingsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

@@ -159,7 +159,7 @@ describe('Recruiter Candidates Hub (Live Database Candidates)', () => {
       expect(candidate.availability).toBe('Open to offers');
 
       // Zero Raw PII assertion: email must be undefined
-      expect((candidate as Record<string, unknown>).email).toBeUndefined();
+      expect((candidate as unknown as Record<string, unknown>).email).toBeUndefined();
     });
 
     it('filters by search term q and country', async () => {

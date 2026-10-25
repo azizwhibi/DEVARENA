@@ -160,7 +160,7 @@ describe('Battle Code real WebSocket transport (isolated auth and persistence)',
     send(b, 'DUEL_MATCH_ACCEPT', { duelId });
     const round = await wait(a, 'DUEL_ROUND_START');
     await wait(b, 'DUEL_ROUND_START');
-    expect(round.payload.question.correctIndex).toBeUndefined();
+    expect((round.payload.question as any).correctIndex).toBeUndefined();
     expect(round.payload.totalQuestions).toBe(10);
     const correct = rooms.getRoom(duelId)!.questions[0].correctIndex;
     send(a, 'DUEL_SUBMIT_ANSWER', {

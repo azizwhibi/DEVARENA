@@ -529,9 +529,59 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      dev_scores: {
+        Row: {
+          user_id: string;
+          username: string;
+          avatar_url: string | null;
+          country: string | null;
+          institution: string | null;
+          institution_key: string | null;
+          visibility: string;
+          status: string;
+          dev_score: number | null;
+          skill_count: number;
+          score_reached_at: string | null;
+          tier: string;
+          scoring_version: string;
+          eligible: boolean;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
+      leaderboard: {
+        Args: {
+          p_scope?: string;
+          p_value?: string | null;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: {
+          rank: number;
+          user_id: string;
+          username: string;
+          avatar_url: string | null;
+          country: string | null;
+          institution: string | null;
+          dev_score: number | null;
+          tier: string;
+          total: number;
+        }[];
+      };
+      my_rank: {
+        Args: {
+          p_user_id: string;
+          p_scope?: string;
+          p_value?: string | null;
+        };
+        Returns: {
+          rank: number | null;
+          dev_score: number | null;
+          tier: string | null;
+          eligible: boolean;
+        }[];
+      };
       update_profile: {
         Args: {
           p_id: string;

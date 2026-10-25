@@ -265,6 +265,59 @@ describe('UsersService & DTO validation', () => {
         });
       });
 
+      it('populates calculated devScore and tier when available in dev_scores view', async () => {
+        const mockDevProfile = {
+          id: userId,
+          email: 'dev@example.test',
+          username: 'devuser',
+          role: 'developer',
+          status: 'active',
+          avatar_url: null,
+          bio: null,
+          country: null,
+          institution: null,
+          visibility: 'public',
+          created_at: '2026-10-18T00:00:00Z',
+        };
+
+        mockSupabase.client.from.mockImplementation((table: string) => {
+          if (table === 'profiles') {
+            return {
+              select: () => ({
+                eq: () => ({
+                  maybeSingle: () => Promise.resolve({ data: mockDevProfile, error: null }),
+                }),
+              }),
+            };
+          }
+          if (table === 'profile_technologies') {
+            return {
+              select: () => ({
+                eq: () => Promise.resolve({ data: [], error: null }),
+              }),
+            };
+          }
+          if (table === 'dev_scores') {
+            return {
+              select: () => ({
+                eq: () => ({
+                  maybeSingle: () =>
+                    Promise.resolve({
+                      data: { dev_score: 82.5, tier: 'advanced' },
+                      error: null,
+                    }),
+                }),
+              }),
+            };
+          }
+          return {};
+        });
+
+        const res = await service.getProfile(userId);
+        expect(res.devScore).toBe(82.5);
+        expect(res.tier).toBe('advanced');
+      });
+
       it('returns status suspended when profile is suspended', async () => {
         const mockSuspended = {
           id: userId,

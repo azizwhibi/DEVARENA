@@ -196,6 +196,28 @@ export class UsersService {
     const status: 'active' | 'suspended' =
       profile.status === 'suspended' ? 'suspended' : 'active';
 
+    let devScore: number | null = null;
+    let tier: string | null = null;
+
+    if (isDeveloper) {
+      try {
+        const { data: scoreRow } = await this.supabase.client
+          .from('dev_scores')
+          .select('dev_score, tier')
+          .eq('user_id', profile.id)
+          .maybeSingle();
+
+        if (scoreRow?.dev_score != null) {
+          devScore = Math.round(Number(scoreRow.dev_score) * 100) / 100;
+        }
+        if (scoreRow?.tier) {
+          tier = scoreRow.tier;
+        }
+      } catch {
+        // non-fatal
+      }
+    }
+
     return {
       id: profile.id,
       email: profile.email,
@@ -209,8 +231,8 @@ export class UsersService {
       technologies: isDeveloper ? technologies : [],
       visibility: profile.visibility,
       createdAt: profile.created_at,
-      devScore: null,
-      tier: null,
+      devScore,
+      tier,
     };
   }
 

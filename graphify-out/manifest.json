@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "backend/src/app.module.ts": {
-    "mtime": 1792871895.300293,
-    "seen": 1792872380.1253664,
-    "ast_hash": "1dde4445eeffd0cd26229645cdd5f81c",
+    "mtime": 1792964009.4093633,
+    "seen": 1792964337.0489767,
+    "ast_hash": "eec331123c625d96fb5f7bfbee1bdb0c",
     "semantic_hash": ""
   },
   "backend/src/auth/account.service.spec.ts": {
@@ -96,15 +96,15 @@
     "semantic_hash": "c489c1abdea7208d5e5bfbaf49cd9a97"
   },
   "backend/src/main.ts": {
-    "mtime": 1792877192.8486018,
-    "seen": 1792877443.8524418,
-    "ast_hash": "18e4ebbd0fff6517f9c7a864d53e1931",
+    "mtime": 1792877858.3535984,
+    "seen": 1792964337.0534205,
+    "ast_hash": "f3de605f07d595ccf4277afdd906fd6f",
     "semantic_hash": ""
   },
   "backend/src/supabase/database.types.ts": {
-    "mtime": 1792874491.7513552,
-    "seen": 1792874981.021736,
-    "ast_hash": "83a2fc2e8fcd190310d3cc151e2eb992",
+    "mtime": 1792964086.611369,
+    "seen": 1792964337.0630438,
+    "ast_hash": "44bda5dbd89fa16a88f4b1cd17cf57db",
     "semantic_hash": ""
   },
   "backend/src/supabase/supabase.module.ts": {
@@ -360,9 +360,9 @@
     "semantic_hash": "40d41a8f54a0ced00eb510adac790814"
   },
   "nextjs/src/components/AuthHeader.tsx": {
-    "mtime": 1792874547.8383772,
-    "seen": 1792874981.0298615,
-    "ast_hash": "08139f5e581ceae9bd78769c8ff806c4",
+    "mtime": 1792966905.0821724,
+    "seen": 1792967058.0974271,
+    "ast_hash": "8c0f104b069ca9413983d084fec0354e",
     "semantic_hash": ""
   },
   "nextjs/src/components/auth/LoginForm.tsx": {
@@ -516,9 +516,9 @@
     "semantic_hash": ""
   },
   "todo.md": {
-    "mtime": 1792876844.2313073,
-    "seen": 1792877443.9146469,
-    "ast_hash": "90ccebebada201674da059d3338b4fb9",
+    "mtime": 1792967502.0627804,
+    "seen": 1792967664.4340503,
+    "ast_hash": "b278b65310f395189c46a59be28322e7",
     "semantic_hash": ""
   },
   "nextjs/public/sw.js": {
@@ -660,15 +660,15 @@
     "semantic_hash": ""
   },
   "backend/src/users/users.service.spec.ts": {
-    "mtime": 1792877186.4628098,
-    "seen": 1792877443.8638227,
-    "ast_hash": "14667140241eb47b2a5bbef04ca8a1b3",
+    "mtime": 1792964220.1192787,
+    "seen": 1792964337.0655105,
+    "ast_hash": "5c225efbbb07bd5af03782a35d672318",
     "semantic_hash": ""
   },
   "backend/src/users/users.service.ts": {
-    "mtime": 1792877218.5754066,
-    "seen": 1792877443.8638241,
-    "ast_hash": "015f46e53078fa83d7c70e48fe7368b0",
+    "mtime": 1792964154.4427104,
+    "seen": 1792964337.065512,
+    "ast_hash": "b0bdcf808192dc87fee6dc9ef49e7000",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-profile.mjs": {
@@ -792,9 +792,9 @@
     "semantic_hash": ""
   },
   "nextjs/scripts/check-role-login.mjs": {
-    "mtime": 1792877383.8034556,
-    "seen": 1792877443.8681033,
-    "ast_hash": "7017fbbb7a6eb11ac971405a72be10c2",
+    "mtime": 1792877919.4250083,
+    "seen": 1792964337.0702157,
+    "ast_hash": "e2bd857585930eee71244aabc1c5623d",
     "semantic_hash": ""
   },
   "nextjs/src/app/recruiter/page.tsx": {
@@ -804,9 +804,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/recruiter/RecruiterDashboard.tsx": {
-    "mtime": 1792872089.2544837,
-    "seen": 1792872380.1482542,
-    "ast_hash": "35f983697f3e15f6302d746680b65f5f",
+    "mtime": 1792967611.956088,
+    "seen": 1792967664.4213445,
+    "ast_hash": "32d31b8cde48d29e47caec2d25129a01",
     "semantic_hash": ""
   },
   "nextjs/src/lib/role-login.ts": {
@@ -822,9 +822,9 @@
     "semantic_hash": ""
   },
   "backend/src/users/candidates.spec.ts": {
-    "mtime": 1792499270.2108414,
-    "seen": 1792499357.708608,
-    "ast_hash": "6b3eb79b19431a9830dd697c5ef2db73",
+    "mtime": 1792964297.8110113,
+    "seen": 1792964337.0639305,
+    "ast_hash": "e63ed45d0620a35f49a5fe71119fda86",
     "semantic_hash": ""
   },
   "backend/src/users/dto/list-candidates.query.ts": {
@@ -834,9 +834,9 @@
     "semantic_hash": ""
   },
   "nextjs/scripts/check-recruiter-candidates.mjs": {
-    "mtime": 1792499216.649356,
-    "seen": 1792499357.7117076,
-    "ast_hash": "17fd0487e329c3a6d47a43f8178cde34",
+    "mtime": 1792967514.3215816,
+    "seen": 1792967664.4023387,
+    "ast_hash": "7fa365a3534685cb430b9d531ff02bcf",
     "semantic_hash": ""
   },
   "nextjs/src/lib/candidates.ts": {
@@ -888,9 +888,9 @@
     "semantic_hash": ""
   },
   "backend/src/messaging/messaging.gateway.spec.ts": {
-    "mtime": 1792500674.5244918,
-    "seen": 1792518451.9238636,
-    "ast_hash": "636446f28c0e6a593860ad64e7aae7c3",
+    "mtime": 1792963719.1426575,
+    "seen": 1792964337.0568051,
+    "ast_hash": "852f5dcf1c7bcae0c37e57db1e949c89",
     "semantic_hash": ""
   },
   "backend/src/messaging/messaging.gateway.ts": {
@@ -1014,9 +1014,9 @@
     "semantic_hash": ""
   },
   "backend/src/duel/duel.gateway.spec.ts": {
-    "mtime": 1792874491.5000467,
-    "seen": 1792874981.019721,
-    "ast_hash": "ca3739bb1bea13f0c64b3a7b4cfd81e8",
+    "mtime": 1792964301.2280304,
+    "seen": 1792964337.051633,
+    "ast_hash": "81cc434821ed63622822fd46c07081c7",
     "semantic_hash": ""
   },
   "backend/src/duel/duel.gateway.ts": {
@@ -1278,15 +1278,15 @@
     "semantic_hash": ""
   },
   "backend/src/skills/me-skills.controller.ts": {
-    "mtime": 1792874491.6899595,
-    "seen": 1792874981.021736,
-    "ast_hash": "a50406c87f006937389ddd75a830e8a9",
+    "mtime": 1792966679.4713733,
+    "seen": 1792967058.0677152,
+    "ast_hash": "e9b6de35c143fd4963583f934727d4f7",
     "semantic_hash": ""
   },
   "backend/src/skills/progress-admin.controller.ts": {
-    "mtime": 1792874491.6940866,
-    "seen": 1792874981.021736,
-    "ast_hash": "943e22f4772704987045448fd3b8aa80",
+    "mtime": 1792963824.2471168,
+    "seen": 1792964337.0603662,
+    "ast_hash": "3440dde3ae629c2b05ee1f88cdf4f134",
     "semantic_hash": ""
   },
   "backend/src/skills/scoring/level.calculator.spec.ts": {
@@ -1320,9 +1320,9 @@
     "semantic_hash": ""
   },
   "backend/src/skills/skill-progress.service.ts": {
-    "mtime": 1792874491.7157505,
-    "seen": 1792874981.021736,
-    "ast_hash": "c2c1db59c63548cb1255066944260e2d",
+    "mtime": 1792963812.1295345,
+    "seen": 1792964337.0612066,
+    "ast_hash": "167ece0dd4d22bea939d71ab2de38869",
     "semantic_hash": ""
   },
   "backend/src/skills/skills-database.service.ts": {
@@ -1518,9 +1518,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/app/(skills)/dashboard/page-client.tsx": {
-    "mtime": 1792874742.6119208,
-    "seen": 1792874981.02927,
-    "ast_hash": "5d8e1788cee205a1f03f494b15ecf9c0",
+    "mtime": 1792966821.6560097,
+    "seen": 1792967058.0903428,
+    "ast_hash": "2021955e80e7771ce187331bec30252a",
     "semantic_hash": ""
   },
   "nextjs/src/app/(skills)/dashboard/page.tsx": {
@@ -1620,9 +1620,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/AccountProvider.tsx": {
-    "mtime": 1792877358.6603117,
-    "seen": 1792877443.8765574,
-    "ast_hash": "29ec37c71be5721d3e5005fe7c91ed66",
+    "mtime": 1792966869.750029,
+    "seen": 1792967058.0971916,
+    "ast_hash": "916656194472c7ecc40689fc5709e1cd",
     "semantic_hash": ""
   },
   "nextjs/src/components/ApplicationShell.tsx": {
@@ -1722,9 +1722,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/duel/DuelArena.tsx": {
-    "mtime": 1792874799.5948558,
-    "seen": 1792874981.0298615,
-    "ast_hash": "415cfe46b52b2ba85974b9bd0b0073ea",
+    "mtime": 1792966745.5438719,
+    "seen": 1792967058.1026857,
+    "ast_hash": "906d8865a5f3fbb197e24c1fb38336fc",
     "semantic_hash": ""
   },
   "nextjs/src/components/knowledge/KnowledgeAdmin.tsx": {
@@ -1800,9 +1800,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/profile/ProfileProgress.tsx": {
-    "mtime": 1792874491.3383472,
-    "seen": 1792874981.0308754,
-    "ast_hash": "f38f9f8ffc0c0db09dc221cb2a65a55c",
+    "mtime": 1792966835.2683377,
+    "seen": 1792967058.106239,
+    "ast_hash": "c222276f747f5fa41f1da0351cac9383",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/SkillsWorkspace.tsx": {
@@ -1830,9 +1830,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/arena/ChallengeModal.tsx": {
-    "mtime": 1792874491.373254,
-    "seen": 1792874981.0308754,
-    "ast_hash": "1b12916fc8a53444f598e51756f3179b",
+    "mtime": 1792966911.399155,
+    "seen": 1792967058.108481,
+    "ast_hash": "6446344faa92e8564f11dbc2f0a374cd",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/profile/HistoryChart.tsx": {
@@ -1854,9 +1854,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/useSkillSummary.ts": {
-    "mtime": 1792874491.4043968,
-    "seen": 1792874981.0308754,
-    "ast_hash": "99fb7452db82cf2661848222710d5ca4",
+    "mtime": 1792966798.8994498,
+    "seen": 1792967058.109124,
+    "ast_hash": "7a50136bbddcf527c6913f964aab57c7",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/useWorkspaceDialogs.ts": {
@@ -1992,21 +1992,99 @@
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1792876817.7863197,
-    "seen": 1792877443.9146397,
-    "ast_hash": "cb382678f7451678545d5fca47531217",
+    "mtime": 1792967480.554832,
+    "seen": 1792967664.4340467,
+    "ast_hash": "35f589b4d323898863d5464904d72fa1",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1792876829.8716822,
-    "seen": 1792877443.9146435,
-    "ast_hash": "c9e7d8e1ed55a4ec5a06bf1793f45922",
+    "mtime": 1792967493.347715,
+    "seen": 1792967664.4340484,
+    "ast_hash": "6f7e9d7cd029a20f004e9f4b363d0e56",
     "semantic_hash": ""
   },
   "SPEC-account-availability.md": {
     "mtime": 1792876794.6385,
     "seen": 1792877443.906845,
     "ast_hash": "a96863fd8f0c2ef37b2e6775c33d446b",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/dto/rankings-query.dto.ts": {
+    "mtime": 1792963982.0835822,
+    "seen": 1792964337.0574346,
+    "ast_hash": "6d207aae0d2c26e7e1d4640d470aa074",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rankings.controller.ts": {
+    "mtime": 1792963995.4461813,
+    "seen": 1792964337.057437,
+    "ast_hash": "f47843df639680bf95cae6d35766705d",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rankings.module.ts": {
+    "mtime": 1792963999.3679364,
+    "seen": 1792964337.0574386,
+    "ast_hash": "e5422d2ecdeb869b8de193d98f82596f",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rankings.service.spec.ts": {
+    "mtime": 1792964020.7934988,
+    "seen": 1792964337.0574403,
+    "ast_hash": "07222aaa291538d9df8c19f5e77039a1",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rankings.service.ts": {
+    "mtime": 1792963990.701656,
+    "seen": 1792964337.0574417,
+    "ast_hash": "bf25792b87c700dbdd875ae27cc32f36",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/progress.spec.ts": {
+    "mtime": 1792963848.9302392,
+    "seen": 1792964337.0603683,
+    "ast_hash": "099b1cc7832b811ce54225df12b2e98c",
+    "semantic_hash": ""
+  },
+  "SPEC-scoring.md": {
+    "mtime": 1792963325.1757414,
+    "seen": 1792964337.0903196,
+    "ast_hash": "8def41f7886e48978ff17ef8748900df",
+    "semantic_hash": ""
+  },
+  "SPEC-ws-chat.md": {
+    "mtime": 1792963373.338413,
+    "seen": 1792964337.0903366,
+    "ast_hash": "53b97864255dd9e763ebe3ffd951ac16",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/me-skills.controller.spec.ts": {
+    "mtime": 1792966688.4786372,
+    "seen": 1792967058.067712,
+    "ast_hash": "6ee3ceb98a3a8ee480ecaa2dc4dae5c4",
+    "semantic_hash": ""
+  },
+  "SPEC-developer-invitations.md": {
+    "mtime": 1792966253.6274586,
+    "seen": 1792967058.1173754,
+    "ast_hash": "1616c2c0c13cdb3f50df2056a1144a68",
+    "semantic_hash": ""
+  },
+  "SPEC-practice-scoring.md": {
+    "mtime": 1792966266.7497723,
+    "seen": 1792967058.117596,
+    "ast_hash": "0006e89dc554603f856971c878c1f313",
+    "semantic_hash": ""
+  },
+  "SPEC-user-scores-ui.md": {
+    "mtime": 1792966277.5342429,
+    "seen": 1792967058.118203,
+    "ast_hash": "3dd36e019f3a2abe7536bd0ae1b33527",
+    "semantic_hash": ""
+  },
+  "SPEC-invitation-delivery.md": {
+    "mtime": 1792967464.8816164,
+    "seen": 1792967664.429759,
+    "ast_hash": "15bd68949a8c9fb59866ff07806daba0",
     "semantic_hash": ""
   }
 }

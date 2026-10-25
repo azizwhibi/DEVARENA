@@ -194,8 +194,32 @@ function testPrivacyCompliance() {
   );
 }
 
+// 4. Invitation delivery functional verification
+function testInvitationDelivery() {
+  const dashboardSrc = readFileSync(
+    resolve(__dirname, '../src/components/recruiter/RecruiterDashboard.tsx'),
+    'utf8',
+  );
+
+  assert.ok(
+    !dashboardSrc.includes('Invitation delivery is not available yet'),
+    'Placeholder "Invitation delivery is not available yet" must be eliminated from RecruiterDashboard',
+  );
+
+  assert.ok(
+    dashboardSrc.includes('sendInvitation'),
+    'RecruiterDashboard must import and invoke sendInvitation',
+  );
+
+  assert.ok(
+    dashboardSrc.includes('/invitations'),
+    'RecruiterDashboard must provide navigation link to /invitations for tracking sent requests',
+  );
+}
+
 testBuildCandidatesQuery();
 testFilterCandidates();
 testPrivacyCompliance();
+testInvitationDelivery();
 
-console.log('PASS: 18 recruiter candidate database scenarios (query building, filtering, privacy, UI integrity)');
+console.log('PASS: 21 recruiter candidate database scenarios (query building, filtering, privacy, UI integrity, invitation delivery)');

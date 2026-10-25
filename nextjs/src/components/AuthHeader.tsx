@@ -101,6 +101,35 @@ export function AuthHeader() {
                   <WorkspaceIcon name="settings" />
                   Settings
                 </Link>
+                {account?.role === 'developer' && (
+                  <>
+                    {account.devScore != null && (
+                      <div
+                        className={styles.item}
+                        style={{
+                          opacity: 0.9,
+                          pointerEvents: 'none',
+                          fontSize: '0.8125rem',
+                        }}
+                      >
+                        <WorkspaceIcon name="skills" />
+                        <span>
+                          Dev Score:{' '}
+                          <strong>{account.devScore}%</strong>{' '}
+                          {account.tier ? `(${account.tier})` : ''}
+                        </span>
+                      </div>
+                    )}
+                    <Link href="/invitations" className={styles.item}>
+                      <WorkspaceIcon name="links" />
+                      Interview requests
+                    </Link>
+                    <Link href="/messages" className={styles.item}>
+                      <WorkspaceIcon name="chat" />
+                      Live messages
+                    </Link>
+                  </>
+                )}
                 {account?.role === 'admin' && (
                   <Link href="/admin/users" className={styles.item}>
                     <WorkspaceIcon name="users" />
