@@ -1,0 +1,216 @@
+.dashboard {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+.subtitle {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 24px;
+}
+.scoreCard {
+  padding: 0;
+  overflow: hidden;
+}
+.cardBody {
+  padding: 28px 28px 12px;
+}
+.scoreValue {
+  margin-top: 16px;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.scoreValue span {
+  font-size: 22px;
+  color: var(--muted-foreground);
+  margin-left: 4px;
+}
+.chartHeading {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.challengeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  background:
+    linear-gradient(145deg, rgba(139, 92, 246, 0.07), transparent 70%),
+    var(--card);
+}
+.cardIcon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid #47335f;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #c4b5fd;
+}
+.challengeCard h3 {
+  font-size: 23px;
+  line-height: 1.4;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.challengeCard p {
+  margin: 0;
+}
+.challengeCard > a {
+  margin-top: auto;
+  width: 100%;
+}
+.difficulty {
+  text-transform: capitalize;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+.marketplace {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #393047;
+  border-radius: 16px;
+  background: var(--card);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.marketplace:hover {
+  border-color: #8b5cf6;
+}
+.marketplace strong,
+.marketplace small {
+  display: block;
+}
+.marketplace strong {
+  font-weight: 500;
+}
+.marketplace small {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.balance {
+  margin-left: auto;
+  font-size: 13px;
+  color: #c4b5fd;
+  white-space: nowrap;
+}
+.insights {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+.activity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity:last-child {
+  border: 0;
+}
+.activity small {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  margin-top: 4px;
+}
+.activity svg {
+  color: var(--muted-foreground);
+}
+.insightValue {
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+.insights .ui-button {
+  margin-top: 20px;
+}
+@media (max-width: 1000px) {
+  .content {
+    grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr);
+  }
+  .cardBody {
+    padding: 24px 20px 8px;
+  }
+}
+@media (max-width: 767px) {
+  .dashboard {
+    padding: 24px 16px;
+  }
+  .title {
+    font-size: 28px;
+  }
+  .content,
+  .insights {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .marketplace {
+    flex-wrap: wrap;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .marketplace > span:nth-child(2) {
+    flex: 1;
+  }
+  .balance {
+    margin-left: 56px;
+  }
+  .challengeCard {
+    gap: 16px;
+  }
+  .scoreValue {
+    font-size: 42px;
+  }
+}
