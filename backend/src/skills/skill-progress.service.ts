@@ -71,7 +71,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException("Skill not found.");
+    if (!skill) throw new NotFoundException('Skill not found.');
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')
@@ -139,7 +139,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException("Skill not found.");
+    if (!skill) throw new NotFoundException('Skill not found.');
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')
@@ -239,98 +239,50 @@ export class SkillProgressService {
     return { userId, skillId, ...result };
   }
 
-  /**
-   * Applique le résultat d'une tentative de défi en direct :
-   * - Si correct (succès) : augmente le score (+6%) et enregistre dans l'historique
-   * - Si incorrect (échec) : diminue le score (-6%) et enregistre dans l'historique
-   */
+  /** Only trusted server/admin assessments call this; browser practice never does. */
   async applyAttemptResult(
     userId: string,
     challengeId: string,
     isSuccess: boolean,
     specificSkillId?: string,
   ) {
-    // 1. Enregistre la tentative dans la table attempts
-    await this.supabase.client.from('attempts').insert({
+    const { data: challenge, error: challengeError } =
+      await this.supabase.client
+        .from('challenges')
+        .select('id')
+        .eq('id', challengeId)
+        .maybeSingle();
+    if (challengeError) throw challengeError;
+    if (!challenge) throw new NotFoundException('Problem not found.');
+    const { data: links, error: linkError } = await this.supabase.client
+      .from('challenge_skills')
+      .select('skill_id')
+      .eq('challenge_id', challengeId);
+    if (linkError) throw linkError;
+    const skillIds = [
+      ...new Set<string>(
+        (links ?? []).map((link: { skill_id: string }) => link.skill_id),
+      ),
+    ];
+    if (specificSkillId && !skillIds.includes(specificSkillId)) {
+      throw new NotFoundException('This skill is not linked to the problem.');
+    }
+    const { error } = await this.supabase.client.from('attempts').insert({
       user_id: userId,
       challenge_id: challengeId,
-      accuracy: isSuccess ? 1.0 : 0.0,
+      accuracy: isSuccess ? 1 : 0,
       is_validated: isSuccess,
+      metadata: { validation_source: 'admin_assessment' },
     });
-
-    // 2. Trouve les compétences à impacter :
-    // Si une compétence spécifique est ciblée (par exemple depuis le bouton "Défier" d'une compétence précise),
-    // on met à jour UNIQUEMENT cette compétence pour ne pas impacter les autres !
-    let skillIds: Set<string>;
-    if (specificSkillId) {
-      skillIds = new Set<string>([specificSkillId]);
-    } else {
-      const { data: links } = await this.supabase.client
-        .from('challenge_skills')
-        .select('skill_id')
-        .eq('challenge_id', challengeId);
-      skillIds = new Set<string>(
-        (links ?? []).map((l: any) => l.skill_id as string),
-      );
+    if (error) throw error;
+    // Reuse the weighted, best-result-per-problem calculation. No starting score
+    // and no repeat-submit bonus. A failed result adds no verified proficiency.
+    const updated: Awaited<ReturnType<SkillProgressService['recalculate']>>[] =
+      [];
+    if (isSuccess) {
+      for (const skillId of skillIds)
+        updated.push(await this.recalculate(userId, skillId));
     }
-
-    const updated: any[] = [];
-    for (const sid of skillIds) {
-      // Récupère le score actuel
-      const { data: currentProg } = await this.supabase.client
-        .from('user_skill_progress')
-        .select('level_score, validated_attempts')
-        .eq('user_id', userId)
-        .eq('skill_id', sid)
-        .maybeSingle();
-
-      const oldScore =
-        currentProg?.level_score != null ? Number(currentProg.level_score) : 75;
-      const oldAttempts = Number(currentProg?.validated_attempts ?? 0);
-
-      // Calcul du nouveau score (+6% si succès, -6% si échec)
-      const delta = isSuccess ? 6 : -6;
-      const newScore = Math.max(
-        15,
-        Math.min(100, Math.round(oldScore + delta)),
-      );
-      const newAttempts = isSuccess ? oldAttempts + 1 : oldAttempts;
-
-      const status =
-        newScore >= 85
-          ? 'expert'
-          : newScore >= 65
-            ? 'advanced'
-            : newScore >= 35
-              ? 'intermediate'
-              : 'beginner';
-
-      // Met à jour la table de progression
-      await this.supabase.client.from('user_skill_progress').upsert(
-        {
-          user_id: userId,
-          skill_id: sid,
-          level_score: newScore,
-          validated_attempts: newAttempts,
-          status,
-          scoring_version: SCORING_VERSION,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id,skill_id' },
-      );
-
-      // Insère systématiquement un point dans user_skill_history pour tracer la hausse ou la baisse
-      await this.supabase.client.from('user_skill_history').insert({
-        user_id: userId,
-        skill_id: sid,
-        level_score: newScore,
-        validated_attempts: newAttempts,
-        recorded_at: new Date().toISOString(),
-      });
-
-      updated.push({ skillId: sid, oldScore, newScore, delta, status });
-    }
-
     return { isSuccess, updated };
   }
 }

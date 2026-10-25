@@ -7,11 +7,11 @@ export function OfflineBanner() {
   if (!offline) return null;
   return (
     <p
-      data-guide-obstacle
       role="status"
       className="arena-enter bg-accent px-5 py-2 text-center text-sm font-medium text-white"
     >
-      You’re offline. Navigation will resume when you reconnect.
+      You’re offline. Online actions require a connection.{' '}
+      <a href="/offline.html" className="underline font-semibold">Open offline library</a>
     </p>
   );
 }

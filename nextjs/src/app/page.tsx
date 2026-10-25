@@ -1,4 +1,6 @@
 import { TerminalHero } from '@/components/arena/TerminalHero';
+import { PartnerCarousel } from '@/components/landing/PartnerCarousel';
+import { learningPlatforms } from '@/components/landing/partners';
 
 const steps = [
   {
@@ -20,9 +22,9 @@ const steps = [
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center px-5 py-16 sm:py-24">
+    <main className="flex flex-1 flex-col items-center py-16 sm:py-24">
       <div className="arena-grid" aria-hidden="true" />
-      <section className="arena-enter flex w-full max-w-5xl flex-col items-center gap-10 text-center">
+      <section className="arena-enter flex w-[calc(100%-2.5rem)] max-w-5xl flex-col items-center gap-10 text-center">
         <p className="font-mono text-sm tracking-widest text-[#C4B5FD]">
           &lt;/&gt; DEVARENA
         </p>
@@ -35,7 +37,10 @@ export default function Home() {
         <TerminalHero />
       </section>
 
-      <section aria-labelledby="how-title" className="mt-20 w-full max-w-5xl">
+      <section
+        aria-labelledby="how-title"
+        className="mt-20 w-[calc(100%-2.5rem)] max-w-5xl"
+      >
         <h2
           id="how-title"
           className="text-center font-mono text-sm tracking-widest text-muted-foreground"
@@ -58,6 +63,7 @@ export default function Home() {
           ))}
         </ol>
       </section>
+      <PartnerCarousel partners={learningPlatforms} />
     </main>
   );
 }

@@ -98,3 +98,6 @@ export class ImportDto {
   @IsString() @MinLength(1) @MaxLength(80000) csv: string;
   @IsString() @MinLength(1) @MaxLength(1000) attribution: string;
 }
+export class ExplainLessonDto {
+  @IsIn(['explain']) action: 'explain';
+}

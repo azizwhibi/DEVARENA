@@ -4,23 +4,36 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { SupabaseService } from './skills-database.service';
 
 @Injectable()
 export class AssignmentsService {
   constructor(private readonly database: SupabaseService) {}
+  async demonstrated(userId: string) {
+    const { data, error } = await this.database.client
+      .from('developer_demonstrated_skills')
+      .select(
+        'id,name,slug,description,is_active,category,technology,solved_count,first_validated_at',
+      )
+      .eq('user_id', userId)
+      .order('name');
+    if (error)
+      throw new ServiceUnavailableException(
+        'Demonstrated skills unavailable. Check db/automatic-skills.sql setup.',
+      );
+    return data ?? [];
+  }
   private check(error: { code?: string } | null) {
     if (!error) return;
     if (error.code === '42501') throw new ForbiddenException();
     if (error.code === 'P0002')
-      throw new NotFoundException(
-        "Developer, skill, or challenge not found.",
-      );
+      throw new NotFoundException('Developer, skill, or challenge not found.');
     if (['22023', '22P02', '23503', '23514'].includes(error.code ?? ''))
-      throw new BadRequestException("Check skill links and weights.");
+      throw new BadRequestException('Check skill links and weights.');
     throw new InternalServerErrorException(
-      "Skill links unavailable. Check the skills-management.sql migration.",
+      'Skill links unavailable. Check the skills-management.sql migration.',
     );
   }
   async list(userId: string) {

@@ -1,0 +1,7 @@
+id,name,slug,is_active,created_at
+3d3a654e-0b55-4e65-8712-ca0d6934bffd,Two Pointers,two-pointers,true,2026-10-23 14:03:28.873908+00
+47f78978-bc14-4d04-a8b3-5e256940891f,Database,database,true,2026-10-23 14:03:28.873908+00
+608e3d0e-3f93-4315-a45d-5fe8b174c807,Sorting,sorting,true,2026-10-23 14:03:28.873908+00
+8515e1c2-a4c0-45c0-8ad5-249f1105c328,Hash Table,hash-table,true,2026-10-23 14:03:28.873908+00
+aa982a3b-58d5-4425-869c-543bba6bf6f1,Array,array,true,2026-10-23 14:03:28.873908+00
+d7263b59-f9c8-4be3-a3e5-6800d77ec900,String,string,true,2026-10-23 14:03:28.873908+00

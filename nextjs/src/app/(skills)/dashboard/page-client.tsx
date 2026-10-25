@@ -5,6 +5,8 @@ import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 import { useSkillsAccount } from '@/components/skills/SkillsWorkspace';
 import { useSkillSummary } from '@/components/skills/useSkillSummary';
 import { HistoryChart } from '@/components/skills/profile/HistoryChart';
+import { PracticeProgress } from '@/components/skills/profile/PracticeProgress';
+import { CodeReviewProgress } from '@/components/skills/code/CodeReviewProgress';
 import { ApiService } from '@/lib/skills/api';
 import { marketplaceApi } from '@/lib/marketplace/api';
 import styles from './dashboard.module.css';
@@ -66,6 +68,7 @@ export default function DashboardPage() {
           <p className={styles.subtitle}>Keep building your next skill.</p>
         </div>
       </header>
+      <CodeReviewProgress />
       {error && (
         <p className="workspace-alert" role="alert">
           {error}
@@ -82,8 +85,8 @@ export default function DashboardPage() {
         </div>
       ) : (
         <>
-          <div className={styles.content}>
-            <section
+          <div className={styles.content} data-single={!evaluated.length || undefined}>
+            {!!evaluated.length && <section
               className={'ui-card ' + styles.scoreCard}
               aria-labelledby="score-title"
             >
@@ -114,7 +117,7 @@ export default function DashboardPage() {
               </div>
               <dl className="ui-metrics">
                 <div>
-                  <dt>Assigned</dt>
+                  <dt>Demonstrated</dt>
                   <dd>{available ? skills.length : '—'}</dd>
                 </div>
                 <div>
@@ -130,7 +133,7 @@ export default function DashboardPage() {
                   </dd>
                 </div>
               </dl>
-            </section>
+            </section>}
             <section className={'ui-card ' + styles.challengeCard}>
               <span className={styles.cardIcon}>
                 <WorkspaceIcon name="practice" />
@@ -139,13 +142,13 @@ export default function DashboardPage() {
               <h3>
                 {challenge?.title ??
                   (catalogFailure
-                    ? 'Challenges unavailable'
-                    : 'Start with a challenge')}
+                    ? 'Problems unavailable'
+                    : 'Start with a problem')}
               </h3>
               <p className={styles.subtitle}>
                 {challenge
-                  ? 'Practice a published challenge at your own pace.'
-                  : 'Explore the challenge catalogue to find your next practice session.'}
+                  ? 'Practice a published problem at your own pace.'
+                  : 'Explore the problem catalogue to find your next practice session.'}
               </p>
               {challenge && (
                 <>
@@ -160,7 +163,7 @@ export default function DashboardPage() {
                 </>
               )}
               <Link href="/arena" className="ui-button ui-button-primary">
-                {challenge ? 'Explore challenge' : 'Browse challenges'}
+                {challenge ? 'Explore problem' : 'Browse problems'}
                 <WorkspaceIcon name="arrow" />
               </Link>
             </section>
@@ -180,7 +183,7 @@ export default function DashboardPage() {
             </span>
             <WorkspaceIcon name="arrow" />
           </Link>
-          <div className={styles.insights}>
+          {!!evaluated.length && <div className={styles.insights}>
             <section className="ui-card">
               <h2 className="ui-label">Recent skill activity</h2>
               {evaluated.length ? (
@@ -218,16 +221,17 @@ export default function DashboardPage() {
                   : '—'}
               </p>
               <p className={styles.subtitle}>
-                Assigned skills awaiting a first assessment.
+                Skills awaiting proficiency calculation.
               </p>
               <Link href="/my-skills" className="ui-button">
                 View your skills
                 <WorkspaceIcon name="arrow" />
               </Link>
             </section>
-          </div>
+          </div>}
         </>
       )}
+      <PracticeProgress />
     </div>
   );
 }

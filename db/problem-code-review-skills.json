@@ -1,0 +1,13 @@
+{
+  "skills": [
+    { "name": "Arrays", "slug": "arrays", "description": "Traverse arrays and preserve element order.", "technology": null },
+    { "name": "Hash tables", "slug": "hash-tables", "description": "Use hash-based lookup for pairs and unique values.", "technology": null },
+    { "name": "SQL joins", "slug": "sql-joins", "description": "Combine tables and identify unmatched records.", "technology": "PostgreSQL" },
+    { "name": "SQL subqueries", "slug": "sql-subqueries", "description": "Use subqueries and existence checks to filter records.", "technology": "PostgreSQL" }
+  ],
+  "problems": [
+    { "title": "JavaScript: First Matching Pair", "skills": ["arrays", "hash-tables"] },
+    { "title": "Python: Stable Unique Values", "skills": ["arrays", "hash-tables"] },
+    { "title": "SQL: Customers Without Orders", "skills": ["sql-joins", "sql-subqueries"] }
+  ]
+}

@@ -11,9 +11,9 @@ export default function OfflinePage() {
           You’re offline
         </h1>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          The arena needs a connection. Reconnect and we’ll pick up where you
-          left off.
+          Read resources you downloaded while online.
         </p>
+        <a href="/offline.html" className="btn btn-primary mt-6">Open offline library</a>
       </section>
     </main>
   );

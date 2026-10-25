@@ -27,6 +27,7 @@ import {
   Play,
   Grid2X2,
   Swords,
+  MessageSquare,
 } from 'lucide-react';
 const icons = {
   knowledge: BookOpen,
@@ -57,6 +58,7 @@ const icons = {
   play: Play,
   grid: Grid2X2,
   battle: Swords,
+  discuss: MessageSquare,
 };
 export function WorkspaceIcon({
   name,

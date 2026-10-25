@@ -20,18 +20,22 @@ export function KnowledgeNav() {
         ['/knowledge', 'Library'],
         ['/knowledge/saved', 'Saved'],
         ['/knowledge/progress', 'Progress'],
-      ].map(([href, label]) => (
-        <Link
-          key={href}
-          href={href}
-          data-tour={
-            href === '/knowledge/saved' ? 'knowledge-saved' : undefined
-          }
-          aria-current={path === href ? 'page' : undefined}
-        >
-          {label}
-        </Link>
-      ))}
+        ['/offline.html', 'Offline library'],
+      ].map(([href, label]) =>
+        href === '/offline.html' ? (
+          <a key={href} href={href}>
+            {label}
+          </a>
+        ) : (
+          <Link
+            key={href}
+            href={href}
+            aria-current={path === href ? 'page' : undefined}
+          >
+            {label}
+          </Link>
+        ),
+      )}
     </nav>
   );
 }
@@ -186,7 +190,9 @@ export function ResourceCard({
           {resource.title}
         </Link>
       </h3>
-      {resource.description && <p>{resource.description}</p>}
+      {resource.description && (
+        <p className={styles.summary}>{resource.description}</p>
+      )}
       {reason && <p>{reason}</p>}
       {resource.resource_skills?.length > 0 && (
         <div className={styles.meta}>

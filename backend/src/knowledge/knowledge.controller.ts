@@ -19,6 +19,7 @@ import { KnowledgeCatalogueService } from './knowledge-catalogue.service';
 import { KnowledgeLearningService } from './knowledge-learning.service';
 import { KnowledgeRecommendationsService } from './knowledge-recommendations.service';
 import { KnowledgeImportService } from './knowledge-import.service';
+import { KnowledgeExplanationService } from './knowledge-explanation.service';
 import {
   AdminKnowledgeQuery,
   EventDto,
@@ -28,6 +29,7 @@ import {
   ProgressDto,
   ResourceDto,
   UpdateResourceDto,
+  ExplainLessonDto,
 } from './knowledge.dto';
 
 @Controller('knowledge')
@@ -36,6 +38,7 @@ export class KnowledgeController {
   constructor(
     private readonly catalogue: KnowledgeCatalogueService,
     private readonly learning: KnowledgeLearningService,
+    private readonly explanation: KnowledgeExplanationService,
   ) {}
   @Get('meta') @Header('Cache-Control', 'private, no-store') meta() {
     return this.catalogue.meta();
@@ -60,6 +63,20 @@ export class KnowledgeController {
       ...(await this.catalogue.detail(id)),
       ...(await this.learning.state(user.id, id)),
     };
+  }
+  @Get('resources/:id/offline')
+  @Header('Cache-Control', 'private, no-store')
+  async offline(@Param('id', ParseUUIDPipe) id: string) {
+    return this.catalogue.offline(id);
+  }
+  @Post('resources/:id/explain')
+  @Header('Cache-Control', 'private, no-store')
+  explain(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+    @Body() _dto: ExplainLessonDto,
+  ) {
+    return this.explanation.explain(user.id, id);
   }
 }
 @Controller('me/knowledge')

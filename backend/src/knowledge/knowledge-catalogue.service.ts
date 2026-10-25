@@ -142,6 +142,30 @@ export class KnowledgeCatalogueService {
     }
     return { ...resource, challenges };
   }
+  async offline(id: string) {
+    const resource = await this.resource(id);
+    if (!resource.content?.trim())
+      throw new BadRequestException(
+        'This resource has no written content to download.',
+      );
+    return {
+      id: resource.id,
+      title: resource.title,
+      description: resource.description,
+      content: resource.content,
+      status: 'published' as const,
+      updated_at: resource.updated_at,
+      attribution: resource.attribution,
+      source: resource.source,
+      tags: resource.tags,
+      skills: (resource.resource_skills ?? []).flatMap(
+        (link: { skill_id: string; skill: { name: string } | null }) =>
+          link.skill ? [{ id: link.skill_id, name: link.skill.name }] : [],
+      ),
+      // No resource/topic relation exists yet. Do not infer or invent topic IDs.
+      topics: [],
+    };
+  }
   async save(
     id: string | null,
     dto: ResourceDto | UpdateResourceDto,

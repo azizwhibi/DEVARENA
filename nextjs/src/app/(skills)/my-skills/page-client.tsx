@@ -19,6 +19,8 @@ export default function ProfilePage() {
   >('all');
   const [viewMode, setViewMode] = useState<'cards' | 'radar'>('cards');
   const loadData = useCallback(async () => {
+    setIsLoadingSkills(true);
+    setError('');
     try {
       const skillsData = await ApiService.getMySkills();
       setSkills(skillsData);
@@ -52,10 +54,6 @@ export default function ProfilePage() {
             evaluatedSkills.length,
         )
       : 0;
-  const totalValidated = skills.reduce(
-    (acc, s) => acc + s.validatedAttempts,
-    0,
-  );
   return (
     <div
       className="page-container"
@@ -64,6 +62,9 @@ export default function ProfilePage() {
     >
       <header className="page-header">
         <h1 className="page-title">Skills</h1>
+        <p className="page-subtitle">
+          Built automatically from validated problem results.
+        </p>
       </header>
       {error && (
         <p role="alert">
@@ -85,16 +86,15 @@ export default function ProfilePage() {
             <div key={item} className="skeleton skeleton-panel" />
           ))}
         </div>
-      ) : !skills.length ? (
+      ) : error ? null : !skills.length ? (
         <section className="empty-state">
           <WorkspaceIcon name="skills" size={20} />
-          <h2>No assigned skills</h2>
+          <h2>No demonstrated skills yet</h2>
           <p>
-            Your assigned skills will appear here. Explore available
-            technologies and challenges.
+            Skills appear after a linked problem receives a validated result.
           </p>
           <Link href="/arena" className="btn btn-primary">
-            Start a challenge
+            Start a problem
           </Link>
         </section>
       ) : (
@@ -107,10 +107,6 @@ export default function ProfilePage() {
             <div>
               <dt>Average score</dt>
               <dd>{evaluatedSkills.length ? `${avgScore}%` : '—'}</dd>
-            </div>
-            <div>
-              <dt>Assessments</dt>
-              <dd>{totalValidated}</dd>
             </div>
           </dl>
           <div className="toolbar">

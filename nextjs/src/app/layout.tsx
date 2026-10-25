@@ -4,15 +4,17 @@ import { AuthHeader } from '@/components/AuthHeader';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { OfflineBanner } from '@/components/pwa/OfflineBanner';
 import { RegisterSW } from '@/components/pwa/RegisterSW';
+import { OfflineAccountSync } from '@/components/pwa/OfflineAccountSync';
 import { Suspense } from 'react';
 import { AccountProvider } from '@/components/AccountProvider';
 import { ApplicationShell } from '@/components/ApplicationShell';
 import './(skills)/skills.css';
 
-export const viewport: Viewport = { themeColor: '#090C11' };
+export const viewport: Viewport = { themeColor: '#090C11', viewportFit: 'cover' };
 
 export const metadata: Metadata = {
   title: 'DevArena',
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'DevArena' },
   description: 'Build your skills and take on development challenges.',
 };
 
@@ -33,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             <ApplicationShell>{children}</ApplicationShell>
             <InstallPrompt />
             <RegisterSW />
+            <OfflineAccountSync />
           </AccountProvider>
         </Suspense>
       </body>

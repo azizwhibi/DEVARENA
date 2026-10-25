@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#090C11" />
+    <title>Offline library | DevArena</title>
+    <link rel="stylesheet" href="/offline-reader.css" />
+    <script defer src="/offline-store.js"></script>
+    <script defer src="/offline-reader.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a class="brand" href="/">DevArena</a
+        ><a href="/knowledge">Return online</a>
+      </header>
+      <h1>Offline library</h1>
+      <p id="connection" role="status"></p>
+      <p class="muted">
+        Downloaded copies are for this browser’s last signed-in account. Sign
+        out before sharing this device. External videos and websites require a
+        connection.
+      </p>
+      <p class="muted">
+        Purchases, account changes, administration, battles, AI and grading
+        require a connection. No actions are queued.
+      </p>
+      <div id="message" role="status"></div>
+      <section id="library" aria-label="Downloaded resources"></section>
+      <article id="reader" hidden>
+        <button id="back">Back to library</button>
+        <h2 id="title"></h2>
+        <p id="metadata" class="muted"></p>
+        <p id="availability" role="status"></p>
+        <div id="content"></div>
+        <p id="attribution" class="muted"></p>
+      </article>
+      <noscript>Enable JavaScript to open your downloaded resources.</noscript>
+    </main>
+  </body>
+</html>

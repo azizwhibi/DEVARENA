@@ -1,19 +1,7 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reset your DevArena password</title>
-  </head>
-  <body style="margin:0;background:#09090b;color:#fafafa;font-family:Arial,Helvetica,sans-serif;line-height:1.6;padding:32px 20px">
-    <main style="max-width:480px;margin:0 auto">
-      <p style="color:#6ee7b7;font-weight:bold;letter-spacing:2px">DEVARENA</p>
-      <h1 style="font-size:28px;line-height:1.25">Reset your password</h1>
-      <p>Use the button below to choose a new password for your DevArena account.</p>
-      <p style="margin:28px 0">
-        <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&amp;type=recovery&amp;next=/reset-password" style="display:inline-block;background:#6ee7b7;color:#09090b;padding:12px 20px;border-radius:8px;font-weight:bold;text-decoration:none">Reset password</a>
-      </p>
-      <p style="color:#a1a1aa;font-size:14px">If you didn’t request this, you can ignore this email.</p>
-    </main>
-  </body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><title>Reset your DevArena password</title></head>
+<body style="margin:0;background:#090c11;color:#e7ebf3;font:16px/1.6 Arial,sans-serif;padding:32px">
+<main style="max-width:560px;margin:auto"><p style="color:#c4b5fd;letter-spacing:2px">DEVARENA</p>
+<h1 style="font-size:24px">Reset your password</h1><p>Use this link to choose a new password. If you did not request a reset, you can ignore this email.</p>
+<p><a style="display:inline-block;background:#7c3aed;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none" href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&amp;type=recovery&amp;next=/reset-password">Reset password</a></p>
+<p>This link expires. Request a new reset email if it no longer works.</p></main></body></html>

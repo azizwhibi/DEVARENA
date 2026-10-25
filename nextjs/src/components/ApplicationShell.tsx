@@ -12,6 +12,7 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
     '/arena',
     '/duel',
     '/knowledge',
+    '/community',
     '/marketplace',
     '/profile',
     '/admin',

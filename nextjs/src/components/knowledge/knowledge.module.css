@@ -7,6 +7,7 @@
   padding-bottom: 16px;
 }
 .nav a {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -44,6 +45,13 @@
   font-size: 14px;
   line-height: 1.5;
   color: #a6adbd;
+}
+.summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 .resource footer {
   display: flex;

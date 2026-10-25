@@ -2,6 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
+  // Static offline assets must never depend on an auth refresh or private cookies.
+  if (/^\/offline(?:\.html|-reader\.(?:js|css)|-store\.js)$/.test(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
   let response = NextResponse.next({ request });
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -46,6 +50,7 @@ export async function proxy(request: NextRequest) {
     '/discover',
     '/marketplace',
     '/knowledge',
+    '/community',
   ].some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
   let destination: URL | undefined;
   if (!authenticated && protectedRoute) {

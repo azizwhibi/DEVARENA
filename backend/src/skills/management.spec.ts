@@ -11,6 +11,7 @@ import { AdminGuard, UserGuard } from '../auth/guards';
 import {
   AssignmentsController,
   MyAssignmentsController,
+  DemonstratedSkillsController,
 } from './assignments.controller';
 import { AssignmentsService } from './assignments.service';
 import { SkillsController } from './skills.controller';
@@ -19,6 +20,11 @@ import { TechnologiesController } from './technologies.controller';
 import { TechnologiesService } from './technologies.service';
 import { SkillProgressService } from './skill-progress.service';
 import { SupabaseService } from './skills-database.service';
+import {
+  ProblemsController,
+  ProblemsAdminController,
+} from './problems.controller';
+import { ProblemsService } from './problems.service';
 
 describe('Skills management boundaries', () => {
   const user = '00000000-0000-4000-8000-000000000001',
@@ -27,6 +33,13 @@ describe('Skills management boundaries', () => {
   const assignments = {
     list: jest.fn().mockResolvedValue([]),
     assign: jest.fn().mockResolvedValue([]),
+    demonstrated: jest.fn().mockResolvedValue([]),
+  };
+  const problems = {
+    topics: jest.fn().mockResolvedValue([]),
+    list: jest.fn().mockResolvedValue({ items: [], total: 0 }),
+    save: jest.fn().mockResolvedValue({}),
+    links: jest.fn().mockResolvedValue({ saved: true }),
   };
   const skills = {
     create: jest.fn().mockResolvedValue({ id: skill }),
@@ -39,12 +52,16 @@ describe('Skills management boundaries', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       controllers: [
+        ProblemsController,
+        ProblemsAdminController,
         AssignmentsController,
         MyAssignmentsController,
+        DemonstratedSkillsController,
         SkillsController,
         TechnologiesController,
       ],
       providers: [
+        { provide: ProblemsService, useValue: problems },
         AdminGuard,
         UserGuard,
         {
@@ -90,6 +107,82 @@ describe('Skills management boundaries', () => {
       .set('Authorization', 'Bearer developer')
       .expect(403);
     expect(assignments.assign).not.toHaveBeenCalled();
+  });
+  it('discovers skills for the authenticated developer and protects other profiles', async () => {
+    await request(app.getHttpServer())
+      .get('/me/skills/demonstrated')
+      .expect(401);
+    await request(app.getHttpServer())
+      .get('/me/skills/demonstrated?userId=someone-else')
+      .set('Authorization', 'Bearer developer')
+      .expect(200, []);
+    expect(assignments.demonstrated).toHaveBeenLastCalledWith(user);
+    await request(app.getHttpServer())
+      .get(`/admin/developers/${user}/demonstrated-skills`)
+      .set('Authorization', 'Bearer developer')
+      .expect(403);
+    await request(app.getHttpServer())
+      .get(`/admin/developers/${skill}/demonstrated-skills`)
+      .set('Authorization', 'Bearer admin')
+      .expect(200, []);
+    expect(assignments.demonstrated).toHaveBeenLastCalledWith(skill);
+    await request(app.getHttpServer())
+      .get('/admin/developers/invalid/demonstrated-skills')
+      .set('Authorization', 'Bearer admin')
+      .expect(400);
+    await request(app.getHttpServer())
+      .post('/me/skills/demonstrated')
+      .set('Authorization', 'Bearer developer')
+      .send({ skillId: skill, levelScore: 100 })
+      .expect(404);
+  });
+  it('protects problem administration and rejects invalid topic payloads', async () => {
+    await request(app.getHttpServer()).get('/problems').expect(401);
+    await request(app.getHttpServer())
+      .post('/admin/problems/topics')
+      .set('Authorization', 'Bearer developer')
+      .send({ name: 'Array', slug: 'array', is_active: true })
+      .expect(403);
+    for (const body of [
+      { name: ' ', slug: 'array', is_active: true },
+      { name: 'Array', slug: 'Bad Slug', is_active: true },
+    ])
+      await request(app.getHttpServer())
+        .post('/admin/problems/topics')
+        .set('Authorization', 'Bearer admin')
+        .send(body)
+        .expect(400);
+    await request(app.getHttpServer())
+      .put(`/admin/problems/${skill}/topics`)
+      .set('Authorization', 'Bearer admin')
+      .send({ topicIds: [skill, skill] })
+      .expect(400);
+    expect(problems.save).not.toHaveBeenCalled();
+    expect(problems.links).not.toHaveBeenCalled();
+  });
+  it('uses the authenticated actor for topic replacement and bounds catalogue pagination', async () => {
+    await request(app.getHttpServer())
+      .put(`/admin/problems/${skill}/topics`)
+      .set('Authorization', 'Bearer admin')
+      .send({ topicIds: [] })
+      .expect(200);
+    expect(problems.links).toHaveBeenCalledWith(user, skill, []);
+    await request(app.getHttpServer())
+      .get('/problems?pageSize=999')
+      .set('Authorization', 'Bearer developer')
+      .expect(400);
+    await request(app.getHttpServer())
+      .get('/problems?topic=invalid')
+      .set('Authorization', 'Bearer developer')
+      .expect(400);
+    await request(app.getHttpServer())
+      .get('/problems?q=Array')
+      .set('Authorization', 'Bearer developer')
+      .expect(200);
+    expect(problems.list).toHaveBeenCalledWith(
+      user,
+      expect.objectContaining({ q: 'Array', page: 1, pageSize: 20 }),
+    );
   });
   it('assigns/unassigns a selected developer with the verified admin actor', async () => {
     await request(app.getHttpServer())
@@ -214,6 +307,20 @@ describe('Measured progression is driven by validated attempts', () => {
     const after = await service.recalculate('developer', 'skill');
     expect(after.levelScore).toBe(80);
     expect(after.validatedAttempts).toBe(1);
+    const historyWrites = writes.filter(
+      (w) => w.table === 'user_skill_history',
+    ).length;
+    attempts = [
+      { challenge_id: 'challenge', accuracy: 0.8 },
+      { challenge_id: 'challenge', accuracy: 0.7 },
+    ];
+    last = { level_score: 80, validated_attempts: 1 };
+    const repeated = await service.recalculate('developer', 'skill');
+    expect(repeated.levelScore).toBe(80);
+    expect(repeated.validatedAttempts).toBe(1);
+    expect(writes.filter((w) => w.table === 'user_skill_history')).toHaveLength(
+      historyWrites,
+    );
     expect(filters).toContainEqual(['is_validated', true]);
     expect(writes.some((w) => w.table === 'user_skill_history')).toBe(true);
     expect(

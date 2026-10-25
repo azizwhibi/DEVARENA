@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ApiService } from '@/lib/skills/api';
-import type { AdminSkill } from '@/lib/skills/types';
+import type { AdminSkill, SkillProgress } from '@/lib/skills/types';
 type Reference = { id: string; title: string };
 type Developer = { id: string; username: string };
 type Link = { id: string; name: string; weight: number };
@@ -96,17 +96,19 @@ export default function AssociationsPage() {
             </label>
             {!developers.length && <p>No developers found.</p>}
             {developer && (
-              <DeveloperSkills
-                key={developer}
-                userId={developer}
-                skills={skills}
-              />
+              <div key={developer}>
+                <DemonstratedSkills userId={developer} />
+                <details>
+                  <summary>Optional training targets</summary>
+                  <DeveloperSkills userId={developer} skills={skills} />
+                </details>
+              </div>
             )}
           </section>
           <section className="card">
-            <h2 className="section-title">Challenge skills</h2>
+            <h2 className="section-title">Problem skills</h2>
             <label>
-              Challenge
+              Problem
               <select
                 className="input"
                 value={challenge}
@@ -120,7 +122,7 @@ export default function AssociationsPage() {
                 ))}
               </select>
             </label>
-            {!challenges.length && <p>No challenges available.</p>}
+            {!challenges.length && <p>No problems available.</p>}
             {challenge && (
               <ChallengeSkills
                 key={challenge}
@@ -130,6 +132,74 @@ export default function AssociationsPage() {
             )}
           </section>
         </div>
+      )}
+    </div>
+  );
+}
+function DemonstratedSkills({ userId }: { userId: string }) {
+  const [skills, setSkills] = useState<SkillProgress[]>([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [retry, setRetry] = useState(0);
+  useEffect(() => {
+    let active = true;
+    void ApiService.getDeveloperDemonstratedSkills(userId)
+      .then((data) => {
+        if (active) {
+          setSkills(data);
+          setError('');
+        }
+      })
+      .catch((error) => {
+        if (active)
+          setError(
+            error instanceof Error
+              ? error.message
+              : 'Unable to load demonstrated skills.',
+          );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [userId, retry]);
+  return (
+    <div className="stack-form">
+      <p className="muted">
+        Skills appear automatically from validated problem results.
+      </p>
+      {error ? (
+        <p role="alert">
+          {error}
+          <button
+            className="btn btn-ghost"
+            onClick={() => {
+              setLoading(true);
+              setError('');
+              setRetry((value) => value + 1);
+            }}
+          >
+            Retry
+          </button>
+        </p>
+      ) : loading ? (
+        <p role="status">Loading skills...</p>
+      ) : skills.length ? (
+        <ul>
+          {skills.map((skill) => (
+            <li key={skill.skillId}>
+              <span>
+                {skill.name}
+                {skill.technology ? ' ? ' + skill.technology : ''}
+              </span>
+              <span>{skill.solvedProblems} validated problems</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No demonstrated skills yet.</p>
       )}
     </div>
   );
@@ -180,8 +250,7 @@ function DeveloperSkills({
   return (
     <div className="stack-form">
       <p className="muted">
-        Assignments do not create scores. Removing an assignment preserves
-        assessments and history.
+        Training targets do not add demonstrated skills or change proficiency.
       </p>
       {error && (
         <p role="alert">
@@ -219,7 +288,7 @@ function DeveloperSkills({
             disabled={busy || !selected}
             onClick={() => void change(selected, true)}
           >
-            Assign
+            Add training target
           </button>
           <ul>
             {assigned.map((s) => (
@@ -236,7 +305,7 @@ function DeveloperSkills({
               </li>
             ))}
           </ul>
-          {!assigned.length && <p>No assigned skills.</p>}
+          {!assigned.length && <p>No training targets.</p>}
         </>
       )}
     </div>
@@ -331,7 +400,7 @@ function ChallengeSkills({
               setSelected('');
             }}
           >
-            Add to challenge
+            Add to problem
           </button>
           <ul>
             {links.map((l) => (

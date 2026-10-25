@@ -1,6 +1,6 @@
 # Skills and Technology Management
 
-This completes the existing Sirine/Syrine module inside the current DevArena host. Authentication, profile IDs, Knowledge skill IDs, Marketplace data and BYTE remain shared. Coach IA remains removed, following the earlier explicit removal request; no replacement AI service is introduced.
+This completes the existing Sirine/Syrine module inside the current DevArena host. Authentication, profile IDs, Knowledge skill IDs and Marketplace data remain shared. Coach IA remains removed, following the earlier explicit removal request; no replacement AI service is introduced.
 
 ## Required SQL
 
@@ -29,7 +29,7 @@ The existing user/admin guards, including suspended-account handling, protect al
 - `/arena` now reads real published database challenges and their associated skill names. The old hard-coded challenge list with invented validation states was removed. Associated skill links lead to skill history and available practice challenges.
 - Browser practice is explicitly labelled as training and does not send attempts, scores or validation requests. Skill-card practice links open the actual skill/challenge list instead of constructing fake challenge IDs.
 - The existing `skills-v1` scoring function, validated-attempt query and event workflow remain in place. Catalogue/assignment/link edits do not modify historical snapshots. Administrative simulation endpoints remain restricted to administrators, but simulation and artificial score controls are removed from the association/catalogue UI.
-- Knowledge completion and Marketplace purchases/equipping/hints do not call scoring or assignment mutation code. Their existing tables/IDs/RPCs are not replaced. BYTE navigation targets and its existing saved-step migration remain intact.
+- Knowledge completion and Marketplace purchases/equipping/hints do not call scoring or assignment mutation code. Their existing tables/IDs/RPCs are not replaced.
 
 ## Endpoints added or completed
 
@@ -52,7 +52,7 @@ Executed successfully:
 
 - Backend build and **189 tests across 12 suites**, including new HTTP checks for 401/403, current-user reads, administrator actor identity, UUID validation, logical deletion and trimmed required fields. The scoring integration test changes from unassessed to measured 80% using validated attempts and the existing scoring calculation.
 - Isolated PostgreSQL: `node db/tests/skills-management.cjs`. This checks assignment authorization/idempotence, no fabricated progress/history, unassignment and archival preservation, FK protection, normalized duplicate rejection, multi-skill weights/unlinking, atomic rollback of invalid link replacement, migration replay and RLS/function privileges. It also applies the real Marketplace and Knowledge migrations to the same fixture, performs an actual database purchase/equip and learning completion, and confirms the existing measured score/history stay unchanged. The fixture schema is checked in under `db/tests/fixtures/skills-host.sql`. As with existing SQL verifiers, PGlite is installed only under `.local/verification`.
-- Frontend ESLint, TypeScript, Skills API, BYTE, Knowledge, Marketplace and PWA regressions. The production compiler, type checker and all route prerenders completed; Next.js's existing security-version check returned a nonzero exit afterward. Upgrade the existing Next.js version separately; this integration does not silently change framework dependencies.
+- Frontend ESLint, TypeScript, Skills API, Knowledge, Marketplace and PWA regressions. The production compiler, type checker and all route prerenders completed; Next.js's existing security-version check returned a nonzero exit afterward. Upgrade the existing Next.js version separately; this integration does not silently change framework dependencies.
 
 No shared-database migration, external account creation, push or deployment was performed. Live/browser layout and real Supabase end-to-end verification remain outstanding. The pre-existing deleted recovery email template still interrupts the combined frontend auth script; it is unrelated to these changes. Existing unrelated working-tree changes/deletions were preserved.
 

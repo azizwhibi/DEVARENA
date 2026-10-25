@@ -31,7 +31,6 @@ export function DuelArena() {
     if (confirmLeave) dialog.current?.showModal();
     else dialog.current?.close();
   }, [confirmLeave]);
-  const active = ['reading', 'resolution', 'proposed'].includes(s.phase);
   const finished = s.phase === 'finished';
   const win = s.winnerId === account.id,
     draw = s.winnerId === null;
@@ -47,7 +46,7 @@ export function DuelArena() {
       </div>
     );
   return (
-    <div className="page-container" data-tour="battle-code">
+    <div className="page-container">
       <header className="page-header">
         <div>
           <h1 className="page-title">Battle Code</h1>
@@ -65,10 +64,7 @@ export function DuelArena() {
           </button>
         )}
       </header>
-      <div
-        className={styles.content}
-        data-guide-modal={active ? 'true' : undefined}
-      >
+      <div className={styles.content}>
         {s.error && (
           <p className={styles.alert} role="alert">
             {s.error}
@@ -369,7 +365,6 @@ export function DuelArena() {
       <dialog
         ref={dialog}
         className={styles.leaveDialog}
-        data-guide-modal="true"
         aria-labelledby="leave-battle-title"
         onCancel={() => setConfirmLeave(false)}
       >

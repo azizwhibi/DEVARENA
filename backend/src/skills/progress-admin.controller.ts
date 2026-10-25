@@ -17,6 +17,7 @@ import {
   AttemptValidatedEvent,
 } from './events/attempt-validated.event';
 import { SkillProgressService } from './skill-progress.service';
+import { RecordAssessmentDto } from './dto/record-assessment.dto';
 
 @ApiTags('admin / progress')
 @ApiBearerAuth()
@@ -43,20 +44,20 @@ export class ProgressAdminController {
     return this.progress.recalculate(userId, skillId);
   }
 
-  // Enregistre une tentative de défi (succès -> +score, échec -> -score) avec trace en historique
+  // Trusted admin assessment; scoring is recalculated from validated evidence.
   @Post('users/:userId/challenges/:challengeId/attempt')
   @HttpCode(200)
   async recordAttempt(
     @Param('userId', new ParseUUIDPipe()) userId: string,
     @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
-    @Body() body?: { isSuccess?: boolean; skillId?: string },
+    @Body() body: RecordAssessmentDto,
   ) {
-    const isSuccess = body?.isSuccess ?? true;
+    const isSuccess = body.isSuccess;
     const result = await this.progress.applyAttemptResult(
       userId,
       challengeId,
       isSuccess,
-      body?.skillId,
+      body.skillId,
     );
 
     if (isSuccess) {

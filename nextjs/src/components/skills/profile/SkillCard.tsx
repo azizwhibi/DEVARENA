@@ -41,7 +41,9 @@ export function SkillCard({ skill, onStartChallenge }: SkillCardProps) {
         </span>
       )}
       <div className="skill-card-meta">
-        <span>{skill.validatedAttempts} validated challenges</span>
+        <span>
+          {skill.solvedProblems ?? skill.validatedAttempts} validated problems
+        </span>
         {skill.delta30d !== null && skill.delta30d !== undefined && (
           <span>
             {skill.delta30d >= 0 ? '+' : ''}

@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiRequest, ApiError } from '@/lib/api';
 import { createClient } from '@/lib/supabase/client';
+import { clearOfflineReading } from '@/lib/offline-reading';
 
 interface DangerZoneProps {
   currentUsername: string;
@@ -33,6 +34,7 @@ export function DangerZone({ currentUsername }: DangerZoneProps) {
       });
 
       // Sign out from Supabase to clear session cookies and redirect home
+      await clearOfflineReading().catch(() => {});
       const supabase = createClient();
       await supabase.auth.signOut();
       router.push('/');

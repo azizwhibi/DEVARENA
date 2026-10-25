@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { useSkillSummary } from '@/components/skills/useSkillSummary';
 import { RadarChart } from '@/components/skills/profile/RadarChart';
+import { PracticeProgress } from '@/components/skills/profile/PracticeProgress';
+import { CodeReviewProgress } from '@/components/skills/code/CodeReviewProgress';
 
 export function ProfileProgress({ createdAt }: { createdAt: string }) {
   const { skills, evaluated, average, pending, error, available } =
@@ -23,9 +25,10 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
           {error}
         </p>
       )}
-      <dl className="ui-metrics profile-statistics">
+      <CodeReviewProgress layout="profile" />
+      {!!evaluated.length && <dl className="ui-metrics profile-statistics" aria-label="Verified proficiency">
         <div>
-          <dt>Assigned skills</dt>
+          <dt>Demonstrated skills</dt>
           <dd>{available ? skills.length : '—'}</dd>
         </div>
         <div>
@@ -36,7 +39,8 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
           <dt>Average proficiency</dt>
           <dd>{average === null ? '—' : average + '%'}</dd>
         </div>
-      </dl>
+      </dl>}
+      <PracticeProgress />
       <div className="profile-panels">
         <section className="ui-card">
           <h2 className="ui-label">Developer identity</h2>
@@ -49,17 +53,17 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
               })}
             </strong>
           </div>
-          <div className="identity-detail">
+          {!!evaluated.length && <div className="identity-detail">
             <span>Assessment</span>
             <strong>
               {evaluated.length ? 'Measured proficiency' : 'Not yet assessed'}
             </strong>
-          </div>
+          </div>}
           <Link href="/my-skills" className="ui-button">
             View skills
           </Link>
         </section>
-        <section className="ui-card">
+        {evaluated.length >= 3 && <section className="ui-card">
           <h2 className="ui-label">Developer DNA</h2>
           {evaluated.length >= 3 ? (
             <RadarChart skills={evaluated} />
@@ -69,9 +73,9 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
               <span>At least three assessed skills are needed.</span>
             </div>
           )}
-        </section>
-        <section className="ui-card">
-          <h2 className="ui-label">Skill performance</h2>
+        </section>}
+        {!!evaluated.length && <section className="ui-card">
+          <h2 className="ui-label">Verified skill proficiency</h2>
           {evaluated.length ? (
             evaluated.slice(0, 5).map((skill) => (
               <Link
@@ -92,14 +96,14 @@ export function ProfileProgress({ createdAt }: { createdAt: string }) {
             <div className="ui-empty">
               <strong>No verified scores yet</strong>
               <span>
-                Assigned skills stay unassessed until a validated assessment.
+                Verified proficiency comes from validated problem results.
               </span>
               <Link href="/arena" className="ui-button">
-                Explore challenges
+                Explore problems
               </Link>
             </div>
           )}
-        </section>
+        </section>}
       </div>
     </>
   );

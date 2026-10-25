@@ -8,6 +8,8 @@ import ts from "typescript";
 const require = createRequire(import.meta.url);
 const hooks = registerHooks({
   resolve(specifier, context, next) {
+    if (specifier === '@/components/AccountProvider')
+      return { url: 'mock:account', shortCircuit: true };
     if (specifier === "@/lib/supabase/client")
       return { url: "mock:auth", shortCircuit: true };
     if (specifier === "next/link")
@@ -43,6 +45,7 @@ const hooks = registerHooks({
   },
   load(url, context, next) {
     const mocks = {
+      'mock:account': "export function useAccount(){return {user:null}}",
       "mock:auth":
         "export function createClient(){return {auth:{getSession:async()=>({data:{session:{access_token:'knowledge-session'}}})}};}",
       "mock:link":
@@ -134,6 +137,17 @@ try {
   );
   const origin = "https://app.test",
     context = vm.createContext({ URL, self: undefined });
+  const onlineDescriptor = Object.getOwnPropertyDescriptor(globalThis.navigator, 'onLine');
+  const onlineFetch = globalThis.fetch;
+  Object.defineProperty(globalThis.navigator, 'onLine', { value: false, configurable: true });
+  globalThis.fetch = () => { throw new Error('Offline requests must never reach the network'); };
+  try {
+    await assert.rejects(apiRequest('/me/knowledge/progress/resource-a', { method: 'PATCH', body: '{}' }), /offline/i);
+  } finally {
+    if (onlineDescriptor) Object.defineProperty(globalThis.navigator, 'onLine', onlineDescriptor);
+    else delete globalThis.navigator.onLine;
+    globalThis.fetch = onlineFetch;
+  }
   vm.runInContext(readFileSync("public/sw.js", "utf8"), context);
   for (const path of [
     "/knowledge/resources",
