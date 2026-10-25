@@ -222,7 +222,12 @@ export interface UseQuizDuelReturn {
   isPlayerAnswered: boolean;
   isOpponentAnswered: boolean;
   answerQuestion: (selectedIndex: number) => void;
-  restartDuel: () => void;
+  restartDuel: (driverOverride?: DuelDriverType) => void;
+  forfeitDuel: (reason?: string) => void;
+  forfeitOutcome: 'self' | 'opponent' | null;
+
+  // Détection Réseau (PHASE A)
+  isOnline: boolean;
 
   // Contrôles multijoueur & Matchmaking WebSocket (PHASE 2 & Ready Check)
   driver: DuelDriverType;

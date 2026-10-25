@@ -14,6 +14,8 @@ import type {
 } from '@/types/duel';
 import { DEFAULT_DUEL_QUESTIONS } from '@/lib/duelMockQuestions';
 import { createClient } from '@/lib/supabase/client';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { getQueueCooldownRemaining } from '@/hooks/useDuelAntiCheat';
 
 export const ROUND_TIME_MS = 10000;
 export const RESOLUTION_TIME_MS = 2000;
@@ -71,7 +73,21 @@ export function useQuizDuel({
   onRoundComplete,
   onFinish,
 }: UseQuizDuelOptions = {}): UseQuizDuelReturn {
+  const isOnline = useNetworkStatus();
   const [activeDriver, setActiveDriver] = useState<DuelDriverType>(initialDriver);
+  const activeDriverRef = useRef<DuelDriverType>(initialDriver);
+
+  useEffect(() => {
+    activeDriverRef.current = activeDriver;
+  }, [activeDriver]);
+
+  useEffect(() => {
+    if (initialDriver) {
+      setActiveDriver(initialDriver);
+      activeDriverRef.current = initialDriver;
+    }
+  }, [initialDriver]);
+
   const activeQuestions = useMemo(() => questions.slice(0, TOTAL_QUESTIONS), [questions]);
 
   const [duelState, setDuelState] = useState<DuelState>(autoStart ? 'READING' : 'READING');
@@ -118,6 +134,9 @@ export function useQuizDuel({
     avatarUrl?: string;
   } | null>(null);
 
+  // État de forfait / disqualification explicite (Anti-Triche ou abandon)
+  const [forfeitOutcome, setForfeitOutcome] = useState<'self' | 'opponent' | null>(null);
+
   // Références d'état synchronisées
   const duelStateRef = useRef<DuelState>(duelState);
   const currentQuestionIndexRef = useRef<number>(currentQuestionIndex);
@@ -125,6 +144,12 @@ export function useQuizDuel({
   const roundStartTimeRef = useRef<number>(0);
   const isResolvingRef = useRef<boolean>(false);
   const currentDuelIdRef = useRef<string>(duelId);
+  const isSearchingMatchRef = useRef<boolean>(isSearchingMatch);
+  const prevIsOnlineRef = useRef<boolean>(isOnline);
+
+  useEffect(() => {
+    isSearchingMatchRef.current = isSearchingMatch;
+  }, [isSearchingMatch]);
 
   const playerAnswerRef = useRef<PlayerRoundResult | null>(null);
   const opponentAnswerRef = useRef<PlayerRoundResult | null>(null);
@@ -203,7 +228,7 @@ export function useQuizDuel({
    * Initialisation et gestion robuste de la WebSocket (PHASE 2)
    */
   useEffect(() => {
-    if (activeDriver !== 'websocket' || typeof window === 'undefined') return;
+    if (activeDriver !== 'websocket' || typeof window === 'undefined' || !isOnline) return;
 
     let isSubscribed = true;
     let socket: WebSocket | null = null;
@@ -459,9 +484,13 @@ export function useQuizDuel({
 
               case 'DUEL_ERROR': {
                 setErrorMessage(serverEvent.payload.message);
-                if (serverEvent.payload.code === 'OPPONENT_DISCONNECTED') {
+                if (
+                  serverEvent.payload.code === 'OPPONENT_DISCONNECTED' ||
+                  serverEvent.payload.code === 'OPPONENT_FORFEIT'
+                ) {
                   setDuelState('FINISHED');
                   duelStateRef.current = 'FINISHED';
+                  setForfeitOutcome('opponent');
                 }
                 break;
               }
@@ -500,7 +529,7 @@ export function useQuizDuel({
       }
       webSocketRef.current = null;
     };
-  }, [activeDriver, socketUrl, duelId, playerName]);
+  }, [activeDriver, socketUrl, duelId, playerName, isOnline]);
 
   // Boucle d'horloge locale en phase 'READING'
   useEffect(() => {
@@ -721,8 +750,41 @@ export function useQuizDuel({
       webSocketRef.current.send(JSON.stringify({ type: 'DUEL_QUEUE_LEAVE' }));
       webSocketRef.current.close();
     }
+    webSocketRef.current = null;
+    activeDriverRef.current = 'local_bot';
     setActiveDriver('local_bot');
   }, []);
+
+  // Basculement explicite de driver
+  const handleSetDriver = useCallback((newDriver: DuelDriverType) => {
+    activeDriverRef.current = newDriver;
+    setActiveDriver(newDriver);
+    if (newDriver === 'local_bot') {
+      setIsSearchingMatch(false);
+      setIsMatchProposed(false);
+      setHasAcceptedMatch(false);
+      setHasOpponentAccepted(false);
+      setProposedOpponent(null);
+      if (webSocketRef.current) {
+        if (webSocketRef.current.readyState === WebSocket.OPEN) {
+          webSocketRef.current.send(JSON.stringify({ type: 'DUEL_QUEUE_LEAVE' }));
+        }
+        webSocketRef.current.close();
+        webSocketRef.current = null;
+      }
+    }
+  }, []);
+
+  // Détection de coupure réseau pendant la recherche de match
+  useEffect(() => {
+    if (prevIsOnlineRef.current && !isOnline) {
+      if (isSearchingMatchRef.current) {
+        cancelSearch();
+        setErrorMessage('Connexion Internet perdue. Recherche de match annulée.');
+      }
+    }
+    prevIsOnlineRef.current = isOnline;
+  }, [isOnline, cancelSearch]);
 
   // Accepter le match proposé
   const acceptMatch = useCallback(() => {
@@ -752,61 +814,136 @@ export function useQuizDuel({
     setHasOpponentAccepted(false);
     setProposedOpponent(null);
     setIsSearchingMatch(false);
+    activeDriverRef.current = 'local_bot';
     setActiveDriver('local_bot');
   }, []);
 
   // Lancer la recherche de match multijoueur
   const startMatchmaking = useCallback(() => {
+    if (!isOnline) {
+      setErrorMessage(
+        'Vous êtes actuellement hors-ligne. Connexion Internet requise pour le matchmaking.',
+      );
+      return;
+    }
+    const cooldownRemaining = getQueueCooldownRemaining();
+    if (cooldownRemaining > 0) {
+      setErrorMessage(
+        `Bannissement temporaire actif : ${cooldownRemaining}s restant(s). Recherche de match bloquée.`,
+      );
+      return;
+    }
     setErrorMessage(null);
     setIsMatchProposed(false);
     setHasAcceptedMatch(false);
     setHasOpponentAccepted(false);
     setProposedOpponent(null);
+    activeDriverRef.current = 'websocket';
     setActiveDriver('websocket');
+    setForfeitOutcome(null);
     setIsSearchingMatch(true);
     setSearchDurationSeconds(0);
-  }, []);
+  }, [isOnline]);
 
   // Redémarrage complet du duel
-  const restartDuel = useCallback(() => {
-    setCurrentQuestionIndex(0);
-    currentQuestionIndexRef.current = 0;
-    setServerQuestion(null);
-    setPlayerRoundResult(null);
-    setOpponentRoundResult(null);
-    setTimeRemainingMs(ROUND_TIME_MS);
-    setErrorMessage(null);
+  const restartDuel = useCallback(
+    (driverOverride?: DuelDriverType) => {
+      const targetDriver = driverOverride ?? activeDriverRef.current;
+      setCurrentQuestionIndex(0);
+      currentQuestionIndexRef.current = 0;
+      setServerQuestion(null);
+      setPlayerRoundResult(null);
+      setOpponentRoundResult(null);
+      setTimeRemainingMs(ROUND_TIME_MS);
+      setErrorMessage(null);
+      setForfeitOutcome(null);
 
-    setPlayerStats({
-      name: playerName,
-      totalScore: 0,
-      correctAnswers: 0,
-      totalResponseTimeMs: 0,
-      roundScores: [],
-    });
-    setOpponentStats({
-      name: activeDriver === 'websocket' ? 'Adversaire' : opponentName,
-      totalScore: 0,
-      correctAnswers: 0,
-      totalResponseTimeMs: 0,
-      roundScores: [],
-    });
+      setPlayerStats({
+        name: playerName,
+        totalScore: 0,
+        correctAnswers: 0,
+        totalResponseTimeMs: 0,
+        roundScores: [],
+      });
+      setOpponentStats({
+        name: targetDriver === 'websocket' ? 'Adversaire' : opponentName,
+        totalScore: 0,
+        correctAnswers: 0,
+        totalResponseTimeMs: 0,
+        roundScores: [],
+      });
 
-    if (activeDriver === 'websocket') {
-      setIsSearchingMatch(true);
-      if (webSocketRef.current?.readyState === WebSocket.OPEN) {
-        webSocketRef.current.send(
-          JSON.stringify({
-            type: 'DUEL_JOIN',
-            payload: { duelId: 'matchmaking', playerName },
-          })
-        );
+      if (targetDriver === 'websocket') {
+        if (!isOnline) {
+          setErrorMessage(
+            'Vous êtes actuellement hors-ligne. Connexion Internet requise pour le matchmaking.',
+          );
+          activeDriverRef.current = 'local_bot';
+          setActiveDriver('local_bot');
+          setDuelState('READING');
+          duelStateRef.current = 'READING';
+          return;
+        }
+        setIsSearchingMatch(true);
+        if (webSocketRef.current?.readyState === WebSocket.OPEN) {
+          webSocketRef.current.send(
+            JSON.stringify({
+              type: 'DUEL_JOIN',
+              payload: { duelId: 'matchmaking', playerName },
+            }),
+          );
+        }
+      } else {
+        setDuelState('READING');
+        duelStateRef.current = 'READING';
       }
-    } else {
-      setDuelState('READING');
-      duelStateRef.current = 'READING';
-    }
-  }, [playerName, opponentName, activeDriver]);
+    },
+    [playerName, opponentName, isOnline],
+  );
+
+  // Abandon / Forfait immédiat (Anti-triche ou abandon volontaire)
+  const forfeitDuel = useCallback(
+    (reason: string = 'ANTI_CHEAT_FORFEIT') => {
+      // 1. Clore la socket si websocket actif pour notifier le serveur
+      if (webSocketRef.current) {
+        if (webSocketRef.current.readyState === WebSocket.OPEN) {
+          try {
+            webSocketRef.current.send(JSON.stringify({ type: 'DUEL_QUEUE_LEAVE' }));
+          } catch {}
+          try {
+            webSocketRef.current.close();
+          } catch {}
+        }
+      }
+
+      // 2. Basculer immédiatement sur FINISHED avec statut FORFEIT explicite
+      setForfeitOutcome('self');
+      setDuelState('FINISHED');
+      duelStateRef.current = 'FINISHED';
+
+      // 3. Déclarer l'adversaire vainqueur d'office
+      const finalPlayerStats = { ...playerStats };
+      const finalOpponentStats = {
+        ...opponentStats,
+        totalScore: Math.max(opponentStats.totalScore, playerStats.totalScore + 500),
+      };
+
+      setPlayerStats(finalPlayerStats);
+      setOpponentStats(finalOpponentStats);
+
+      setErrorMessage(
+        reason === 'ANTI_CHEAT_FORFEIT'
+          ? 'Défaite par forfait : Infraction aux règles de sécurité anti-triche (perte de focus répétée).'
+          : 'Défaite par forfait.',
+      );
+
+      onFinishRef.current?.({
+        player: finalPlayerStats,
+        opponent: finalOpponentStats,
+      });
+    },
+    [playerStats, opponentStats],
+  );
 
   return {
     duelState,
@@ -822,10 +959,15 @@ export function useQuizDuel({
     isOpponentAnswered: opponentRoundResult !== null,
     answerQuestion,
     restartDuel,
+    forfeitDuel,
+    forfeitOutcome,
+
+    // Détection Réseau (PHASE A)
+    isOnline,
 
     // Contrôles multijoueur (PHASE 2 & Ready Check)
     driver: activeDriver,
-    setDriver: setActiveDriver,
+    setDriver: handleSetDriver,
     isSearchingMatch,
     searchDurationSeconds,
     queuePosition,

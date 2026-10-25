@@ -5,6 +5,7 @@ import { connection } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { apiRequest } from '@/lib/api-server';
 import { DuelArena } from '@/components/duel/DuelArena';
+import type { DuelDriverType } from '@/types/duel';
 
 export const metadata: Metadata = {
   title: '1v1 Duel Arena | DEVARENA',
@@ -30,7 +31,17 @@ function ArenaSkeleton() {
   );
 }
 
-async function DuelArenaContainer() {
+interface DuelPageProps {
+  searchParams?: Promise<{ mode?: string }>;
+}
+
+async function DuelArenaContainer({
+  searchParams,
+}: DuelPageProps) {
+  const resolvedParams = searchParams ? await searchParams : undefined;
+  const initialDriver: DuelDriverType =
+    resolvedParams?.mode === 'offline' ? 'local_bot' : 'websocket';
+
   await connection();
   let username = 'Dev_Candidate';
 
@@ -63,10 +74,10 @@ async function DuelArenaContainer() {
     username = 'Dev_Candidate';
   }
 
-  return <DuelArena playerName={username} />;
+  return <DuelArena playerName={username} initialDriver={initialDriver} />;
 }
 
-export default function DuelPage() {
+export default function DuelPage({ searchParams }: DuelPageProps) {
   return (
     <main className="relative flex flex-1 flex-col px-4 py-6 md:py-10 pb-20 sm:pb-12">
       <div className="arena-grid" aria-hidden="true" />
@@ -95,7 +106,7 @@ export default function DuelPage() {
 
         {/* Arène de duel avec chargement en streaming Suspense */}
         <Suspense fallback={<ArenaSkeleton />}>
-          <DuelArenaContainer />
+          <DuelArenaContainer searchParams={searchParams} />
         </Suspense>
       </div>
     </main>

@@ -75,3 +75,16 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .arena-tick { stroke-dashoffset: 0; }
 }
+
+/* ---- Duel Arena Anti-Cheat Text Lock: total selection and drag prevention ---- */
+.duel-no-copy,
+.duel-no-copy * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  -webkit-touch-callout: none !important;
+}
+

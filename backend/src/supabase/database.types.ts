@@ -363,7 +363,28 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      v_dev_rankings: {
+        Row: {
+          user_id: string;
+          username: string;
+          avatar_url: string | null;
+          country: string | null;
+          institution: string | null;
+          institution_key: string | null;
+          visibility: string;
+          status: string;
+          created_at: string;
+          xp: number;
+          matches_won: number;
+          total_matches: number;
+          avg_accuracy: number;
+          validated_attempts: number;
+          dev_score: number;
+          tier: string;
+          rank: number;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       update_profile: {

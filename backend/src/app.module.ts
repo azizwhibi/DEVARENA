@@ -6,6 +6,7 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DuelModule } from './duel/duel.module';
+import { RankingsModule } from './rankings/rankings.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DuelModule } from './duel/duel.module';
     AuthModule,
     UsersModule,
     DuelModule,
+    RankingsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
