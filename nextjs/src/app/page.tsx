@@ -1,6 +1,7 @@
 import { TerminalHero } from '@/components/arena/TerminalHero';
 import { PartnerCarousel } from '@/components/landing/PartnerCarousel';
 import { learningPlatforms } from '@/components/landing/partners';
+import { MobileShowcase } from '@/components/landing/MobileShowcase';
 
 const steps = [
   {
@@ -36,6 +37,8 @@ export default function Home() {
         </p>
         <TerminalHero />
       </section>
+
+      <MobileShowcase />
 
       <section
         aria-labelledby="how-title"

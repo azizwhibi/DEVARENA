@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthHeader } from '@/components/AuthHeader';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { InstallProvider } from '@/components/pwa/InstallProvider';
 import { OfflineBanner } from '@/components/pwa/OfflineBanner';
 import { RegisterSW } from '@/components/pwa/RegisterSW';
 import { OfflineAccountSync } from '@/components/pwa/OfflineAccountSync';
@@ -30,12 +31,14 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           }
         >
           <AccountProvider>
-            <OfflineBanner />
-            <AuthHeader />
-            <ApplicationShell>{children}</ApplicationShell>
-            <InstallPrompt />
-            <RegisterSW />
-            <OfflineAccountSync />
+            <InstallProvider>
+              <OfflineBanner />
+              <AuthHeader />
+              <ApplicationShell>{children}</ApplicationShell>
+              <InstallPrompt />
+              <RegisterSW />
+              <OfflineAccountSync />
+            </InstallProvider>
           </AccountProvider>
         </Suspense>
       </body>
