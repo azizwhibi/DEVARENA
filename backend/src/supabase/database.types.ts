@@ -532,6 +532,25 @@ export type Database = {
       };
     };
     Views: {
+      competitive_leaderboard: {
+        Row: {
+          user_id: string;
+          username: string;
+          avatar_url: string | null;
+          country: string | null;
+          institution: string | null;
+          institution_key: string | null;
+          visibility: string;
+          status: string;
+          duel_rating: number;
+          wins: number;
+          matches_played: number;
+          dev_score: number;
+          competitive_points: number;
+          tier: string;
+        };
+        Relationships: [];
+      };
       dev_scores: {
         Row: {
           user_id: string;

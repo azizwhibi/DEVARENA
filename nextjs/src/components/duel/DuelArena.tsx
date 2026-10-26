@@ -39,6 +39,12 @@ export function DuelArena() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!s.ratingUpdate) return;
+    window.dispatchEvent(new Event('profile-score-updated'));
+    router.refresh();
+  }, [s.ratingUpdate, router]);
+
+  useEffect(() => {
     if (account.role === 'admin') {
       router.replace('/admin/users');
     } else if (account.role === 'recruiter') {
@@ -306,8 +312,10 @@ export function DuelArena() {
                 {s.mode === 'online' && (
                   <p role="status">
                     {s.ratingUpdate
-                      ? `${s.ratingUpdate.delta >= 0 ? '+' : ''}${s.ratingUpdate.delta} Elo · ${s.ratingUpdate.rating.toLocaleString('en-US')} rating · ${s.ratingUpdate.competitivePoints.toLocaleString('en-US')} competitive points`
-                      : 'Competitive rating update pending.'}{' '}
+                      ? `${s.ratingUpdate.delta >= 0 ? '+' : ''}${s.ratingUpdate.delta} Elo · ${s.ratingUpdate.rating.toLocaleString('en-US')} rating · ${s.ratingUpdate.competitivePoints.toLocaleString('en-US')} competitive points${s.ratingUpdate.marginBonus ? (s.ratingUpdate.marginBonus === 50 ? ' · 🔥 Blowout Bonus (+50%)' : ' · ⚡ Dominant Win (+25%)') : ''}`
+                      : s.ratingStatus === 'failed'
+                        ? 'Competitive rating could not be confirmed. Check Rankings before playing another ranked match.'
+                        : 'Saving competitive rating…'}{' '}
                     <a href="/rankings">View rank progress</a>
                   </p>
                 )}

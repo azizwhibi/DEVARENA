@@ -8,11 +8,13 @@
     "start": "next start -p 3001",
     "lint": "eslint",
     "test:skills": "node --experimental-strip-types scripts/check-skills.mjs",
-    "test:auth": "node --experimental-strip-types scripts/check-safe-next.mjs && node --experimental-strip-types scripts/check-api.mjs && node --experimental-strip-types scripts/check-register.mjs && node --experimental-strip-types scripts/check-oauth.mjs && node --experimental-strip-types scripts/check-recovery.mjs && node --experimental-strip-types scripts/check-profile.mjs && node scripts/check-admin.mjs && node scripts/check-pwa.mjs && node --experimental-strip-types scripts/check-role-login.mjs && node --experimental-strip-types scripts/check-recruiter-candidates.mjs && node --experimental-strip-types scripts/check-rankings.mjs && node --experimental-strip-types scripts/check-competitive-results.mjs",
+    "test:auth": "node --experimental-strip-types scripts/check-safe-next.mjs && node --experimental-strip-types scripts/check-api.mjs && node --experimental-strip-types scripts/check-register.mjs && node --experimental-strip-types scripts/check-oauth.mjs && node --experimental-strip-types scripts/check-recovery.mjs && node --experimental-strip-types scripts/check-profile.mjs && node scripts/check-admin.mjs && node scripts/check-pwa.mjs && node --experimental-strip-types scripts/check-role-login.mjs && node --experimental-strip-types scripts/check-recruiter-candidates.mjs && node --experimental-strip-types scripts/check-rankings.mjs && node --experimental-strip-types scripts/check-competitive-results.mjs && node --experimental-strip-types scripts/check-practice-loading.mjs && node --experimental-strip-types scripts/check-practice-history.mjs && node --experimental-strip-types scripts/check-duel-lifecycle.mjs",
     "test:knowledge": "node --experimental-strip-types scripts/check-knowledge.mjs",
     "test:guide": "node --experimental-strip-types scripts/check-dev-guide.mjs",
     "test:marketplace": "node --experimental-strip-types scripts/check-marketplace.mjs",
-    "test:duel": "node --experimental-strip-types scripts/check-duel.mjs"
+    "test:duel": "node --experimental-strip-types scripts/check-duel.mjs && node --experimental-strip-types scripts/check-duel-lifecycle.mjs",
+    "test:practice": "node --experimental-strip-types scripts/check-practice-loading.mjs && node --experimental-strip-types scripts/check-practice-history.mjs",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",
@@ -26,6 +28,7 @@
     "three": "0.186.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -1,5 +1,141 @@
 # Tasks: `identity` module
 
+- [x] T72b: `SPEC-battle-margin-ranking.md` approved by the user after specification review.
+
+## Active Phase — Battle Score-Margin Ranking Adjustment & Persistence (Checkpoint P)
+
+Spec: [`SPEC-battle-margin-ranking.md`](file:///D:/5SIM4/PWA/app/DEVARENA/SPEC-battle-margin-ranking.md) (approved by user). Plan: active extension in `tasks/plan.md`.
+
+### T73: Database SQL Migration & RPC for Battle Score Margin Calculation
+- [x] Acceptance: `apply_competitive_duel` calculates `v_score_diff = abs(m.player1_score - m.player2_score)`. Winner receives 1.25x delta if diff >= 2500, 1.50x delta if diff >= 5000 (excluding forfeits). Loser incurs standard loss delta without multiplier penalty, floored at 800 Elo. Returns margin bonus metadata.
+- Verify: Transactional SQL assertions in `supabase/tests/rankings.sql` validating standard, dominant (+25%), blowout (+50%), asymmetric loss, and forfeit exclusion.
+- Files: `supabase/migrations/20261028000001_recover_duel_rankings.sql`, `supabase/tests/rankings.sql` (max 2).
+- Dependencies: approved implementation plan. Scope: S.
+
+### T74: Backend Rating Persistence & Payload Integration in `DuelRoomService`
+- [x] Acceptance: `DuelRoomService.persistMatchResult` parses margin bonus from RPC result, sends `DUEL_RATING_UPDATED` with `marginBonus: 0 | 25 | 50` alongside `delta`, `rating`, `competitivePoints`. `fallbackRankings` in `rankings.service.ts` mirrors margin logic.
+- Verify: Backend unit tests in `backend/src/duel/duel-ranking.spec.ts` asserting delta calculations and event dispatch for standard, dominant, and blowout wins.
+- Command: `npm --prefix backend test -- duel-ranking duel-room rankings`.
+- Files: `backend/src/duel/duel-room.service.ts`, `backend/src/duel/duel.types.ts`, `backend/src/duel/duel-ranking.spec.ts`, `backend/src/rankings/rankings.service.ts` (max 4).
+- Dependencies: T73. Scope: M.
+
+### T75: Frontend Duel Result Modal with Margin Bonus & Real-Time Rating Display
+- [x] Acceptance: `DuelResultModal.tsx` renders final match outcome, rating change (`+delta` / `-delta`), and special margin bonus badges ("🔥 Blowout Bonus (+50%)" or "⚡ Dominant Win (+25%)") when a big difference win occurs.
+- Verify: Frontend test scenario script validating modal rendering under standard, dominant, and blowout outcomes.
+- Command: `npm --prefix nextjs run test:duel`.
+- Files: `nextjs/src/components/duel/DuelResultModal.tsx`, `nextjs/src/types/duel.ts`, `nextjs/scripts/check-duel.mjs` (max 3).
+- Dependencies: T74. Scope: M.
+
+### T76: Frontend Rankings Board & MyStanding Visibility Verification
+- [x] Acceptance: Navigating to `/rankings` displays updated competitive points, tier, and division derived from the battle. `MyStanding` card correctly renders updated points, tier progress bar, and distance to next tier.
+- Verify: `npm --prefix nextjs run test:auth` and runtime assertion script verifying ranking table & `MyStanding` state updates after duel completion.
+- Command: `npm --prefix nextjs run test:auth`.
+- Files: `nextjs/src/components/rankings/RankingsBoard.tsx`, `nextjs/src/app/(skills)/rankings/page-client.tsx`, `nextjs/scripts/check-competitive-results.mjs` (max 3).
+- Dependencies: T75. Scope: M.
+
+### T77: Full Regression Suite, Typechecks, Graphify Sync & Checkpoint P Review
+- [x] Acceptance: Standard test suites, builds, and typechecks pass with 0 errors; Graphify knowledge graph refreshed; independent test-engineer, security-auditor, and code-reviewer receipts generated.
+- Verify: Full verification commands from `tasks/plan.md`, `git diff --check`.
+- Files: `docs/battle-margin-ranking-review.md`, `todo.md` (max 2).
+- Dependencies: T73–T76. Scope: S.
+
+### Checkpoint P
+- [x] T73–T77 acceptance and test verification complete.
+- [x] Full suites/builds/typechecks pass; independent review receipts complete.
+- [x] Human approval received for completion/phase transition per AGENTS.md Rule 11.
+- [x] Approved atomic conventional commit pushed before advancing to another phase.
+
+---
+
+- [x] T60: `SPEC-practice-delivery.md` approved by the user after scope approval.
+- [x] T61: `SPEC-duel-ranking-recovery.md` approved by the user after scope approval.
+
+## Recovery phase — practice delivery and duel ranking (Checkpoint O)
+
+Plan: active extension in `tasks/plan.md`. Both specifications and the implementation plan/task list approved by the user. Existing earlier work and checkpoints are preserved. The checks between slices are automated proof gates; this phase ends only at Checkpoint O.
+
+### T62: Record live catalog and schema readiness
+- [x] Acceptance: inventory all published challenges/content/subjects; compare schema/API availability and migration prerequisites; identify trusted SQL/browser access and authorized test identities without exposing secrets.
+- Verify: read-only full-catalog resolver audit, sanitized REST probes, physical schema/migration queries when trusted SQL access exists. Distinguish absent API objects from confirmed physical absence.
+- Files: `backend/scripts/check-practice-catalog.cjs`, `docs/challenge-duel-readiness.md` (max 2).
+- Dependencies: approved implementation plan. Scope: S. No hosted mutations.
+
+### T63: Serve authoritative practice content
+- [ ] Acceptance: existing bank endpoint adds public question projections from the server-owned source; selection/grading agree; no answer keys leak, and existing answer submission remains valid.
+- Verify: failing then passing backend contract/grading tests; unauthorized/unpublished/unknown content rejection and public projection key allowlist.
+- Command: `npm --prefix backend test -- competitive-attempts challenge-grading`.
+- Files: `backend/src/skills/scoring/practice-questions.ts`, `challenge-grading.ts`, `challenge-grading.spec.ts`, `backend/src/skills/me-skills.controller.ts`, `competitive-attempts.spec.ts` (max 5).
+- Dependencies: T62. Scope: M.
+
+### T64: Cover the current challenge subjects
+- [ ] Acceptance: all 104 current published challenges (and any newly added rows) receive relevant playable content; missing subjects have >=2 distinct questions per pool; duplicate prompts and accidental identifier-substring matches are rejected.
+- Verify: deterministic subject fixtures plus live catalog audit and reviewed subject/pool matrix; do not count unrelated fallback content as coverage.
+- Command: `npm --prefix backend test -- challenge-grading`; run `backend/scripts/check-practice-catalog.cjs` using its sanitized documented invocation.
+- Files: canonical practice-question source, grading resolver/spec, catalog audit, `docs/challenge-duel-readiness.md` (max 5).
+- Dependencies: T63. Scope: M; divide content additions by subject if one slice exceeds a focused session.
+
+### T65: Render only loaded practice questions
+- [ ] Acceptance: UI consumes the authoritative question projection; loading/error/timeout has no provisional prompt/options; retry recovers and stale loads cannot replace current content. Feedback uses server grading.
+- Verify: frontend runtime RED/Green scenarios for reported NestJS-under-error reproduction, valid load, invalid response, retry, timeout and cancellation; preserve bank/grading parity checks as applicable.
+- Commands: `npm --prefix nextjs run test:practice`; `npm --prefix nextjs run test:auth`.
+- Files: `nextjs/src/components/skills/arena/ChallengeModal.tsx`, `nextjs/scripts/check-practice-loading.mjs`, `check-competitive-results.mjs`, `nextjs/src/lib/practice.ts` if a public content type/helper is necessary (max 4).
+- Dependencies: T63–T64. Scope: M.
+
+### T66: Rotate practice questions across reopening
+- [ ] Acceptance: no repeats before pool exhaustion across modal/route remounts; account/pool isolation; explicit exhaustion/restart; singleton and unavailable-storage behavior are correct.
+- Verify: deterministic runtime scenarios for each transition and same-pool challenge navigation; browser storage contains only non-sensitive question identifiers.
+- Commands: `npm --prefix nextjs run test:practice`; `npm --prefix nextjs run test:auth` (wire new rotation scenarios into these standard gates).
+- Files: modal, `nextjs/src/lib/practice-history.ts`, `nextjs/scripts/check-practice-history.mjs`, `nextjs/package.json` (max 4).
+- Dependencies: T65. Scope: M. Automated practice proof required before proceeding.
+
+### T67: Prepare exact development schema repair
+- [ ] Acceptance: produce reviewed idempotent SQL restoring verified missing prerequisites, or cache refresh steps if schema already exists; preserve rows/RLS/privileges and document transaction/rollback behavior and exact safe execution method.
+- Verify: inspect existing duel/marketplace/competitive SQL dependencies and assertion safety; validate in an available disposable/local database where possible. Human review of exact hosted SQL is required before T68.
+- Files: at most one timestamped migration if needed, `supabase/tests/rankings.sql`, `docs/challenge-duel-readiness.md` and `docs/duel-ranking-repair.md` (max 4). Existing scripts are reused without unrelated edits.
+- Dependencies: T62 and completed practice slices. Scope: M. No hosted execution in T67.
+
+### T68: Restore and prove development ranking schema
+- [ ] Acceptance: approved exact repair is applied to the verified development target; match/rank/reward prerequisites and service-only privileges exist; API cache sees them and transactional SQL assertions pass.
+- Verify: trusted SQL execution of reviewed repair and `supabase/tests/rankings.sql`; sanitized post-repair schema/read RPC probes. Record exact invocation, target identity and migration IDs without secrets.
+- Files: `docs/duel-ranking-repair.md`, `docs/challenge-duel-readiness.md` (max 2 evidence files).
+- Dependencies: T67, explicit approval for its exact hosted SQL, trusted SQL access. Scope: S. Leave pending if access is missing.
+
+### T69: Report and recover authoritative rating persistence
+- [ ] Acceptance: match outcome is distinct from pending/saved/failed rating state; replay of a stored match reuses its UUID and validates stored evidence; no duplicate counters/rewards; failures emit sanitized matching status.
+- Verify: backend RED/Green cases for insert/RPC failure, duplicate/recovery, mismatched stored participants, missing infrastructure and personalized rating notifications.
+- Command: `npm --prefix backend test -- duel-ranking duel-room duel.gateway`.
+- Files: `backend/src/duel/duel-room.service.ts`, `duel.types.ts`, `duel-ranking.spec.ts`, `duel-room.service.spec.ts`, gateway/spec only if necessary (max 5; split if both gateway and its spec need edits).
+- Dependencies: T67 locally verified repair; event contract in plan approved. Prepare offline while hosted T68 awaits exact-SQL approval; T71 remains gated on T68. Scope: M.
+
+### T70: Display ranking status and refresh standing
+- [ ] Acceptance: online pending/failed/success states are distinct, stale/solo updates ignored, connection loss/bounded wait resolves pending honestly, successful rating changes invalidate profile/rankings navigation data.
+- Verify: real state reducer/UI runtime scenarios with personalized authoritative updates and prefetched navigation refresh; background refresh failure preserves account/outcome.
+- Commands: `npm --prefix nextjs run test:duel`; `npm --prefix nextjs run test:auth`.
+- Files: `nextjs/src/types/duel.ts`, `src/lib/duelState.ts`, `src/components/duel/DuelArena.tsx`, `scripts/check-duel.mjs`, `scripts/check-competitive-results.mjs` (max 5). Existing account refresh path reused; split any additional hook/account edits into a separately reviewed slice.
+- Dependencies: T69. Scope: M.
+
+### T71: Prove authenticated practice and ranked duel flows
+- [ ] Acceptance: actual browser/backend/database flows satisfy both specifications; two authorized test players produce one persisted match and rating result, before/after points/counts agree across profile/rankings; replay changes nothing.
+- Verify: practice load/answer/reopen/rotation/exhaustion/retry across both entry routes; real server-resolved duel, failure status, private/public standing; SQL replay/draw/forfeit assertions. Retain sanitized evidence; no production or other-user credentials.
+- Files: `docs/challenge-duel-runtime-evidence.md`, narrowly scoped integration scripts under `backend/scripts/` or `nextjs/scripts/` if required (max 3).
+- Dependencies: T66, T68–T70 and available authorized identities/browser tooling. Scope: M. Mock-only results cannot close this task.
+
+### T72: Full gates and independent review
+- [ ] Acceptance: standard suites/builds/typechecks and meaningful >=90% touched-area coverage pass; Graphify refresh/integrity and secret-exclusion checks pass; test-engineer, security-auditor and code-reviewer receipts have no unresolved blocker.
+- Verify: exact full commands in `tasks/plan.md`, safe SQL assertions and T71 runtime evidence; `git diff --check`; final review lists all changed files, commands/status, minimal-diff check and open risks.
+- Files: `docs/challenge-duel-recovery-review.md`, `todo.md`, generated Graphify artifacts (verification output only).
+- Dependencies: T71. Scope: S.
+
+### Checkpoint O
+- [ ] T62–T72 acceptance and actual runtime/database evidence complete.
+- [ ] Full suites/builds/typechecks pass; independent review receipts complete.
+- [ ] Human approval received for completion/phase transition per AGENTS.md Rule 11.
+- [ ] Approved atomic conventional commit pushed before advancing to another phase.
+
+- [x] T59: Fix practice loading using the stored challenge category when title/skills lack a question bank; add failure/timeout retry and runtime regression scenarios while preserving server-authorized grading (user-authorized maintenance; no phase advancement).
+
+- [x] T58: Regression fix: expose existing authoritative competitive points and duel rating on profiles, show them alongside proficiency, and refresh shared account/profile after a matching server rating update. Preserve solo/practice reward restrictions; verify focused regressions and full gates before completion.
+
 ## Phase 21 — Competitive rankings and reward economy (user-authorized, completed)
 
 Spec: `SPEC-competitive-rankings.md`. All tasks share Checkpoint N; no phase advancement or commit/push before review.

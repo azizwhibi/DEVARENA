@@ -61,6 +61,13 @@ export function ProfileHeader({ profile }: { profile: UserProfileData }) {
             )}
           </div>
           {profile.bio && <p className="profile-bio">{profile.bio}</p>}
+          {isDeveloper && profile.competitivePoints != null && (
+            <div className="profile-verified-values">
+              <span>Competitive points: {profile.competitivePoints}</span>
+              <span>Competitive tier: {profile.competitiveTier}</span>
+              <span>Duel rating: {profile.duelRating}</span>
+            </div>
+          )}
           {isDeveloper && profile.technologies.length > 0 && (
             <div className="profile-technologies">
               {profile.technologies.map((t) => (

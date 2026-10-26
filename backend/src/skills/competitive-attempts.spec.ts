@@ -107,7 +107,19 @@ describe('competitive practice awards', () => {
       title: 'Expert challenge', is_published: true,
       challenge_skills: [{ skills: { id: 'sql', name: 'SQL indexes', slug: 'sql' } }],
     }, error: null });
-    expect(await controller.questionBank(challengeId)).toEqual({ bank: 'SQL_QUESTIONS' });
+    expect(await controller.questionBank(challengeId)).toMatchObject({ bank: 'SQL_QUESTIONS' });
+  });
+
+  it('returns playable public questions without grading keys', async () => {
+    const result = await controller.questionBank(challengeId);
+    expect(result).toMatchObject({ bank: 'NESTJS_QUESTIONS' });
+    expect((result as any).questions.length).toBeGreaterThanOrEqual(2);
+    for (const question of (result as any).questions) {
+      expect(Object.keys(question).sort()).toEqual(['codeSnippet', 'hint', 'options', 'question']);
+      for (const option of question.options) {
+        expect(Object.keys(option).sort()).toEqual(['id', 'text']);
+      }
+    }
   });
 
   it('does not award mastery or credits for a wrong answer', async () => {
@@ -122,6 +134,28 @@ describe('competitive practice awards', () => {
     });
     expect(events.emitAsync).not.toHaveBeenCalled();
     expect(rewards.checkAndGrant).not.toHaveBeenCalled();
+  });
+
+  it('loads and grades a generic published challenge using its stored category', async () => {
+    db.client.from('challenges').maybeSingle.mockResolvedValue({
+      data: {
+        title: 'Defi test moyen',
+        category: 'SQL',
+        is_published: true,
+        challenge_skills: [],
+      },
+      error: null,
+    });
+    expect(await controller.questionBank(challengeId)).toMatchObject({
+      bank: 'SQL_QUESTIONS',
+    });
+    await expect(
+      controller.recordMyAttempt(req, challengeId, {
+        question:
+          'Why use JOIN LATERAL instead of a correlated PostgreSQL subquery?',
+        answerId: 'opt-1',
+      }),
+    ).resolves.toMatchObject({ isSuccess: true });
   });
 
   it('rejects missing or unpublished challenges', async () => {

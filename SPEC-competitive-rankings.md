@@ -14,6 +14,8 @@ Implement the user's ranking brief as one feature phase, extending existing Nest
 - Skill recalculation completes before reward checks. No Elo or competitive credit rewards from self-reported solo practice. Challenge awards use server validation of submitted answers, never client success/accuracy claims. Preserve existing RFC-7807 and suspension enforcement.
 
 ## Contracts
+T58 regression clarification: `/me/profile` exposes optional `competitivePoints`, `competitiveTier`, and `duelRating` from the existing service-only competitive leaderboard view. Median `devScore` and proficiency `tier` retain their meaning. The profile displays both, and a matching authoritative `DUEL_RATING_UPDATED` refreshes shared account data and the Next route cache. Background refresh failures preserve the displayed account; older requests cannot overwrite newer profile updates. Solo battles remain unranked.
+
 GET /rankings: scope,value,search (max 120),page>=1,pageSize 1–100. Response {items,total,page,pageSize,me}. Items: rank,userId,username,avatarUrl,country,institution,devScore,tier,division,competitivePoints,duelRating,wins,matchesPlayed,winRate. me: rank,devScore,tier,division,eligible,competitivePoints,duelRating,wins,matchesPlayed,winRate,pointsToNextTier,nextTier,nextTierReward,tierProgress.
 
 SQL RPCs (coordinate changes before implementation):

@@ -30,7 +30,7 @@ import {
   SubmitChallengeAnswerDto,
   SoloPracticeDto,
 } from './dto/submit-challenge-answer.dto';
-import { getChallengeBankName, gradeChallengeAnswer } from './scoring/challenge-grading';
+import { getChallengeQuestionBank, gradeChallengeAnswer, getChallengeAnswerExplanation } from './scoring/challenge-grading';
 
 type AuthedRequest = Request & { user?: { id: string } };
 
@@ -63,8 +63,8 @@ export class MeSkillsController {
   async questionBank(
     @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
   ) {
-    const { title, skills } = await this.loadChallenge(challengeId);
-    return { bank: getChallengeBankName(title, skills) };
+    const { title, skills, category } = await this.loadChallenge(challengeId);
+    return getChallengeQuestionBank(title, skills, category);
   }
 
   private async loadChallenge(challengeId: string) {
@@ -72,7 +72,7 @@ export class MeSkillsController {
       await this.supabase.client
         .from('challenges')
         .select(
-          'id, title, is_published, challenge_skills(skills(id, name, slug))',
+          'id, title, category, is_published, challenge_skills(skills(id, name, slug))',
         )
         .eq('id', challengeId)
         .maybeSingle();
@@ -85,12 +85,14 @@ export class MeSkillsController {
     const linkedSkills = challenge.challenge_skills as unknown as
       | { skills: { id: string; name: string; slug: string } | null }[]
       | undefined;
-    const skills = (linkedSkills ?? []).map((link) =>
-      link.skills
-        ? `${link.skills.id} ${link.skills.name} ${link.skills.slug}`
-        : '',
+    const skills = (linkedSkills ?? []).flatMap((link) =>
+      link.skills ? [link.skills.name, link.skills.slug] : [],
     );
-    return { title: challenge.title as string, skills };
+    return {
+      title: challenge.title as string,
+      skills,
+      category: challenge.category as string | undefined,
+    };
   }
 
   @Post('challenges/:challengeId/attempt')
@@ -103,12 +105,13 @@ export class MeSkillsController {
     const userId = req.user!.id;
     if (!body?.question || !body?.answerId)
       throw new BadRequestException('Submit a challenge answer.');
-    const { title, skills } = await this.loadChallenge(challengeId);
+    const { title, skills, category } = await this.loadChallenge(challengeId);
     const isValidated = gradeChallengeAnswer(
       title,
       body.question,
       body.answerId,
       skills,
+      category,
     );
     const accuracy = isValidated ? 1 : 0;
     const { data: attempt, error } = await this.supabase.client
@@ -158,6 +161,7 @@ export class MeSkillsController {
       accuracy,
       masteryPoints,
       rankReward,
+      explanation: getChallengeAnswerExplanation(title, body.question, body.answerId, skills, category),
     };
   }
 

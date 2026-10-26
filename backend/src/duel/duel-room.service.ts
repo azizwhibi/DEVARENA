@@ -447,6 +447,16 @@ export class DuelRoomService {
     winnerId: string | null,
     isForfeit: boolean,
   ): Promise<void> {
+    let failureCode: 'match_save_failed' | 'rating_apply_failed' = 'match_save_failed';
+    const notifyStatus = (status: 'pending' | 'failed') => {
+      for (const player of [room.player1, room.player2]) {
+        safeSend(player.socket, {
+          type: 'DUEL_RATING_STATUS',
+          payload: { duelId: room.duelId, status, ...(status === 'failed' ? { code: failureCode } : {}) },
+        });
+      }
+    };
+    notifyStatus('pending');
     try {
       const roundsSummary = room.player1.roundScores.map((score, idx) => ({
         roundIndex: idx,
@@ -454,7 +464,7 @@ export class DuelRoomService {
         player1Score: score,
         player2Score: room.player2.roundScores[idx] ?? 0,
       }));
-      const { error } = await this.supabase.client.from('duel_matches').insert({
+      const match = {
         id: room.duelId,
         player1_id: room.player1.id,
         player2_id: room.player2.id,
@@ -463,31 +473,66 @@ export class DuelRoomService {
         winner_id: winnerId,
         is_forfeit: isForfeit,
         rounds_data: roundsSummary,
-      });
-      if (error) {
+      };
+      const { error } = await this.supabase.client.from('duel_matches').insert(match);
+      let saved = !error;
+      if (error?.code === '23505') {
+        const { data: existing, error: readError } = await this.supabase.client
+          .from('duel_matches')
+          .select('player1_id, player2_id, player1_score, player2_score, winner_id, is_forfeit, rounds_data')
+          .eq('id', room.duelId)
+          .maybeSingle();
+        const storedRounds = existing?.rounds_data;
+        saved = !readError && !!existing &&
+          existing.player1_id === match.player1_id && existing.player2_id === match.player2_id &&
+          existing.player1_score === match.player1_score && existing.player2_score === match.player2_score &&
+          existing.winner_id === match.winner_id && existing.is_forfeit === match.is_forfeit &&
+          Array.isArray(storedRounds) && storedRounds.length === roundsSummary.length &&
+          roundsSummary.every((round, index) => {
+            const stored = storedRounds[index];
+            return !!stored && typeof stored === 'object' && !Array.isArray(stored) &&
+              stored.roundIndex === round.roundIndex && stored.questionId === round.questionId &&
+              stored.player1Score === round.player1Score && stored.player2Score === round.player2Score;
+          });
+      }
+      if (!saved) {
         this.logger.warn(
           'Battle result could not be saved. Check the duel integration migration.',
         );
+        notifyStatus('failed');
         return;
       }
+      failureCode = 'rating_apply_failed';
       const { data, error: ratingError } = await this.supabase.client.rpc(
         'apply_competitive_duel',
         { p_match_id: room.duelId },
       );
       if (ratingError || !data) {
         this.logger.warn('Battle rating could not be updated.');
+        notifyStatus('failed');
         return;
       }
       const rating = data as unknown as {
         applied: boolean;
+        player_a: string;
+        player_b: string;
         delta_a: number;
         delta_b: number;
         rating_a: number;
         rating_b: number;
         points_a: number;
         points_b: number;
+        margin_bonus_a?: number;
+        margin_bonus_b?: number;
       };
-      if (!rating.applied) return;
+      if (typeof rating.applied !== 'boolean' ||
+          rating.player_a !== room.player1.id || rating.player_b !== room.player2.id ||
+          ![rating.delta_a, rating.delta_b, rating.rating_a, rating.rating_b, rating.points_a, rating.points_b]
+            .every((value) => Number.isSafeInteger(value)) ||
+          rating.rating_a < 800 || rating.rating_b < 800 || rating.points_a < 0 || rating.points_b < 0) {
+        notifyStatus('failed');
+        return;
+      }
       safeSend(room.player1.socket, {
         type: 'DUEL_RATING_UPDATED',
         payload: {
@@ -495,6 +540,7 @@ export class DuelRoomService {
           delta: rating.delta_a,
           rating: rating.rating_a,
           competitivePoints: rating.points_a,
+          marginBonus: rating.margin_bonus_a ?? 0,
         },
       });
       safeSend(room.player2.socket, {
@@ -504,17 +550,21 @@ export class DuelRoomService {
           delta: rating.delta_b,
           rating: rating.rating_b,
           competitivePoints: rating.points_b,
+          marginBonus: rating.margin_bonus_b ?? 0,
         },
       });
-      this.events.emit('duel.finished', {
+      if (rating.applied === true) this.events.emit('duel.finished', {
         playerA: room.player1.id,
         playerB: room.player2.id,
         winnerId,
         deltaA: rating.delta_a,
         deltaB: rating.delta_b,
+        marginBonusA: rating.margin_bonus_a ?? 0,
+        marginBonusB: rating.margin_bonus_b ?? 0,
       });
     } catch {
       this.logger.warn('Battle result could not be saved.');
+      notifyStatus('failed');
     }
   }
 

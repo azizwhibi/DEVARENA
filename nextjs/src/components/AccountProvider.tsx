@@ -10,6 +10,9 @@ export type Account = AuthUser & {
   avatarUrl?: string | null;
   devScore?: number | null;
   tier?: string | null;
+  competitivePoints?: number;
+  competitiveTier?: string;
+  duelRating?: number;
 };
 const AccountContext = createContext<ReturnType<typeof useAccountState> | null>(
   null,
@@ -41,22 +44,25 @@ function useAccountState() {
     if (!userId) return;
     const controller = new AbortController();
     let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+    let requestSequence = 0;
 
-    const fetchProfile = async (isRetry = false) => {
+    const fetchProfile = async (isRetry = false, background = false) => {
+      const request = ++requestSequence;
       try {
         const value = await apiRequest<Account>('/me/profile', {
           signal: controller.signal,
         });
-        if (controller.signal.aborted) return;
+        if (controller.signal.aborted || request !== requestSequence) return;
         if (value.id !== userId) throw new Error('Account could not be loaded');
         setProfile(value);
         setFailure(null);
       } catch (error) {
-        if (controller.signal.aborted) return;
+        if (controller.signal.aborted || request !== requestSequence) return;
+        if (background) return;
         // If first attempt failed with a network or transient error, retry once automatically after 600ms
         if (!isRetry && !(error instanceof ApiError)) {
           retryTimeout = setTimeout(() => {
-            if (!controller.signal.aborted) {
+            if (!controller.signal.aborted && request === requestSequence) {
               void fetchProfile(true);
             }
           }, 600);
@@ -74,6 +80,7 @@ function useAccountState() {
     const updated = (event: Event) => {
       const value = (event as CustomEvent<Account>).detail;
       if (value?.id === userId) {
+        requestSequence++;
         setProfile((previous) =>
           previous?.id === value.id ? { ...previous, ...value } : value,
         );
@@ -81,10 +88,13 @@ function useAccountState() {
       }
     };
     window.addEventListener('profile-updated', updated);
+    const refreshScore = () => void fetchProfile(false, true);
+    window.addEventListener('profile-score-updated', refreshScore);
     return () => {
       controller.abort();
       if (retryTimeout) clearTimeout(retryTimeout);
       window.removeEventListener('profile-updated', updated);
+      window.removeEventListener('profile-score-updated', refreshScore);
     };
   }, [userId, retryKey]);
   return {

@@ -47,6 +47,7 @@ export type BattleState = {
   error: string;
   winnerId: string | null;
   ratingUpdate: DuelRatingUpdatePayload | null;
+  ratingStatus: 'idle' | 'pending' | 'saved' | 'failed';
   rounds: { player: PlayerRoundResult; opponent: PlayerRoundResult }[];
 };
 export const initialBattle = (name: string): BattleState => ({
@@ -68,6 +69,7 @@ export const initialBattle = (name: string): BattleState => ({
   error: '',
   winnerId: null,
   ratingUpdate: null,
+  ratingStatus: 'idle',
   rounds: [],
 });
 export function addResult(
@@ -91,9 +93,17 @@ export function receiveBattle(
 ): BattleState {
   switch (event.type) {
     case 'DUEL_RATING_UPDATED':
-      if (state.mode !== 'online' || state.duelId !== event.payload.duelId)
+      if (state.mode !== 'online' || state.duelId !== event.payload.duelId ||
+          ![event.payload.delta, event.payload.rating, event.payload.competitivePoints].every(Number.isSafeInteger) ||
+          event.payload.rating < 800 || event.payload.competitivePoints < 0 ||
+          (event.payload.marginBonus !== undefined && !Number.isSafeInteger(event.payload.marginBonus)))
         return state;
-      return { ...state, ratingUpdate: event.payload };
+      return { ...state, ratingUpdate: event.payload, ratingStatus: 'saved' };
+    case 'DUEL_RATING_STATUS':
+      if (state.mode !== 'online' || state.duelId !== event.payload.duelId || state.ratingUpdate ||
+          !['pending', 'failed'].includes(event.payload.status))
+        return state;
+      return { ...state, ratingStatus: event.payload.status };
     case 'DUEL_QUEUE_WAITING':
       return {
         ...state,
@@ -187,12 +197,14 @@ export function receiveBattle(
       };
     }
     case 'DUEL_MATCH_END':
+      if (state.mode !== 'online' || state.duelId !== event.payload.duelId) return state;
       return {
         ...state,
         phase: 'finished',
         player: event.payload.finalStats.player,
         opponent: event.payload.finalStats.opponent,
         winnerId: event.payload.winnerId,
+        ratingStatus: state.ratingUpdate ? 'saved' : state.ratingStatus === 'failed' ? 'failed' : 'pending',
       };
     case 'DUEL_ERROR':
       return { ...state, error: event.payload.message };

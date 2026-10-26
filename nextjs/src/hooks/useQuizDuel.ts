@@ -84,6 +84,17 @@ export function useQuizDuel(playerId: string, playerName: string) {
   }, []);
   useEffect(() => () => stop(), [stop]);
   useEffect(() => {
+    if (state.mode !== 'online' || state.phase !== 'finished' || state.ratingStatus !== 'pending') return;
+    const duelId = state.duelId;
+    const timer = window.setTimeout(() => {
+      setState((current) => current.duelId !== duelId || current.ratingStatus !== 'pending' ? current :
+        receiveBattle(current, { type: 'DUEL_RATING_STATUS', payload: {
+          duelId, status: 'failed', code: 'ranking_unavailable',
+        } }, playerId, Date.now()));
+    }, 30_000);
+    return () => clearTimeout(timer);
+  }, [state.mode, state.phase, state.ratingStatus, state.duelId, playerId]);
+  useEffect(() => {
     if (!['reading', 'proposed'].includes(state.phase)) return;
     const tick = window.setInterval(
       () =>
@@ -235,7 +246,9 @@ export function useQuizDuel(playerId: string, playerName: string) {
         socket.current = null;
         setState((current) =>
           current.phase === 'finished'
-            ? current
+            ? current.ratingStatus === 'pending'
+              ? { ...current, ratingStatus: 'failed' }
+              : current
             : {
                 ...current,
                 phase: 'idle',

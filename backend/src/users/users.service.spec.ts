@@ -310,12 +310,36 @@ describe('UsersService & DTO validation', () => {
               }),
             };
           }
+          if (table === 'competitive_leaderboard') {
+            return {
+              select: () => ({
+                eq: (_column: string, id: string) => {
+                  expect(id).toBe(userId);
+                  return {
+                    maybeSingle: async () => ({
+                      data: {
+                        competitive_points: 1972,
+                        duel_rating: 1224,
+                        tier: 'Platinum',
+                      },
+                      error: null,
+                    }),
+                  };
+                },
+              }),
+            };
+          }
           return {};
         });
 
         const res = await service.getProfile(userId);
         expect(res.devScore).toBe(82.5);
         expect(res.tier).toBe('advanced');
+        expect(res).toMatchObject({
+          competitivePoints: 1972,
+          duelRating: 1224,
+          competitiveTier: 'Platinum',
+        });
       });
 
       it('returns status suspended when profile is suspended', async () => {

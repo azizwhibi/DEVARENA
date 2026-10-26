@@ -89,6 +89,7 @@ export type DuelServerEventType =
   | 'DUEL_ROUND_RESOLVE'
   | 'DUEL_MATCH_END'
   | 'DUEL_RATING_UPDATED'
+  | 'DUEL_RATING_STATUS'
   | 'DUEL_MATCH_FOUND'
   | 'DUEL_QUEUE_WAITING'
   | 'DUEL_ERROR'
@@ -176,9 +177,14 @@ export interface DuelMatchCancelledPayload {
 }
 
 export type DuelServerEvent =
+  | { type: 'DUEL_RATING_STATUS'; payload: {
+      duelId: string;
+      status: 'pending' | 'failed';
+      code?: 'match_save_failed' | 'rating_apply_failed' | 'ranking_unavailable';
+    } }
   | {
       type: 'DUEL_RATING_UPDATED';
-      payload: { duelId: string; delta: number; rating: number; competitivePoints: number };
+      payload: { duelId: string; delta: number; rating: number; competitivePoints: number; marginBonus?: number };
     }
   | { type: 'DUEL_ROUND_START'; payload: DuelRoundStartPayload }
   | { type: 'DUEL_OPPONENT_ANSWERED'; payload: DuelOpponentAnsweredPayload }

@@ -22,6 +22,9 @@ export interface UserProfileData {
   createdAt: string;
   devScore: number | null;
   tier: string | null;
+  competitivePoints?: number;
+  competitiveTier?: string;
+  duelRating?: number;
 }
 
 interface TechnologyOption {

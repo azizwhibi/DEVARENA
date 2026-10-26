@@ -18,6 +18,27 @@ const resolve={duelId,roundIndex:0,correctIndex:1,playerResult:result,opponentRe
 event('DUEL_ROUND_RESOLVE',resolve);assert.equal(state.player.totalScore,750);assert.equal(state.player.correctAnswers,1);assert.equal(state.rounds.length,1);
 event('DUEL_ROUND_RESOLVE',resolve);assert.equal(state.rounds.length,1);assert.equal(state.player.totalScore,750);
 event('DUEL_MATCH_END',{duelId,winnerId:opponent,finalStats:{player:state.player,opponent:state.opponent}});assert.equal(state.winnerId,opponent);assert.equal(state.phase,'finished');
+assert.equal(state.ratingStatus,'pending','An online outcome waits for persisted ranking evidence');
+const pendingState=state;
+for(const changes of [{rating:-1},{competitivePoints:-1},{delta:0.5},{rating:'1220'},{marginBonus:1.5},{marginBonus:'50'}]) {
+  assert.strictEqual(receiveBattle(state,{type:'DUEL_RATING_UPDATED',payload:{duelId,delta:20,rating:1220,competitivePoints:732,...changes}},me,1000),state,'Malformed ratings cannot be announced as saved');
+}
+assert.strictEqual(receiveBattle(state,{type:'DUEL_RATING_STATUS',payload:{duelId,status:'saved'}},me,1000),state,'Status messages cannot invent saved evidence');
+event('DUEL_RATING_STATUS',{duelId:'old',status:'failed',code:'ranking_unavailable'});
+assert.strictEqual(state,pendingState,'Another match cannot change ranking status');
+event('DUEL_RATING_STATUS',{duelId,status:'failed',code:'match_save_failed'});
+assert.equal(state.ratingStatus,'failed');assert.equal(state.ratingUpdate,null);
+event('DUEL_RATING_UPDATED',{duelId,delta:36,rating:1236,competitivePoints:742,marginBonus:50});
+assert.equal(state.ratingStatus,'saved');assert.equal(state.ratingUpdate.rating,1236);assert.equal(state.ratingUpdate.marginBonus,50);
+const blowoutState=state;
+const arenaSource=await readFile(new URL('../src/components/duel/DuelArena.tsx',import.meta.url),'utf8');
+assert.ok(arenaSource.includes('Blowout Bonus (+50%)'),'DuelArena renders blowout bonus when margin >= 5000');
+assert.ok(arenaSource.includes('Dominant Win (+25%)'),'DuelArena renders dominant bonus when margin >= 2500');
+const savedState=state;
+event('DUEL_RATING_STATUS',{duelId,status:'failed',code:'ranking_unavailable'});
+assert.strictEqual(state,savedState,'A delayed failure cannot replace confirmed success');
+const soloState={...initialBattle('Alice'),mode:'solo',duelId};
+assert.strictEqual(receiveBattle(soloState,{type:'DUEL_RATING_STATUS',payload:{duelId,status:'failed'}},me,1000),soloState);
 event('DUEL_MATCH_FOUND',{duelId:'next',player:{id:me,name:'Alice'},opponent:{id:opponent,name:'Bob'}});assert.equal(state.player.totalScore,0);assert.deepEqual(state.rounds,[]);
 event('DUEL_MATCH_CANCELLED',{duelId:'next',reason:'timeout'});assert.equal(state.phase,'idle');assert.equal(state.mode,'online');
 const proxy=await readFile(new URL('../src/proxy.ts',import.meta.url),'utf8');assert.ok(proxy.includes("'/duel'"));

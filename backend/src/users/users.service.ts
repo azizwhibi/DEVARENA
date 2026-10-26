@@ -88,6 +88,9 @@ export interface UserProfileResponse {
   createdAt: string;
   devScore: number | null;
   tier: string | null;
+  competitivePoints?: number;
+  competitiveTier?: string;
+  duelRating?: number;
 }
 
 export interface TechnologyItem {
@@ -198,6 +201,10 @@ export class UsersService {
 
     let devScore: number | null = null;
     let tier: string | null = null;
+    let competitive: Pick<
+      UserProfileResponse,
+      'competitivePoints' | 'competitiveTier' | 'duelRating'
+    > = {};
 
     if (isDeveloper) {
       try {
@@ -216,6 +223,22 @@ export class UsersService {
       } catch {
         // non-fatal
       }
+      try {
+        const { data, error } = await this.supabase.client
+          .from('competitive_leaderboard')
+          .select('competitive_points, tier, duel_rating')
+          .eq('user_id', profile.id)
+          .maybeSingle();
+        if (!error && data) {
+          competitive = {
+            competitivePoints: Number(data.competitive_points),
+            competitiveTier: data.tier,
+            duelRating: Number(data.duel_rating),
+          };
+        }
+      } catch {
+        // An unavailable ranking view must not prevent profile access.
+      }
     }
 
     return {
@@ -233,6 +256,7 @@ export class UsersService {
       createdAt: profile.created_at,
       devScore,
       tier,
+      ...competitive,
     };
   }
 
