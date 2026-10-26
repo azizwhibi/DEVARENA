@@ -1,5 +1,7 @@
 # Implementation Plan: DevArena User & Auth initiative
 
+Platform Integration & Feature Merge extension (2026-10-26): Phase 25–28, T78–T86, is governed by `SPEC-platform-merge.md`. Merges `feature/devarena-integrated-platform` into `user-integrated`. Integrates Community forum, Problems Bank & Gemini AI code review, Lesson explanations, Landing showcase, and unified PWA offline reader while strictly preserving governance documents, 29/29 backend test suites, 15/15 frontend test scripts, role isolation, and 1v1 Elo duels. Checkpoints Q, R, S, T define the incremental verification gates.
+
 Competitive rankings extension (2026-10-26): user-authorized Phase 21, T53–T57, is governed by `SPEC-competitive-rankings.md`. Reuse existing median scores, rankings, events, duel gateway and wallets. SQL provides atomic Elo/rewards; Next displays authoritative results. Checkpoint N requires verification and human review before commit/push or another phase.
 
 Map: `CAPABILITY-MAP.md` (D1–D13) · Spec: `SPEC-identity.md` · Tasks: `tasks/todo.md`
