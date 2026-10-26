@@ -192,6 +192,17 @@ html[data-sidebar-collapsed='true'] .brandText {
     opacity: 0.4;
   }
 }
+@media (max-width: 359px) {
+  .brand {
+    padding-right: 8px;
+  }
+  .right {
+    padding-inline: 8px;
+  }
+  .login {
+    white-space: nowrap;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;

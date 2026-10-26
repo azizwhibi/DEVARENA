@@ -16,6 +16,9 @@ export interface SkillProgress {
   technology?: string;
   levelScore: number | null;
   validatedAttempts: number;
+  /** Distinct validated problems linked to this skill, not submission count. */
+  solvedProblems?: number;
+  firstValidatedAt?: string;
   status: SkillStatus;
   delta30d?: number | null;
   updatedAt?: string | null;

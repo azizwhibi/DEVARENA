@@ -1,0 +1,1184 @@
+id,title,difficulty,duration_seconds,is_published,category,description,problem_type,coding_version_id,problem_slug
+5f0e30a2-aacf-4b91-bb02-a2ef62284d31,Python: Stable Unique Values,beginner,,true,,"Return each integer from values exactly once, preserving its first occurrence order.",coding,3f59aabe-591e-4c91-a687-2b3bbdd954db,stable-unique-values
+b7377233-6d79-46e3-bba9-bf0bda72cf6c,JavaScript: First Matching Pair,beginner,,true,,"Return two distinct zero-based indices [i,j] whose values sum to target, with i < j. If several pairs exist, return the lexicographically smallest: smallest i, then smallest j. Return [] when no pair exists.",coding,fa6bac55-4b96-44e1-9a96-c81448cab274,first-matching-pair
+e5c91ba4-92a5-431f-82e9-1130f3de92e4,SQL: Customers Without Orders,intermediate,,true,,"Write a SQL SELECT returning id and name of every customer with no order. Sort by customer id ascending. Tables: customers(id INTEGER PRIMARY KEY, name TEXT), orders(id INTEGER PRIMARY KEY, customer_id INTEGER). Duplicate customer names are allowed; orders.customer_id may be NULL.",sql,71b1f4e6-b374-4786-a018-8f6c74258510,customers-without-orders
+0455846a-6196-59ef-80cf-9c91800774fb,Prefix Running Totals,beginner,900,true,Arrays,"Implement prefixTotals(values).
+
+Return an array whose element at index i is the sum of values[0] through values[i]. Do not change the input. Return [] for an empty array.
+
+Constraints: 0 <= values.length <= 100000; each value is an integer between -10000 and 10000.
+
+Example 1:
+Input: [2,-1,4]
+Output: [2,1,5]
+
+Example 2:
+Input: []
+Output: []",coding,,prefix-running-totals
+2ba265d6-ba2a-5f9e-8a7b-4f3c955c172f,Rotate Values to the Right,beginner,900,true,Arrays,"Implement rotateRight(values, k).
+
+Return a new array rotated right by k positions. A value leaving the right edge re-enters on the left. Empty input returns [].
+
+Constraints: 0 <= values.length <= 100000; values are integers; 0 <= k <= 1000000000.
+
+Example 1:
+Input: {""values"":[1,2,3,4],""k"":5}
+Output: [4,1,2,3]
+
+Example 2:
+Input: {""values"":[],""k"":3}
+Output: []",coding,,rotate-values-to-the-right
+5b4aee04-de18-5b73-bea2-305665dcdddd,Missing Value in a Range,beginner,900,true,Arrays,"Implement missingValue(values).
+
+An array of length n contains distinct integers from 0 through n, with exactly one integer missing. Return the missing integer.
+
+Constraints: 0 <= n <= 100000; all input integers are distinct and lie in [0,n].
+
+Example 1:
+Input: [3,0,1]
+Output: 2
+
+Example 2:
+Input: []
+Output: 0",coding,,missing-value-in-a-range
+f7aa6b29-73e3-55ea-a084-df4f600210b6,Best Single Stock Trade,beginner,900,true,Arrays,"Implement maxTradeProfit(prices).
+
+Return the largest profit from buying once and selling on a later day. Return 0 if no profitable trade exists. You may choose to make no trade.
+
+Constraints: 0 <= prices.length <= 100000; prices are integers between 0 and 1000000.
+
+Example 1:
+Input: [7,1,5,3,6,4]
+Output: 5
+
+Example 2:
+Input: [5,4,2]
+Output: 0",coding,,best-single-stock-trade
+1af015c6-589a-5a03-bdc8-13da958f1584,Product Outside Each Position,intermediate,1800,true,Arrays,"Implement productsOutside(values).
+
+Return an array where position i contains the product of all input elements except values[i]. Do not use division. The product of an empty set is 1.
+
+Constraints: 1 <= values.length <= 100000; every intermediate prefix/suffix product and result fits in a signed 32-bit integer.
+
+Example 1:
+Input: [1,2,3,4]
+Output: [24,12,8,6]
+
+Example 2:
+Input: [0,2,0]
+Output: [0,0,0]",coding,,product-outside-each-position
+63f49178-6502-528c-b126-434f9f4cc176,Merge Two Ordered Streams,beginner,900,true,Arrays,"Implement mergeSorted(left, right).
+
+Return all values from two arrays in ascending order. Both inputs are already sorted. Keep every occurrence, including duplicates.
+
+Constraints: 0 <= left.length + right.length <= 100000; values are signed 32-bit integers.
+
+Example 1:
+Input: {""left"":[1,3],""right"":[1,2]}
+Output: [1,1,2,3]
+
+Example 2:
+Input: {""left"":[],""right"":[2]}
+Output: [2]",coding,,merge-two-ordered-streams
+c13b6ec9-f620-588c-b01d-fb96f25d84ac,Largest Contiguous Total,intermediate,1800,true,Arrays,"Implement maxSubarrayTotal(values).
+
+Return the maximum sum of a nonempty contiguous subarray. A subarray cannot wrap around the end of the array.
+
+Constraints: 1 <= values.length <= 100000; each integer is between -10000 and 10000.
+
+Example 1:
+Input: [2,-3,4,-1,2]
+Output: 5
+
+Example 2:
+Input: [-5,-2]
+Output: -2",coding,,largest-contiguous-total
+fa902b34-2fce-50e8-8fe7-dbe317a9c8d7,Nearest Value to Zero,beginner,900,true,Arrays,"Implement closestToZeroIndex(values).
+
+Return the zero-based index of the element with the smallest absolute value. Break ties by choosing the smaller numeric value, then the smaller index.
+
+Constraints: 1 <= values.length <= 100000; each value is an integer between -1000000 and 1000000.
+
+Example 1:
+Input: [-2,2,-1,1]
+Output: 2
+
+Example 2:
+Input: [3,3]
+Output: 0",coding,,nearest-value-to-zero
+924d07ab-5085-5027-b199-91b5030abd69,Stable Zero Compaction,beginner,900,true,Arrays,"Implement moveZeros(values).
+
+Return all nonzero elements in their original order followed by every zero from the input. Preserve the input length.
+
+Constraints: 0 <= values.length <= 100000; values are signed 32-bit integers.
+
+Example 1:
+Input: [0,3,0,1,2]
+Output: [3,1,2,0,0]
+
+Example 2:
+Input: []
+Output: []",coding,,stable-zero-compaction
+9c5f5585-80a1-5dbd-8b68-517819aad480,Longest Flat Run,beginner,900,true,Arrays,"Implement longestEqualRun(values).
+
+Return the length of the longest contiguous run of equal values. Empty input has answer 0.
+
+Constraints: 0 <= values.length <= 100000; values are integers.
+
+Example 1:
+Input: [2,2,1,1,1,3]
+Output: 3
+
+Example 2:
+Input: []
+Output: 0",coding,,longest-flat-run
+adc67638-d869-556a-9bfb-ef7a3904d780,Reverse Word Order,beginner,900,true,Strings,"Implement reverseWords(text).
+
+Split text on one or more ASCII spaces, discard empty words, reverse word order, and join using one space. Do not reverse characters within a word.
+
+Constraints: 0 <= text.length <= 100000; text contains ASCII letters and spaces only.
+
+Example 1:
+Input: ""  build better tools  ""
+Output: ""tools better build""
+
+Example 2:
+Input: ""   ""
+Output: """"",coding,,reverse-word-order
+3ef07154-542c-5c25-941e-4883e762c87d,Case-Insensitive Palindrome,beginner,900,true,Strings,"Implement isCleanPalindrome(text).
+
+Ignore ASCII characters that are not letters or digits. Compare letters without case. Return whether the remaining sequence reads the same in both directions. Empty cleaned text is a palindrome.
+
+Constraints: 0 <= text.length <= 100000; ASCII input.
+
+Example 1:
+Input: ""A man, a plan, a canal: Panama!""
+Output: true
+
+Example 2:
+Input: ""code""
+Output: false",coding,,case-insensitive-palindrome
+2d9f1fc3-88ba-50cc-a655-fd5edc4a1e99,First Unique Character Position,beginner,900,true,Strings,"Implement firstUniqueIndex(text).
+
+Return the zero-based index of the first character that occurs exactly once in text, or -1 if there is none.
+
+Constraints: 0 <= text.length <= 100000; lowercase English letters only.
+
+Example 1:
+Input: ""swiss""
+Output: 1
+
+Example 2:
+Input: ""aabb""
+Output: -1",coding,,first-unique-character-position
+8dca5505-4086-57f2-85f6-ec2d81f4437a,Longest Shared Prefix,beginner,900,true,Strings,"Implement sharedPrefix(words).
+
+Return the longest prefix shared by every input word. Return an empty string if the list is empty or no nonempty prefix is shared.
+
+Constraints: 0 <= words.length <= 1000; lowercase English letters; total word length <= 100000.
+
+Example 1:
+Input: [""flower"",""flow"",""flight""]
+Output: ""fl""
+
+Example 2:
+Input: []
+Output: """"",coding,,longest-shared-prefix
+bbaad60a-201f-5990-aadd-6f62ccda1540,Run-Length Text Encoding,beginner,900,true,Strings,"Implement encodeRuns(text).
+
+Replace each maximal run of equal characters by the character followed by its decimal run length, including length 1. Return an empty string for empty input.
+
+Constraints: 0 <= text.length <= 100000; ASCII letters only.
+
+Example 1:
+Input: ""aaabbc""
+Output: ""a3b2c1""
+
+Example 2:
+Input: """"
+Output: """"",coding,,run-length-text-encoding
+03bad23d-a34c-5bcf-8901-baf213e1865f,Single Edit Apart,intermediate,1800,true,Strings,"Implement oneEditApart(left, right).
+
+Return true if exactly one insertion, deletion, or substitution of one character converts left into right. Identical strings return false.
+
+Constraints: 0 <= left.length,right.length <= 100000; lowercase English letters only.
+
+Example 1:
+Input: {""left"":""cat"",""right"":""cut""}
+Output: true
+
+Example 2:
+Input: {""left"":""same"",""right"":""same""}
+Output: false",coding,,single-edit-apart
+956fd35c-5db0-5a54-a96d-59259ae205c2,Cyclic String Match,beginner,900,true,Strings,"Implement isRotation(left, right).
+
+Return whether right can be formed by moving a prefix of left to its end. Zero moved characters is allowed. Strings of different lengths cannot match.
+
+Constraints: 0 <= left.length,right.length <= 100000; lowercase English letters only.
+
+Example 1:
+Input: {""left"":""arena"",""right"":""enaar""}
+Output: true
+
+Example 2:
+Input: {""left"":""ab"",""right"":""aa""}
+Output: false",coding,,cyclic-string-match
+0c243551-3300-5265-882f-24436ecf6e22,Shortest Repeating Block,intermediate,1800,true,Strings,"Implement smallestRepeatBlock(text).
+
+Return the shortest nonempty block whose repetition forms text exactly. If no shorter block works, return text.
+
+Constraints: 1 <= text.length <= 100000; lowercase English letters only.
+
+Example 1:
+Input: ""ababab""
+Output: ""ab""
+
+Example 2:
+Input: ""abcab""
+Output: ""abcab""",coding,,shortest-repeating-block
+a9eca276-9017-501b-aff4-ccca70d29162,Version Number Comparison,intermediate,1800,true,Strings,"Implement compareVersions(left, right).
+
+Compare dot-separated nonnegative integer version components. Ignore leading zeros and treat missing trailing components as zero. Return -1, 0, or 1 according to numeric component order.
+
+Constraints: Each version has 1..100 components; each component contains 1..100 digits. Do not assume a component fits a native integer.
+
+Example 1:
+Input: {""left"":""1.02"",""right"":""1.2.0""}
+Output: 0
+
+Example 2:
+Input: {""left"":""2.0"",""right"":""1.99""}
+Output: 1",coding,,version-number-comparison
+75282cad-3cd7-5ad3-a80a-886f2b645e97,Normalized File Path,intermediate,1800,true,Strings,"Implement normalizePath(path).
+
+Normalize an absolute Unix-style path. Collapse repeated slashes, ignore dot segments, and make double-dot segments remove the preceding directory if present. Never go above root. Return no trailing slash except for root.
+
+Constraints: 1 <= path.length <= 100000; path starts with /; names contain ASCII letters, digits, underscores and dots. Only complete . and .. segments are special.
+
+Example 1:
+Input: ""/a//b/../c/""
+Output: ""/a/c""
+
+Example 2:
+Input: ""/../../""
+Output: ""/""",coding,,normalized-file-path
+dad7d8f5-6f5b-57e2-9f77-8f6432e9eeea,Group Words by Letter Counts,intermediate,1800,true,Hash Tables,"Implement groupAnagrams(words).
+
+Group words that have identical letter counts. Preserve input order within each group. Order groups by the first input occurrence of a member.
+
+Constraints: 0 <= words.length <= 10000; lowercase English words, possibly empty; total characters <= 100000.
+
+Example 1:
+Input: [""eat"",""tea"",""tan"",""ate""]
+Output: [[""eat"",""tea"",""ate""],[""tan""]]
+
+Example 2:
+Input: []
+Output: []",coding,,group-words-by-letter-counts
+0f54e47b-ec37-5bb9-8cd4-6c25b838636d,Most Frequent Values,intermediate,1800,true,Hash Tables,"Implement topFrequent(values, k).
+
+Return the k distinct values with highest frequency. Sort by frequency descending, then numeric value ascending. For k=0 return [].
+
+Constraints: 0 <= values.length <= 100000; integer values; 0 <= k <= number of distinct input values.
+
+Example 1:
+Input: {""values"":[4,4,2,2,3],""k"":2}
+Output: [2,4]
+
+Example 2:
+Input: {""values"":[],""k"":0}
+Output: []",coding,,most-frequent-values
+53c1123c-792d-5270-a4e7-5ced85f8da09,Repeated Value Within Reach,beginner,900,true,Hash Tables,"Implement hasNearbyDuplicate(values, k).
+
+Return whether two equal values occur at distinct indices whose distance is at most k.
+
+Constraints: 0 <= values.length <= 100000; integer values; 0 <= k <= 100000.
+
+Example 1:
+Input: {""values"":[1,2,3,1],""k"":3}
+Output: true
+
+Example 2:
+Input: {""values"":[1,1],""k"":0}
+Output: false",coding,,repeated-value-within-reach
+d91dedce-c1fd-560f-902d-4c53d04fa9cb,Common Values with Multiplicity,beginner,900,true,Hash Tables,"Implement multisetIntersection(left, right).
+
+Return each integer present in both inputs as many times as the smaller of its two frequencies. Sort the result in ascending order.
+
+Constraints: 0 <= left.length + right.length <= 100000; signed 32-bit integer values.
+
+Example 1:
+Input: {""left"":[1,2,2,3],""right"":[2,2,2]}
+Output: [2,2]
+
+Example 2:
+Input: {""left"":[],""right"":[1]}
+Output: []",coding,,common-values-with-multiplicity
+0d93b894-8bb9-5b50-ba20-b548192c6abf,Longest Consecutive Value Chain,intermediate,1800,true,Hash Tables,"Implement longestConsecutive(values).
+
+Return the length of the longest sequence of consecutive distinct integer values present anywhere in the input. Duplicates do not extend a sequence. Use expected O(n) time.
+
+Constraints: 0 <= values.length <= 100000; each value is between -1000000000 and 1000000000.
+
+Example 1:
+Input: [100,4,200,1,3,2]
+Output: 4
+
+Example 2:
+Input: [1,1,2]
+Output: 2",coding,,longest-consecutive-value-chain
+88d328ae-df05-5ab3-ae3d-61db7073e049,Bijective Pattern Match,beginner,900,true,Hash Tables,"Implement matchesWordPattern(pattern, words).
+
+Return whether pattern characters map bijectively to words at corresponding positions. Equal characters require equal words, and different characters require different words.
+
+Constraints: 0 <= pattern.length <= 10000; lowercase pattern characters and nonempty lowercase words; words is an array.
+
+Example 1:
+Input: {""pattern"":""abba"",""words"":[""red"",""blue"",""blue"",""red""]}
+Output: true
+
+Example 2:
+Input: {""pattern"":""ab"",""words"":[""red"",""red""]}
+Output: false",coding,,bijective-pattern-match
+6af9f06f-d8f5-5cb5-8494-575bb8bfecc5,Count Target-Sum Subarrays,intermediate,1800,true,Hash Tables,"Implement countTargetSubarrays(values, target).
+
+Return the number of nonempty contiguous subarrays with sum equal to target. Count subarrays at different index ranges separately.
+
+Constraints: 0 <= values.length <= 100000; each value is between -1000 and 1000; target is an integer. The count may exceed signed 32-bit range.
+
+Example 1:
+Input: {""values"":[1,1,1],""target"":2}
+Output: 2
+
+Example 2:
+Input: {""values"":[0,0],""target"":0}
+Output: 3",coding,,count-target-sum-subarrays
+14ed835d-ab7a-5aed-b7bf-b1ffee87b2ad,Count Distinct Absolute Values,beginner,900,true,Hash Tables,"Implement distinctAbsoluteCount(values).
+
+Return the number of distinct absolute values in the array. A negative number and its positive counterpart count as one.
+
+Constraints: 0 <= values.length <= 100000; integers between -1000000 and 1000000.
+
+Example 1:
+Input: [-3,-1,0,1,3]
+Output: 3
+
+Example 2:
+Input: []
+Output: 0",coding,,count-distinct-absolute-values
+a515cb60-5fed-5300-be94-a34529e73d90,Sorted Pair Positions,intermediate,1800,true,Two Pointers,"Implement sortedPair(values, target).
+
+Given a nondecreasing array, return distinct zero-based indices [i,j] with i<j and values[i]+values[j]=target. Among valid pairs return the lexicographically smallest. Return [] if none exists.
+
+Constraints: 0 <= values.length <= 100000; integers between -1000000 and 1000000; target is an integer. Use O(n) time.
+
+Example 1:
+Input: {""values"":[1,2,2,4],""target"":4}
+Output: [1,2]
+
+Example 2:
+Input: {""values"":[1,3],""target"":7}
+Output: []",coding,,sorted-pair-positions
+b3fb9aaf-ef57-5502-a18e-41567a235c05,Sorted Squares,beginner,900,true,Two Pointers,"Implement sortedSquares(values).
+
+Return the square of every value in ascending order. Input is already sorted in nondecreasing order. Use O(n) time.
+
+Constraints: 0 <= values.length <= 100000; integers between -10000 and 10000.
+
+Example 1:
+Input: [-4,-1,0,3]
+Output: [0,1,9,16]
+
+Example 2:
+Input: []
+Output: []",coding,,sorted-squares
+c5915e82-b25c-5a28-9572-a14652c851d8,Largest Container Area,intermediate,1800,true,Two Pointers,"Implement maxContainerArea(heights).
+
+Choose indices i<j to maximize min(heights[i],heights[j])*(j-i). Return that area, or 0 if fewer than two heights exist.
+
+Constraints: 0 <= heights.length <= 100000; integer heights between 0 and 10000. Use O(n) time.
+
+Example 1:
+Input: [1,8,6,2,5,4,8,3,7]
+Output: 49
+
+Example 2:
+Input: [1]
+Output: 0",coding,,largest-container-area
+9e0bc398-913d-5c3f-b3c1-111d96f8f184,Longest Nonrepeating Substring,intermediate,1800,true,Sliding Window,"Implement longestDistinctSubstring(text).
+
+Return the length of the longest contiguous substring containing no repeated character. Count ASCII characters exactly, including spaces.
+
+Constraints: 0 <= text.length <= 100000; ASCII input. Use O(n) time.
+
+Example 1:
+Input: ""abcabcbb""
+Output: 3
+
+Example 2:
+Input: """"
+Output: 0",coding,,longest-nonrepeating-substring
+1e754fbf-d121-5e70-8429-74f13153f5c6,Shortest Sufficient Positive Window,intermediate,1800,true,Sliding Window,"Implement minimumPositiveWindow(values, target).
+
+Return the shortest length of a contiguous subarray whose sum is at least target. Return 0 if none exists. All input values are strictly positive.
+
+Constraints: 0 <= values.length <= 100000; 1 <= each value <= 10000; 1 <= target <= 1000000000. Use O(n) time.
+
+Example 1:
+Input: {""values"":[2,3,1,2,4,3],""target"":7}
+Output: 2
+
+Example 2:
+Input: {""values"":[1,1],""target"":5}
+Output: 0",coding,,shortest-sufficient-positive-window
+20b89e53-e06a-5335-8106-62f0ac0c3c75,Binary Window with Limited Repairs,intermediate,1800,true,Sliding Window,"Implement longestOnesAfterFlips(bits, k).
+
+Return the longest contiguous window that can contain only ones after changing at most k zeros into ones. Do not change the input.
+
+Constraints: 0 <= bits.length <= 100000; bits contains only 0 and 1; 0 <= k <= bits.length.
+
+Example 1:
+Input: {""bits"":[1,0,0,1,1,0,1],""k"":1}
+Output: 4
+
+Example 2:
+Input: {""bits"":[0,0],""k"":0}
+Output: 0",coding,,binary-window-with-limited-repairs
+a902d96f-e517-5763-b2e7-8fe8f237292e,Distinct Counts per Window,intermediate,1800,true,Sliding Window,"Implement windowDistinctCounts(values, k).
+
+For every contiguous window of exactly k elements, return its number of distinct values, ordered by window starting position.
+
+Constraints: 1 <= k <= values.length <= 100000; integer values.
+
+Example 1:
+Input: {""values"":[1,2,1,3],""k"":3}
+Output: [2,3]
+
+Example 2:
+Input: {""values"":[5],""k"":1}
+Output: [1]",coding,,distinct-counts-per-window
+2e6dc06b-10c3-53d9-9c5e-b3a2788f112a,Smallest Covering Substring,advanced,2700,true,Sliding Window,"Implement minimumCover(text, required).
+
+Return the shortest contiguous substring of text containing every character of required with at least its required multiplicity. Break equal-length ties by earliest starting index. Return an empty string if required is empty or no window exists.
+
+Constraints: 0 <= text.length,required.length <= 100000; ASCII letters only. Use O(text.length+required.length) time.
+
+Example 1:
+Input: {""text"":""ADOBECODEBANC"",""required"":""ABC""}
+Output: ""BANC""
+
+Example 2:
+Input: {""text"":""a"",""required"":""aa""}
+Output: """"",coding,,smallest-covering-substring
+8a1a38ee-3504-5134-850e-b9aa83d2767c,Exact Position in Sorted Values,beginner,900,true,Binary Search,"Implement binarySearch(values, target).
+
+Return the zero-based index of target in a strictly increasing array, or -1 if absent. Use O(log n) time.
+
+Constraints: 0 <= values.length <= 100000; integer values and integer target.
+
+Example 1:
+Input: {""values"":[-2,1,5,9],""target"":5}
+Output: 2
+
+Example 2:
+Input: {""values"":[],""target"":4}
+Output: -1",coding,,exact-position-in-sorted-values
+a7afd774-1bd2-529e-96b6-9cbdf92bd964,First Insertion Position,beginner,900,true,Binary Search,"Implement lowerBound(values, target).
+
+Return the first index i with values[i]>=target, or values.length if no such index exists. Input may contain duplicates. Use O(log n) time.
+
+Constraints: 0 <= values.length <= 100000; input is nondecreasing; integer values and target.
+
+Example 1:
+Input: {""values"":[1,2,2,5],""target"":2}
+Output: 1
+
+Example 2:
+Input: {""values"":[1,3],""target"":4}
+Output: 2",coding,,first-insertion-position
+819cdc96-4f91-550c-8666-d78e3ea34fbe,Target Span in Sorted Values,intermediate,1800,true,Binary Search,"Implement targetSpan(values, target).
+
+Return the first and last indices where target occurs in a nondecreasing array. Return [-1,-1] when absent. Use O(log n) time.
+
+Constraints: 0 <= values.length <= 100000; integer values and target.
+
+Example 1:
+Input: {""values"":[1,2,2,2,5],""target"":2}
+Output: [1,3]
+
+Example 2:
+Input: {""values"":[1],""target"":3}
+Output: [-1,-1]",coding,,target-span-in-sorted-values
+c0ba0968-18d2-5eee-b021-5198039c3b4b,Integer Square Root Floor,beginner,900,true,Binary Search,"Implement integerSquareRoot(n).
+
+Return the largest integer r such that r*r<=n. Do not use a built-in square-root or exponentiation function.
+
+Constraints: n is an integer with 0 <= n <= 2147483647.
+
+Example 1:
+Input: 10
+Output: 3
+
+Example 2:
+Input: 0
+Output: 0",coding,,integer-square-root-floor
+5272585f-32b9-53af-bc21-08d32476ef6f,Find in a Rotated Array,intermediate,1800,true,Binary Search,"Implement searchRotated(values, target).
+
+A strictly increasing array has been rotated at an unknown pivot, possibly zero positions. Return the index of target, or -1 when absent. Use O(log n) time.
+
+Constraints: 0 <= values.length <= 100000; distinct integer values and integer target.
+
+Example 1:
+Input: {""values"":[4,5,6,1,2,3],""target"":2}
+Output: 4
+
+Example 2:
+Input: {""values"":[],""target"":1}
+Output: -1",coding,,find-in-a-rotated-array
+9825b08e-fa6d-586e-be19-9867607f7c00,Minimum Shipping Capacity,intermediate,1800,true,Binary Search,"Implement minimumCapacity(weights, days).
+
+Ship packages in input order in at most days days. Every package is indivisible and a day can carry at most capacity total weight. Return the smallest integer capacity that can ship all packages.
+
+Constraints: 1 <= weights.length <= 100000; 1 <= each weight <= 10000; 1 <= days <= weights.length.
+
+Example 1:
+Input: {""weights"":[1,2,3,4,5],""days"":2}
+Output: 9
+
+Example 2:
+Input: {""weights"":[7],""days"":1}
+Output: 7",coding,,minimum-shipping-capacity
+95b6c581-eafd-502f-940e-b7d377cb44ee,Minimum Processing Speed,intermediate,1800,true,Binary Search,"Implement minimumSpeed(piles, hours).
+
+At speed k, processing a pile of size p takes ceil(p/k) hours. Piles are processed separately and unused time cannot transfer between piles. Return the smallest positive integer speed whose total time is at most hours.
+
+Constraints: 1 <= piles.length <= 10000; 1 <= each pile <= 1000000000; piles.length <= hours <= 1000000000.
+
+Example 1:
+Input: {""piles"":[3,6,7,11],""hours"":8}
+Output: 4
+
+Example 2:
+Input: {""piles"":[9],""hours"":3}
+Output: 3",coding,,minimum-processing-speed
+66fca216-1298-599d-b41b-4a742afe91e1,Median Across Two Ordered Arrays,expert,3600,true,Binary Search,"Implement medianOfSorted(left, right).
+
+Return the median of all elements across two nondecreasing arrays. For an even total length, return the arithmetic mean of the two middle values. Use O(log(min(m,n)+1)) time and O(1) auxiliary space.
+
+Constraints: 1 <= left.length+right.length <= 100000; integer values between -1000000 and 1000000.
+
+Example 1:
+Input: {""left"":[1,3],""right"":[2]}
+Output: 2
+
+Example 2:
+Input: {""left"":[1,2],""right"":[3,4]}
+Output: 2.5",coding,,median-across-two-ordered-arrays
+a93c639c-d4e6-52f4-afef-cf2da0beda43,Balanced Bracket Sequence,beginner,900,true,Stacks,"Implement balancedBrackets(text).
+
+Return whether every opening bracket is closed by the matching type in proper nesting order. An empty string is valid.
+
+Constraints: 0 <= text.length <= 100000; characters are only (, ), [, ], { and }.
+
+Example 1:
+Input: ""([]{})""
+Output: true
+
+Example 2:
+Input: ""([)]""
+Output: false",coding,,balanced-bracket-sequence
+f4b249eb-83e5-564c-aba9-6b6cab630811,Cancel Adjacent Equal Letters,beginner,900,true,Stacks,"Implement cancelAdjacent(text).
+
+Repeatedly remove adjacent pairs of equal characters until no such pair remains. Return the remaining string. Removing a pair can create a new removable pair.
+
+Constraints: 0 <= text.length <= 100000; lowercase English letters only.
+
+Example 1:
+Input: ""abbaca""
+Output: ""ca""
+
+Example 2:
+Input: ""aaaa""
+Output: """"",coding,,cancel-adjacent-equal-letters
+18fb194b-8080-5f12-9e5f-5a7d5fbfeba7,Next Warmer Reading,intermediate,1800,true,Monotonic Stack,"Implement daysUntilWarmer(temperatures).
+
+For each reading, return the number of positions until a strictly warmer reading occurs. Use 0 if no warmer reading exists later.
+
+Constraints: 0 <= temperatures.length <= 100000; integer readings. Use O(n) time.
+
+Example 1:
+Input: [30,40,35,50]
+Output: [1,2,1,0]
+
+Example 2:
+Input: [5,5]
+Output: [0,0]",coding,,next-warmer-reading
+3ffb0d92-9c91-5129-8713-50797005c05e,Postfix Integer Calculator,intermediate,1800,true,Stacks,"Implement evaluatePostfix(tokens).
+
+Evaluate a valid postfix expression containing signed base-10 integer tokens and +, -, *, /. Division truncates toward zero. Return the final integer.
+
+Constraints: 1 <= tokens.length <= 10000; expression is valid; divisors are nonzero; all intermediate results fit signed 32-bit integers.
+
+Example 1:
+Input: [""2"",""3"",""+"",""4"",""*""]
+Output: 20
+
+Example 2:
+Input: [""-7"",""3"",""/""]
+Output: -2",coding,,postfix-integer-calculator
+90567d45-6469-5858-9b66-4feb44987783,Merge Overlapping Closed Intervals,intermediate,1800,true,Intervals,"Implement mergeIntervals(intervals).
+
+Merge all overlapping closed intervals and return the result sorted by start. Intervals touching at an endpoint overlap. Input order is arbitrary.
+
+Constraints: 0 <= intervals.length <= 100000; each item is [start,end] with integer start<=end.
+
+Example 1:
+Input: [[1,3],[2,5],[8,9]]
+Output: [[1,5],[8,9]]
+
+Example 2:
+Input: [[1,2],[2,3]]
+Output: [[1,3]]",coding,,merge-overlapping-closed-intervals
+da534c41-ebf8-5f09-b132-9d425010418d,Minimum Meeting Rooms,intermediate,1800,true,Intervals,"Implement meetingRooms(intervals).
+
+Return the minimum number of rooms needed for meetings. Intervals are half-open [start,end), so a room ending at t can serve a meeting starting at t.
+
+Constraints: 0 <= intervals.length <= 100000; each item is [start,end] with integer start<end.
+
+Example 1:
+Input: [[0,30],[5,10],[15,20]]
+Output: 2
+
+Example 2:
+Input: [[1,2],[2,3]]
+Output: 1",coding,,minimum-meeting-rooms
+bb4f2939-b8e3-5583-8bd1-eedc20f11896,Sliding Window Maximums,advanced,2700,true,Monotonic Queue,"Implement windowMaximums(values, k).
+
+Return the maximum value in each contiguous window of length k, in increasing start-index order. Use O(n) time.
+
+Constraints: 1 <= k <= values.length <= 100000; signed 32-bit integers.
+
+Example 1:
+Input: {""values"":[1,3,-1,-3,5,3,6,7],""k"":3}
+Output: [3,3,5,5,6,7]
+
+Example 2:
+Input: {""values"":[4],""k"":1}
+Output: [4]",coding,,sliding-window-maximums
+7322f185-b80d-5aab-a584-1b6cecdea548,Largest Histogram Rectangle,advanced,2700,true,Monotonic Stack,"Implement largestHistogramRectangle(heights).
+
+Bars have width 1 and sit next to each other. Return the maximum area of a rectangle fully inside contiguous bars.
+
+Constraints: 0 <= heights.length <= 100000; integer heights between 0 and 100000. Use O(n) time; empty input returns 0.
+
+Example 1:
+Input: [2,1,5,6,2,3]
+Output: 10
+
+Example 2:
+Input: [0,0]
+Output: 0",coding,,largest-histogram-rectangle
+92a0fc22-28c9-5c8d-a41c-f76b66651110,Matrix Spiral Reading,intermediate,1800,true,Matrices,"Implement spiralOrder(matrix).
+
+Return matrix values in clockwise spiral order, beginning at the top-left corner and initially moving right. Empty input returns [].
+
+Constraints: matrix is [] or a rectangular m by n matrix with 1<=m,n<=300; entries are integers.
+
+Example 1:
+Input: [[1,2,3],[4,5,6]]
+Output: [1,2,3,6,5,4]
+
+Example 2:
+Input: []
+Output: []",coding,,matrix-spiral-reading
+e280bad8-a075-54a6-8305-736821e5236e,Clockwise Square Rotation,intermediate,1800,true,Matrices,"Implement rotateMatrix(matrix).
+
+Return the square matrix rotated 90 degrees clockwise. The returned representation is an array of rows.
+
+Constraints: 1 <= matrix.length <= 300; each row has exactly matrix.length integer entries.
+
+Example 1:
+Input: [[1,2],[3,4]]
+Output: [[3,1],[4,2]]
+
+Example 2:
+Input: [[7]]
+Output: [[7]]",coding,,clockwise-square-rotation
+56556cee-b0c9-5d5a-8f3a-349592badbf9,Clear Zero Rows and Columns,intermediate,1800,true,Matrices,"Implement clearZeroLines(matrix).
+
+Return a matrix where any row or column containing a zero in the ORIGINAL input is entirely zero. Other entries remain unchanged.
+
+Constraints: 1 <= rows,columns <= 300; rectangular integer matrix.
+
+Example 1:
+Input: [[1,2,3],[4,0,6]]
+Output: [[1,0,3],[0,0,0]]
+
+Example 2:
+Input: [[1,2]]
+Output: [[1,2]]",coding,,clear-zero-rows-and-columns
+98ce4c5b-9aa7-5246-882e-9d78dd9e6b25,Count Four-Way Islands,intermediate,1800,true,Matrices,"Implement countIslands(grid).
+
+Count connected groups of 1 cells. Connectivity is horizontal or vertical, never diagonal. Water cells contain 0. Do not change the input.
+
+Constraints: grid is [] or a rectangular binary matrix with at most 100000 cells.
+
+Example 1:
+Input: [[1,0,1],[1,0,0]]
+Output: 2
+
+Example 2:
+Input: []
+Output: 0",coding,,count-four-way-islands
+460cdf76-f495-55dc-b818-98cb006d458e,Shortest Open Grid Route,intermediate,1800,true,Breadth-First Search,"Implement shortestGridPath(grid).
+
+Return the smallest number of orthogonal moves from top-left to bottom-right through 0 cells. Cells with 1 are blocked. Return -1 if either endpoint is blocked or no route exists.
+
+Constraints: 1 <= rows,columns <= 300; rectangular binary matrix. A single open cell needs 0 moves.
+
+Example 1:
+Input: [[0,0],[1,0]]
+Output: 2
+
+Example 2:
+Input: [[1]]
+Output: -1",coding,,shortest-open-grid-route
+6a71f229-06c5-5eaa-b0bf-32ec1f17fdf2,Integral Region Totals,intermediate,1800,true,Prefix Sum,"Implement regionTotals(matrix, queries).
+
+For each query [r1,c1,r2,c2], return the sum of the inclusive rectangular region. Indices are zero-based. Preserve query order. Use O(rows*columns + queries.length) time.
+
+Constraints: 1 <= rows,columns <= 300; integer entries with absolute value <=1000; up to 100000 valid queries with r1<=r2 and c1<=c2.
+
+Example 1:
+Input: {""matrix"":[[1,2],[3,4]],""queries"":[[0,0,1,1],[0,1,1,1]]}
+Output: [10,6]
+
+Example 2:
+Input: {""matrix"":[[5]],""queries"":[]}
+Output: []",coding,,integral-region-totals
+17735bfb-ce62-5484-9403-8fc48c8124d8,Binary Tree Maximum Depth,beginner,900,true,Trees,"Implement treeDepth(root).
+
+Return the number of nodes on the longest path from root to a leaf. A null root has depth 0.
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input.
+
+Example 1:
+Input: {""value"":1,""left"":{""value"":2,""left"":null,""right"":null},""right"":null}
+Output: 2
+
+Example 2:
+Input: null
+Output: 0",coding,,binary-tree-maximum-depth
+05deda9d-c9b8-5f64-a076-3d518b27eee5,Binary Tree Level Groups,intermediate,1800,true,Trees,"Implement levelOrder(root).
+
+Return node values grouped by depth, from root level downward. Within a level, visit from left to right. A null root returns [].
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input.
+
+Example 1:
+Input: {""value"":1,""left"":{""value"":2,""left"":null,""right"":null},""right"":{""value"":3,""left"":null,""right"":null}}
+Output: [[1],[2,3]]
+
+Example 2:
+Input: null
+Output: []",coding,,binary-tree-level-groups
+5a585b03-3efe-5fb1-ac5a-8fbac4463bf0,Strict Binary Search Tree Check,intermediate,1800,true,Trees,"Implement isStrictBST(root).
+
+Return whether all values in each left subtree are strictly smaller than its root and all values in each right subtree are strictly larger. Duplicate values make the tree invalid. A null tree is valid.
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input.
+
+Example 1:
+Input: {""value"":2,""left"":{""value"":1,""left"":null,""right"":null},""right"":{""value"":3,""left"":null,""right"":null}}
+Output: true
+
+Example 2:
+Input: {""value"":2,""left"":{""value"":2,""left"":null,""right"":null},""right"":null}
+Output: false",coding,,strict-binary-search-tree-check
+b7a244f7-50ac-540a-8d36-3afada7089b7,Tree Path with Target Total,beginner,900,true,Trees,"Implement hasRootLeafSum(root, target).
+
+Return whether any path from root to a leaf has node-value sum equal to target. A leaf has no children. A null tree has no path, even when target is zero.
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input. Target is an integer.
+
+Example 1:
+Input: {""root"":{""value"":3,""left"":{""value"":2,""left"":null,""right"":null},""right"":{""value"":7,""left"":null,""right"":null}},""target"":5}
+Output: true
+
+Example 2:
+Input: {""root"":null,""target"":0}
+Output: false",coding,,tree-path-with-target-total
+dc41e6d4-9187-5900-ab76-ce8433240d98,Mirror a Binary Tree,beginner,900,true,Trees,"Implement mirrorTree(root).
+
+Return a new tree with left and right children exchanged recursively at every node. Null input returns null.
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input.
+
+Example 1:
+Input: {""value"":1,""left"":{""value"":2,""left"":null,""right"":null},""right"":{""value"":3,""left"":null,""right"":null}}
+Output: {""value"":1,""left"":{""value"":3,""left"":null,""right"":null},""right"":{""value"":2,""left"":null,""right"":null}}
+
+Example 2:
+Input: null
+Output: null",coding,,mirror-a-binary-tree
+2070b970-5c61-5d79-8180-5093de325604,Binary Tree Diameter in Edges,intermediate,1800,true,Trees,"Implement treeDiameter(root).
+
+Return the maximum number of edges on a simple path between any two nodes. The path need not include the root. Empty and single-node trees have diameter 0.
+
+Constraints: Trees are nested JSON nodes {value,left,right}; absent children are null. At most 10000 nodes; integer values. Do not modify the input.
+
+Example 1:
+Input: {""value"":1,""left"":{""value"":2,""left"":{""value"":4,""left"":null,""right"":null},""right"":{""value"":5,""left"":null,""right"":null}},""right"":{""value"":3,""left"":null,""right"":null}}
+Output: 3
+
+Example 2:
+Input: {""value"":8,""left"":null,""right"":null}
+Output: 0",coding,,binary-tree-diameter-in-edges
+1ebcedfb-16bc-5c84-a9d5-d40175cd8faf,Count Undirected Components,intermediate,1800,true,Graphs,"Implement componentCount(n, edges).
+
+Vertices are numbered 0 through n-1. Each pair [u,v] is an undirected edge. Return the number of connected components, including isolated vertices. Duplicate edges and self-loops are allowed.
+
+Constraints: 0 <= n <= 100000; 0 <= edges.length <= 200000; all endpoints are valid.
+
+Example 1:
+Input: {""n"":5,""edges"":[[0,1],[1,2],[3,4]]}
+Output: 2
+
+Example 2:
+Input: {""n"":0,""edges"":[]}
+Output: 0",coding,,count-undirected-components
+0100a447-02cc-5cf2-bbdc-98162bd7c090,Shortest Unweighted Graph Distance,intermediate,1800,true,Graphs,"Implement graphDistance(n, edges, start, end).
+
+Return the minimum number of edges needed to travel between start and end in an undirected graph. Return -1 when unreachable. Return 0 when start=end.
+
+Constraints: 1 <= n <= 100000; 0 <= edges.length <= 200000; vertices and endpoints are valid zero-based indices. Duplicate edges are allowed.
+
+Example 1:
+Input: {""n"":4,""edges"":[[0,1],[1,2]],""start"":0,""end"":2}
+Output: 2
+
+Example 2:
+Input: {""n"":3,""edges"":[[0,1]],""start"":0,""end"":2}
+Output: -1",coding,,shortest-unweighted-graph-distance
+db88b188-8ff2-592c-82e4-519ddfbf30ff,Feasible Prerequisite Schedule,intermediate,1800,true,Topological Sort,"Implement canFinish(n, prerequisites).
+
+Task IDs are 0 through n-1. A pair [task,required] means required must finish before task. Return whether every task can be completed. Duplicate pairs do not add extra constraints.
+
+Constraints: 0 <= n <= 100000; up to 200000 valid prerequisite pairs.
+
+Example 1:
+Input: {""n"":2,""prerequisites"":[[1,0]]}
+Output: true
+
+Example 2:
+Input: {""n"":2,""prerequisites"":[[1,0],[0,1]]}
+Output: false",coding,,feasible-prerequisite-schedule
+0a50f918-5def-5c2b-aaca-a04785402e3f,Bipartite Team Assignment,intermediate,1800,true,Graphs,"Implement isBipartite(n, edges).
+
+Return whether all vertices of an undirected graph can be split into two groups so every edge connects different groups. Disconnected vertices are allowed. A self-loop makes the answer false.
+
+Constraints: 0 <= n <= 100000; up to 200000 valid zero-based endpoint pairs.
+
+Example 1:
+Input: {""n"":3,""edges"":[[0,1],[1,2]]}
+Output: true
+
+Example 2:
+Input: {""n"":3,""edges"":[[0,1],[1,2],[2,0]]}
+Output: false",coding,,bipartite-team-assignment
+a43cdeda-6a5f-5117-ae65-999dc5024c62,Nonnegative Weighted Routes,advanced,2700,true,Shortest Path,"Implement shortestWeightedRoutes(n, edges, source).
+
+Each [u,v,w] is a directed edge of nonnegative weight w. Return an array of minimum distances from source, using -1 for unreachable vertices. Source distance is 0. Parallel edges are allowed.
+
+Constraints: 1 <= n <= 100000; up to 200000 edges; valid zero-based vertices; integer weights 0..1000000. Use an efficient priority-queue shortest-path algorithm.
+
+Example 1:
+Input: {""n"":4,""edges"":[[0,1,4],[0,2,1],[2,1,2]],""source"":0}
+Output: [0,3,1,-1]
+
+Example 2:
+Input: {""n"":1,""edges"":[],""source"":0}
+Output: [0]",coding,,nonnegative-weighted-routes
+ddfd3809-b577-5f7f-a7dd-1f913b90c856,Minimum Network Connection Cost,advanced,2700,true,Minimum Spanning Tree,"Implement minimumNetworkCost(n, edges).
+
+Each [u,v,cost] is an undirected connection option. Return the minimum total cost to connect all vertices, or -1 if impossible. Parallel edges are allowed. A single vertex costs 0.
+
+Constraints: 1 <= n <= 100000; up to 200000 edges; valid zero-based endpoints; integer costs 0..1000000.
+
+Example 1:
+Input: {""n"":3,""edges"":[[0,1,2],[1,2,3],[0,2,9]]}
+Output: 5
+
+Example 2:
+Input: {""n"":2,""edges"":[]}
+Output: -1",coding,,minimum-network-connection-cost
+977bae63-4f58-58cd-8e16-e4d63ce02a64,One-or-Two Step Routes,beginner,900,true,Dynamic Programming,"Implement countStairRoutes(n).
+
+Count ordered sequences of steps of size 1 or 2 whose sum is n. There is one way to climb zero steps: take no steps.
+
+Constraints: n is an integer with 0 <= n <= 45.
+
+Example 1:
+Input: 4
+Output: 5
+
+Example 2:
+Input: 0
+Output: 1",coding,,one-or-two-step-routes
+46c05c0d-b591-5dcd-b96a-28bfdf187737,Best Nonadjacent Reward,intermediate,1800,true,Dynamic Programming,"Implement maxNonadjacentReward(values).
+
+Choose any subset of positions with no adjacent positions and return the largest total value. Choosing nothing is allowed. Positions are in a line, not a circle.
+
+Constraints: 0 <= values.length <= 100000; integer values between 0 and 10000.
+
+Example 1:
+Input: [2,7,9,3,1]
+Output: 12
+
+Example 2:
+Input: []
+Output: 0",coding,,best-nonadjacent-reward
+992e3f23-ac92-5366-b88f-41cd2d7a6a28,Fewest Reusable Coins,intermediate,1800,true,Dynamic Programming,"Implement minimumCoins(coins, amount).
+
+Return the fewest coins needed to form amount using unlimited copies of the given denominations. Return -1 if impossible and 0 for amount=0.
+
+Constraints: 1 <= coins.length <= 30; distinct positive integer denominations <=10000; 0 <= amount <=10000.
+
+Example 1:
+Input: {""coins"":[1,3,4],""amount"":6}
+Output: 2
+
+Example 2:
+Input: {""coins"":[2],""amount"":3}
+Output: -1",coding,,fewest-reusable-coins
+d037e2b1-cc81-5e58-bba1-435354db9118,Count Unordered Coin Combinations,intermediate,1800,true,Dynamic Programming,"Implement coinCombinations(coins, amount).
+
+Count combinations of unlimited coins summing to amount. Order within a combination does not matter. The empty combination is counted once for amount=0.
+
+Constraints: 1 <= coins.length <= 30; distinct positive integer denominations; 0 <= amount <=1000; answer fits signed 32-bit range.
+
+Example 1:
+Input: {""coins"":[1,2,5],""amount"":5}
+Output: 4
+
+Example 2:
+Input: {""coins"":[2],""amount"":0}
+Output: 1",coding,,count-unordered-coin-combinations
+b9ef5ca3-cad7-5bc7-b44b-0d6c8ece9967,Longest Strictly Increasing Subsequence,intermediate,1800,true,Dynamic Programming,"Implement increasingSubsequenceLength(values).
+
+Return the maximum length of a strictly increasing subsequence. Elements retain their input order but need not be contiguous. Equal values cannot extend it.
+
+Constraints: 0 <= values.length <= 100000; integer values. Use O(n log n) time.
+
+Example 1:
+Input: [10,9,2,5,3,7,101,18]
+Output: 4
+
+Example 2:
+Input: [2,2,2]
+Output: 1",coding,,longest-strictly-increasing-subsequence
+84e553c0-bd62-58d7-815e-a1f6d26af02e,Longest Common Subsequence Length,intermediate,1800,true,Dynamic Programming,"Implement commonSubsequenceLength(left, right).
+
+Return the length of the longest sequence of characters appearing in both strings in the same relative order. Characters need not be adjacent.
+
+Constraints: 0 <= left.length,right.length <= 1000; lowercase English letters only.
+
+Example 1:
+Input: {""left"":""abcde"",""right"":""ace""}
+Output: 3
+
+Example 2:
+Input: {""left"":""abc"",""right"":""xyz""}
+Output: 0",coding,,longest-common-subsequence-length
+41a24612-91a9-5716-8cc6-de1323bad8e9,Unit-Cost Edit Distance,advanced,2700,true,Dynamic Programming,"Implement editDistance(left, right).
+
+Return the minimum number of single-character insertions, deletions or substitutions required to transform left into right. Each operation costs 1.
+
+Constraints: 0 <= left.length,right.length <= 500; lowercase English letters only.
+
+Example 1:
+Input: {""left"":""kitten"",""right"":""sitting""}
+Output: 3
+
+Example 2:
+Input: {""left"":"""",""right"":""abc""}
+Output: 3",coding,,unit-cost-edit-distance
+52dbbd06-0291-5810-b84c-793c99863083,Dictionary Word Segmentation,intermediate,1800,true,Dynamic Programming,"Implement canSegment(text, dictionary).
+
+Return whether text can be split into a sequence of words from dictionary. Words may be reused. Empty text can be segmented using zero words.
+
+Constraints: 0 <= text.length <= 1000; up to 1000 distinct nonempty lowercase words, each at most 30 characters; lowercase text.
+
+Example 1:
+Input: {""text"":""devtool"",""dictionary"":[""dev"",""tool""]}
+Output: true
+
+Example 2:
+Input: {""text"":""devtools"",""dictionary"":[""dev"",""tool""]}
+Output: false",coding,,dictionary-word-segmentation
+a842d2c5-5251-528d-b9e5-2a80d386c069,Minimum Grid Travel Cost,intermediate,1800,true,Dynamic Programming,"Implement minimumGridCost(costs).
+
+Move from top-left to bottom-right using only right or down moves. Return the minimum sum of visited cell costs, including both endpoints.
+
+Constraints: 1 <= rows,columns <= 300; rectangular integer matrix; each cost is between 0 and 10000.
+
+Example 1:
+Input: [[1,3,1],[1,5,1],[4,2,1]]
+Output: 7
+
+Example 2:
+Input: [[8]]
+Output: 8",coding,,minimum-grid-travel-cost
+aa04ffed-344a-5df3-b983-9f0d2c4da83e,Minimum Palindrome Partition Cuts,advanced,2700,true,Dynamic Programming,"Implement palindromeCuts(text).
+
+Split text into nonempty palindromic substrings and return the minimum number of cuts between them. Empty text needs 0 cuts.
+
+Constraints: 0 <= text.length <= 2000; lowercase English letters only. Use O(n squared) time or better.
+
+Example 1:
+Input: ""aab""
+Output: 1
+
+Example 2:
+Input: ""racecar""
+Output: 0",coding,,minimum-palindrome-partition-cuts
+fd7dee2b-ac49-5a19-a2c4-d032d2b74df6,SQL: Active Developer Directory,beginner,900,true,SQL Filtering,"Write one PostgreSQL SELECT query. Return id and name for active developers, ordered by id ascending.
+
+Constraints: Table developers(id integer, name text, active boolean). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""developers"":[{""id"":1,""name"":""Ava"",""active"":true},{""id"":2,""name"":""Ben"",""active"":false},{""id"":3,""name"":""Mia"",""active"":true}]}
+Output: [{""id"":1,""name"":""Ava""},{""id"":3,""name"":""Mia""}]",sql,,sql-active-developer-directory
+56f0dadd-8bab-5da6-a19a-41b8432e249c,SQL: Names Ending in a Suffix,beginner,900,true,SQL Filtering,"Write one PostgreSQL SELECT query. Return id and name when name ends in the letters 'son', ignoring case. Order by id ascending.
+
+Constraints: Table developers(id integer, name text). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""developers"":[{""id"":1,""name"":""Jackson""},{""id"":2,""name"":""Ava""},{""id"":3,""name"":""WILSON""}]}
+Output: [{""id"":1,""name"":""Jackson""},{""id"":3,""name"":""WILSON""}]",sql,,sql-names-ending-in-a-suffix
+20dd4139-c870-5d7a-bb97-f07bd222643c,SQL: Duplicate Contact Addresses,beginner,900,true,SQL Aggregation,"Write one PostgreSQL SELECT query. Return email and occurrences for email addresses appearing more than once. Match addresses exactly and sort by email ascending.
+
+Constraints: Table contacts(id integer, email text). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""contacts"":[{""id"":1,""email"":""a@dev.test""},{""id"":2,""email"":""b@dev.test""},{""id"":3,""email"":""a@dev.test""}]}
+Output: [{""email"":""a@dev.test"",""occurrences"":2}]",sql,,sql-duplicate-contact-addresses
+1ee08a90-9926-5909-b951-0a1d5d1c8cbf,SQL: Products Never Purchased,intermediate,1800,true,SQL Joins,"Write one PostgreSQL SELECT query. Return id and name of products referenced by no order item. Null product_id values must not exclude unmatched products. Order by id ascending.
+
+Constraints: Tables products(id integer, name text), order_items(id integer, product_id integer nullable). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""products"":[{""id"":1,""name"":""Keyboard""},{""id"":2,""name"":""Mouse""}],""order_items"":[{""id"":10,""product_id"":1},{""id"":11,""product_id"":null}]}
+Output: [{""id"":2,""name"":""Mouse""}]",sql,,sql-products-never-purchased
+3ace5964-fa8f-5e1e-8a82-634e22d50b2f,SQL: Employees Paid Above Their Manager,intermediate,1800,true,SQL Joins,"Write one PostgreSQL SELECT query. Return id and name of employees with salary strictly greater than their direct manager salary. Exclude employees without a manager. Order by id ascending.
+
+Constraints: Table employees(id integer, name text, salary integer, manager_id integer nullable). Non-null manager_id references employees.id. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""employees"":[{""id"":1,""name"":""Lead"",""salary"":90,""manager_id"":null},{""id"":2,""name"":""Dev"",""salary"":100,""manager_id"":1},{""id"":3,""name"":""QA"",""salary"":80,""manager_id"":1}]}
+Output: [{""id"":2,""name"":""Dev""}]",sql,,sql-employees-paid-above-their-manager
+b73a4c1e-a8bc-50f0-90bd-bf0fed3e33a5,SQL: Department Headcounts Including Empty Teams,intermediate,1800,true,SQL Joins,"Write one PostgreSQL SELECT query. Return department_id, department_name and employee_count for every department, including departments with no employees. Order by department_id ascending.
+
+Constraints: Tables departments(id integer, name text), employees(id integer, department_id integer nullable). Non-null department_id references departments.id. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""departments"":[{""id"":1,""name"":""Platform""},{""id"":2,""name"":""Data""}],""employees"":[{""id"":7,""department_id"":1},{""id"":8,""department_id"":null}]}
+Output: [{""department_id"":1,""department_name"":""Platform"",""employee_count"":1},{""department_id"":2,""department_name"":""Data"",""employee_count"":0}]",sql,,sql-department-headcounts-including-empty-teams
+d7285b7e-20f8-5304-a8bd-e1b0fc3a516b,SQL: Highest Paid Employees per Department,intermediate,1800,true,SQL Window Functions,"Write one PostgreSQL SELECT query. Return department_id, id, name and salary for every employee tied for the highest salary in their department. Order by department_id then id ascending.
+
+Constraints: Table employees(id integer, name text, department_id integer, salary integer). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""employees"":[{""id"":1,""name"":""A"",""department_id"":10,""salary"":100},{""id"":2,""name"":""B"",""department_id"":10,""salary"":100},{""id"":3,""name"":""C"",""department_id"":10,""salary"":80}]}
+Output: [{""department_id"":10,""id"":1,""name"":""A"",""salary"":100},{""department_id"":10,""id"":2,""name"":""B"",""salary"":100}]",sql,,sql-highest-paid-employees-per-department
+39faa56a-cb3b-53d3-8c70-0a7b2c3855e2,SQL: Second Distinct Salary,intermediate,1800,true,SQL Subqueries,"Write one PostgreSQL SELECT query. Return exactly one row with column second_salary holding the second-highest distinct salary. Return NULL in that row if fewer than two distinct salaries exist.
+
+Constraints: Table employees(id integer, salary integer). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""employees"":[{""id"":1,""salary"":100},{""id"":2,""salary"":100},{""id"":3,""salary"":80}]}
+Output: [{""second_salary"":80}]",sql,,sql-second-distinct-salary
+2cc5975e-bf53-535b-8c4c-9fa7de500af3,SQL: Customers with Three Completed Orders,beginner,900,true,SQL Aggregation,"Write one PostgreSQL SELECT query. Return customer_id and completed_orders for customers with at least three orders whose status is exactly 'completed'. Order by customer_id ascending.
+
+Constraints: Table orders(id integer, customer_id integer, status text). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""orders"":[{""id"":1,""customer_id"":8,""status"":""completed""},{""id"":2,""customer_id"":8,""status"":""completed""},{""id"":3,""customer_id"":8,""status"":""completed""},{""id"":4,""customer_id"":9,""status"":""pending""}]}
+Output: [{""customer_id"":8,""completed_orders"":3}]",sql,,sql-customers-with-three-completed-orders
+a5a3b5b8-b1eb-5983-b827-e353435bfd88,SQL: Revenue by Calendar Month,intermediate,1800,true,SQL Dates,"Write one PostgreSQL SELECT query. For completed orders only, return month as YYYY-MM text and revenue_cents as the sum of amount_cents. Return only months with completed orders, ordered by month ascending.
+
+Constraints: Table orders(id integer, ordered_on date, amount_cents integer, status text). Amounts are nonnegative. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""orders"":[{""id"":1,""ordered_on"":""2026-01-05"",""amount_cents"":100,""status"":""completed""},{""id"":2,""ordered_on"":""2026-01-12"",""amount_cents"":250,""status"":""completed""},{""id"":3,""ordered_on"":""2026-02-01"",""amount_cents"":900,""status"":""cancelled""}]}
+Output: [{""month"":""2026-01"",""revenue_cents"":350}]",sql,,sql-revenue-by-calendar-month
+8b202537-151d-586c-b242-acb541b0d3ab,SQL: Daily Running Revenue,intermediate,1800,true,SQL Window Functions,"Write one PostgreSQL SELECT query. First total sales for each date. Return sold_on, daily_cents and running_cents, where running_cents includes all sales on or before that date. Return only dates with sales, ordered by sold_on ascending.
+
+Constraints: Table sales(id integer, sold_on date, amount_cents integer). Amounts are nonnegative. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""sales"":[{""id"":1,""sold_on"":""2026-01-01"",""amount_cents"":10},{""id"":2,""sold_on"":""2026-01-01"",""amount_cents"":20},{""id"":3,""sold_on"":""2026-01-03"",""amount_cents"":5}]}
+Output: [{""sold_on"":""2026-01-01"",""daily_cents"":30,""running_cents"":30},{""sold_on"":""2026-01-03"",""daily_cents"":5,""running_cents"":35}]",sql,,sql-daily-running-revenue
+16ea2101-f16b-5d41-bada-e5b0e00c5b9f,SQL: Each Customers Most Recent Order,intermediate,1800,true,SQL Window Functions,"Write one PostgreSQL SELECT query. Return customer_id, order_id and ordered_on for the latest order of each customer. Break date ties with the greatest order id. Return only customers having an order, sorted by customer_id ascending.
+
+Constraints: Table orders(id integer, customer_id integer, ordered_on date). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""orders"":[{""id"":1,""customer_id"":7,""ordered_on"":""2026-01-01""},{""id"":2,""customer_id"":7,""ordered_on"":""2026-01-03""},{""id"":3,""customer_id"":7,""ordered_on"":""2026-01-03""}]}
+Output: [{""customer_id"":7,""order_id"":3,""ordered_on"":""2026-01-03""}]",sql,,sql-each-customers-most-recent-order
+34b68fd8-960f-567a-ad76-9bb6f12c1b6c,SQL: Customers Ordering in Two Separate Months,intermediate,1800,true,SQL Aggregation,"Write one PostgreSQL SELECT query. Return customer_id for customers with orders in at least two distinct calendar year-months. January in different years counts as different months. Sort by customer_id ascending.
+
+Constraints: Table orders(id integer, customer_id integer, ordered_on date). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""orders"":[{""id"":1,""customer_id"":4,""ordered_on"":""2025-01-02""},{""id"":2,""customer_id"":4,""ordered_on"":""2026-01-03""},{""id"":3,""customer_id"":5,""ordered_on"":""2026-01-09""}]}
+Output: [{""customer_id"":4}]",sql,,sql-customers-ordering-in-two-separate-months
+96094ba1-41fb-55ea-9bb5-d48c18cb6494,SQL: Consecutive Login Day Pairs,intermediate,1800,true,SQL Dates,"Write one PostgreSQL SELECT query. Return distinct user_id and start_day for every pair of consecutive calendar days on which that user logged in. Each pair starts at start_day. Deduplicate repeated daily logins. Order by user_id then start_day ascending.
+
+Constraints: Table logins(id integer, user_id integer, logged_on date). Multiple logins on a date are possible. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""logins"":[{""id"":1,""user_id"":2,""logged_on"":""2026-01-01""},{""id"":2,""user_id"":2,""logged_on"":""2026-01-02""},{""id"":3,""user_id"":2,""logged_on"":""2026-01-02""},{""id"":4,""user_id"":2,""logged_on"":""2026-01-03""}]}
+Output: [{""user_id"":2,""start_day"":""2026-01-01""},{""user_id"":2,""start_day"":""2026-01-02""}]",sql,,sql-consecutive-login-day-pairs
+076d8182-a6fe-5a2c-b491-361386956193,SQL: Products Above Category Average,intermediate,1800,true,SQL Subqueries,"Write one PostgreSQL SELECT query. Return id and name for products priced strictly above the average price in their own category. Include each product in its category average. Order by id ascending.
+
+Constraints: Table products(id integer, name text, category_id integer, price_cents integer). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""products"":[{""id"":1,""name"":""A"",""category_id"":8,""price_cents"":100},{""id"":2,""name"":""B"",""category_id"":8,""price_cents"":300},{""id"":3,""name"":""C"",""category_id"":9,""price_cents"":500}]}
+Output: [{""id"":2,""name"":""B""}]",sql,,sql-products-above-category-average
+c89f48b6-5b93-5b4d-b106-bc1f23f8f748,SQL: Users Completing Every Required Lesson,advanced,2700,true,SQL Subqueries,"Write one PostgreSQL SELECT query. Return user id and name for users who completed every row of required_lessons. Other lesson completions are irrelevant. If no lessons are required, return every user. Order by user id ascending.
+
+Constraints: Tables users(id integer, name text), required_lessons(id integer), completions(id integer, user_id integer, lesson_id integer). user_id references users.id; lesson_id may be absent from required_lessons. Duplicate completions are allowed. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""users"":[{""id"":1,""name"":""A""},{""id"":2,""name"":""B""}],""required_lessons"":[{""id"":10},{""id"":11}],""completions"":[{""id"":1,""user_id"":1,""lesson_id"":10},{""id"":2,""user_id"":1,""lesson_id"":11},{""id"":3,""user_id"":2,""lesson_id"":10}]}
+Output: [{""id"":1,""name"":""A""}]",sql,,sql-users-completing-every-required-lesson
+b17ac46f-6ac5-57f1-a669-2fb696b2e5a0,SQL: Overlapping Reservation Pairs,intermediate,1800,true,SQL Joins,"Write one PostgreSQL SELECT query. Return left_id and right_id for each pair of reservations in the same room whose half-open intervals overlap. Return each pair once with left_id<right_id. Touching endpoints do not overlap. Order by left_id then right_id.
+
+Constraints: Table reservations(id integer, room_id integer, starts_at timestamp without time zone, ends_at timestamp without time zone). starts_at<ends_at. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""reservations"":[{""id"":1,""room_id"":5,""starts_at"":""2026-01-01 09:00:00"",""ends_at"":""2026-01-01 10:00:00""},{""id"":2,""room_id"":5,""starts_at"":""2026-01-01 09:30:00"",""ends_at"":""2026-01-01 11:00:00""},{""id"":3,""room_id"":5,""starts_at"":""2026-01-01 11:00:00"",""ends_at"":""2026-01-01 12:00:00""}]}
+Output: [{""left_id"":1,""right_id"":2}]",sql,,sql-overlapping-reservation-pairs
+11febe89-e29f-55fb-bb45-9fe19ae4b920,SQL: Top Three Distinct Scores per Team,advanced,2700,true,SQL Window Functions,"Write one PostgreSQL SELECT query. Return team_id, player_name, score and score_rank for results whose score is among the three highest distinct scores of their team. Use dense rank, so tied scores have the same rank. Order by team_id ascending, score descending, player_name ascending, then id ascending; id is not an output column.
+
+Constraints: Table results(id integer, team_id integer, player_name text, score integer). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""results"":[{""id"":1,""team_id"":1,""player_name"":""A"",""score"":100},{""id"":2,""team_id"":1,""player_name"":""B"",""score"":90},{""id"":3,""team_id"":1,""player_name"":""C"",""score"":90},{""id"":4,""team_id"":1,""player_name"":""D"",""score"":80},{""id"":5,""team_id"":1,""player_name"":""E"",""score"":70}]}
+Output: [{""team_id"":1,""player_name"":""A"",""score"":100,""score_rank"":1},{""team_id"":1,""player_name"":""B"",""score"":90,""score_rank"":2},{""team_id"":1,""player_name"":""C"",""score"":90,""score_rank"":2},{""team_id"":1,""player_name"":""D"",""score"":80,""score_rank"":3}]",sql,,sql-top-three-distinct-scores-per-team
+ebb512be-2f9f-5cc1-aaf9-c19dab58a56d,SQL: Zero-Sale Dates in a Fixed Range,advanced,2700,true,SQL Dates,"Write one PostgreSQL SELECT query. Return missing_day for every calendar date from 2026-01-01 through 2026-01-05 inclusive having no sale. Duplicate sales on a date do not matter. Ignore dates outside the range and sort ascending.
+
+Constraints: Table sales(id integer, sold_on date). Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""sales"":[{""id"":1,""sold_on"":""2026-01-01""},{""id"":2,""sold_on"":""2026-01-03""},{""id"":3,""sold_on"":""2026-01-05""}]}
+Output: [{""missing_day"":""2026-01-02""},{""missing_day"":""2026-01-04""}]",sql,,sql-zero-sale-dates-in-a-fixed-range
+669a37b5-1b84-56c0-aad8-b6e2d741b7fb,SQL: Longest Daily Login Streak,advanced,2700,true,SQL Window Functions,"Write one PostgreSQL SELECT query. Return user_id and longest_streak, the greatest number of consecutive calendar dates with a login for each user represented in logins. Deduplicate same-day rows. Order by user_id ascending.
+
+Constraints: Table logins(id integer, user_id integer, logged_on date). Duplicate same-day logins are allowed. Each column named id is the primary key of its own table. Unless explicitly nullable, values are non-null. Return only the specified columns in the specified order. Do not modify data.
+
+Example 1:
+Input: {""logins"":[{""id"":1,""user_id"":4,""logged_on"":""2026-01-01""},{""id"":2,""user_id"":4,""logged_on"":""2026-01-02""},{""id"":3,""user_id"":4,""logged_on"":""2026-01-02""},{""id"":4,""user_id"":4,""logged_on"":""2026-01-04""},{""id"":5,""user_id"":7,""logged_on"":""2026-01-09""}]}
+Output: [{""user_id"":4,""longest_streak"":2},{""user_id"":7,""longest_streak"":1}]",sql,,sql-longest-daily-login-streak

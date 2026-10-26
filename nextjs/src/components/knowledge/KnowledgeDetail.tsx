@@ -21,6 +21,8 @@ import {
   ResourceMeta,
 } from './KnowledgeUI';
 import styles from './knowledge.module.css';
+import { OfflineDownload } from './OfflineDownload';
+import { LessonExplanation } from './LessonExplanation';
 export function ResourceContent({
   resource,
   trackClicks = true,
@@ -259,6 +261,8 @@ export function KnowledgeDetail({ id }: { id: string }) {
           <BookmarkButton key={resource.id} resource={resource} />
         </header>
         <ResourceContent resource={resource} />
+        {resource.content.trim() && <OfflineDownload id={resource.id} />}
+        {resource.content.trim() && <LessonExplanation key={resource.id} id={resource.id} />}
         <LearningControls
           key={resource.progress?.updated_at ?? 'not-started'}
           resource={resource}

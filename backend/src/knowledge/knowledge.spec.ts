@@ -185,6 +185,16 @@ describe('Knowledge HTTP authorization and ownership', () => {
       .set('Authorization', 'Bearer developer')
       .expect(403);
   });
+  it('protects offline exports and validates AI requests without contacting the provider', async () => {
+    await request(app.getHttpServer()).get('/knowledge/resources/'+published+'/offline').expect(401);
+    const snapshot=await request(app.getHttpServer()).get('/knowledge/resources/'+published+'/offline').set('Authorization','Bearer developer').expect(200);
+    expect(snapshot.body).toMatchObject({id:published,status:'published',content:'Reviewed notes',topics:[]});
+    expect(snapshot.body).not.toHaveProperty('resource_skills');
+    await request(app.getHttpServer()).get('/knowledge/resources/'+draft+'/offline').set('Authorization','Bearer developer').expect(404);
+    await request(app.getHttpServer()).post('/knowledge/resources/'+published+'/explain').send({action:'explain'}).expect(401);
+    await request(app.getHttpServer()).post('/knowledge/resources/'+published+'/explain').set('Authorization','Bearer developer').send({action:'explain',hidden_tests:['bad']}).expect(400);
+    await request(app.getHttpServer()).post('/knowledge/resources/'+draft+'/explain').set('Authorization','Bearer developer').send({action:'explain'}).expect(404);
+  });
   it('never returns drafts through developer direct-ID access; allows admin preview', async () => {
     await request(app.getHttpServer())
       .get('/knowledge/resources/' + draft)

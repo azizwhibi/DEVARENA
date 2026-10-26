@@ -1,0 +1,17 @@
+# Problem topics
+
+Run `db/problem-topics.sql` in the existing Supabase project's SQL Editor after `db/skills-integration.sql`. Optionally run `db/problem-topics-seed.sql` for six topics and three original published practice examples. Neither script has been applied to shared Supabase by this implementation.
+
+For problem creation, editing, publication and archival, also run `db/problem-administration.sql` after `db/skills-management.sql` and `db/problem-topics.sql`. It adds lifecycle timestamps and the transactional `problem_admin_save` / `problem_admin_action` functions without replacing existing problems, results or progression. An exported/imported `challenges` table can lack these additions: the detail endpoint reads the core columns and existing associations, while mutations return `PROBLEM_ADMINISTRATION_SETUP_REQUIRED` until this migration is applied. Do not recreate or empty the table to repair this setup.
+
+Restart both services using the existing CMD commands (`npm run start:dev` in backend; `npm run dev` in nextjs). Open `/arena` for Problems and `/admin/problems` with an administrator account for topic management. Create/edit topics using a unique name and lowercase hyphenated slug; uncheck Active to archive and recheck it to restore. Each problem has a multiple-selection topic editor; save an empty selection to remove all links. Existing archived links are preserved until explicitly removed. Archived topics disappear from developer filters and badges.
+
+The catalogue persists `q`, `difficulty`, `topic` (UUID), and `page` in the URL. Difficulty values reuse the existing database values; visible labels are Easy, Medium, Hard, Expert. Topic counts are global counts of published problems, independent of the current search and difficulty. Search and filtering are performed in PostgreSQL before pagination, with exact totals and stable title/ID ordering. Unpublished problems appear only in the admin catalogue. No fabricated acceptance rates or premium locks are shown.
+
+Endpoints: authenticated `GET /problems`, `GET /problems/topics`; administrator `GET /admin/problems`, `GET/POST /admin/problems/topics`, `PATCH /admin/problems/topics/:id`, and `PUT /admin/problems/:id/topics` with `{ "topicIds": [] }`. Mutations use existing guards and service-role Supabase access. Junction replacement is atomic and independently verifies the active administrator. Browser roles have no direct table/function privileges. Duplicate names, slugs and links are rejected. Deletion is archival; topic references use restrictive foreign keys.
+
+Existing challenges remain the underlying problem table and retain their IDs, skill links, attempts and progression. Topics never assign skills or update measurements. Browser practice continues using the existing quiz interface and does not execute submitted code or create verified assessments. The optional examples provide original problem descriptions and use that existing practice workflow.
+
+Checks: `node db/tests/problem-topics.cjs` from the root (requires the existing optional `.local/verification` PGlite installation), backend tests/build, and frontend lint/build. The SQL verifier uses an isolated database, not shared credentials.
+
+Verification completed: 208 backend tests, backend build, frontend lint and production build (36 routes), plus Skills, Knowledge, Marketplace, Battle Code and PWA checks passed. The production build required the framework's retry after an existing Next.js security advisory. No live database migration or browser end-to-end test was performed.

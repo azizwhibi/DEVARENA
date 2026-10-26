@@ -1,6 +1,17 @@
 import { AssignmentsService } from './assignments.service';
+import { PracticeController } from './practice/practice.controller';
+import { PracticeService } from './practice/practice.service';
+import { CodeReviewController } from './code-review/code-review.controller';
+import { CodeReviewService } from './code-review/code-review.service';
+import { GeminiCodeReviewService } from './code-review/gemini-code-review.service';
+import {
+  ProblemsController,
+  ProblemsAdminController,
+} from './problems.controller';
+import { ProblemsService } from './problems.service';
 import {
   AssignmentsController,
+  DemonstratedSkillsController,
   MyAssignmentsController,
   PracticeDirectoryController,
 } from './assignments.controller';
@@ -34,7 +45,12 @@ import { SkillInsightsService } from './skill-insights.service';
 @Module({
   imports: [AuthModule, SupabaseModule, RankingsModule],
   controllers: [
+    CodeReviewController,
+    PracticeController,
+    ProblemsController,
+    ProblemsAdminController,
     AssignmentsController,
+    DemonstratedSkillsController,
     MyAssignmentsController,
     PracticeDirectoryController,
     SkillsDirectoryController,
@@ -50,6 +66,10 @@ import { SkillInsightsService } from './skill-insights.service';
   ],
   exports: [SkillProgressService],
   providers: [
+    CodeReviewService,
+    GeminiCodeReviewService,
+    PracticeService,
+    ProblemsService,
     AssignmentsService,
     SupabaseService,
     SkillsService,

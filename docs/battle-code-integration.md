@@ -9,7 +9,7 @@ Habib's `habibGestion/` supplied the 1v1 quiz module. Only battle types, the ten
 - Ten rounds use ten-second question timers and two-second result reveals. Correct answers earn Habib's original `500 + round(remaining / 10000 * 500)` battle points. Incorrect answers and timeouts earn zero.
 - Server result messages update both scoreboards, reveal answers after resolution, and determine the winner. Results, per-round points, accuracy, average response time, and another-match actions are available.
 - Explicit DevBot practice simulates the opponent locally. It supports the same round format and replay without database activity.
-- A leave confirmation explains active-match forfeits. BYTE pauses during a ready check, active round, or leave dialog. The new optional battle tour step opens the lobby without joining a queue.
+- A leave confirmation explains active-match forfeits.
 
 ## Host authentication and data
 
@@ -47,7 +47,7 @@ Matchmaking and live rooms remain in memory, as in Habib's module. Run one backe
 
 - Backend compilation and full suite: **206 tests across 15 suites passed**, including 17 battle tests.
 - Isolated real WebSocket tests cover rejected authentication, duplicate identities, origin rejection, identity spoof attempts, mutual acceptance, hidden answers, authoritative resolution, repeated answers, and forfeit winners.
-- Frontend lint, TypeScript/production build, battle-state checks, skills, Knowledge, Marketplace, BYTE, and PWA checks passed. Both battle routes appear in the production route table.
+- Frontend lint, TypeScript/production build, battle-state checks, skills, Knowledge, Marketplace, and PWA checks passed. Both battle routes appear in the production route table.
 - `node db/tests/duel-integration.cjs` passes migration replay, profile/XP/proficiency preservation, private table privileges, and historical-score preservation after account deletion, without shared database connections.
 - Browser screenshots under `.local/design/battle-*.png` cover the lobby, practice, and results at 390, 768, and 1440px. A complete ten-round DevBot match, replay reset, leave confirmation, and offline matchmaking rejection were verified. The sidebar has seven items and the active Battle Code link; no page overflow or duplicate main landmark was found.
 - No GitHub push or deployment was performed. No real online match against shared accounts was used for transport verification; the socket tests isolate authentication and persistence.

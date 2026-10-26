@@ -12,7 +12,7 @@ The attachment contained the brief, but the reference screenshots and `Texte col
 - Global design tokens and shared card/button/field/table/dialog/skeleton/empty-state styles replace competing accents. Feature-specific styles remain scoped.
 - Dashboard uses the real assigned skills, measured average, latest assessed skill's recorded history, published challenges, and actual Marketplace balance. Missing scores and insufficient history have truthful states.
 - Profile uses the existing identity/avatar, editable settings and cosmetics, a restrained violet/cyan banner, real proficiency statistics, a radar only with three assessed skills, and performance bars. No ranking, streak, reward, or verification values were fabricated.
-- Dialog keyboard behavior and focus restoration are shared. BYTE keeps its character animations, stored progress, reduced-motion behavior, and stable existing targets; its controls match the theme. Battle Code adds one optional tour step.
+- Dialog keyboard behavior and focus restoration are shared across the workspace.
 - Manifest/theme/icons follow the palette. The existing service worker still caches only the offline page, icons, and static assets, never authenticated application data.
 
 ## Completed presentation checklist
@@ -35,13 +35,13 @@ The attachment contained the brief, but the reference screenshots and `Texte col
 | `/admin/marketplace`, product/grant forms | Yes | 390, 768, 1440px; no product/credit mutations |
 | `/recruiter` | Yes | 390, 768, 1440px; unsupported benchmark/invitation claims removed |
 | `/duel`, `/arena/duel` | Yes | Full DevBot match, results, replay, leave confirmation, offline guard; 390, 768, 1440px |
-| BYTE, PWA install/offline controls, metadata/manifest/icons | Yes | Guide/drawer placement, reduced-motion fallback; state and PWA tests |
+| PWA install/offline controls, metadata/manifest/icons | Yes | Drawer placement and PWA tests |
 
 Coach remains removed as requested previously. Battle Code came from the subsequently supplied Habib module; its integration and SQL are documented in `docs/battle-code-integration.md`.
 
 ## Checks and limits
 
-Frontend ESLint, TypeScript, production build (35 generated routes after battle integration), skills, Knowledge, Marketplace, battle-state, 18 BYTE checks, and PWA checks pass. Backend build and 206 tests across 15 suites pass. Isolated SQL tests validate battle migration replay and preservation without shared database writes.
+Frontend ESLint, TypeScript, production build (35 generated routes after battle integration), skills, Knowledge, Marketplace, battle-state, and PWA checks pass. Backend build and 206 tests across 15 suites pass. Isolated SQL tests validate battle migration replay and preservation without shared database writes.
 
 Safe redirects, API, registration, OAuth, profile libraries, user administration, role navigation, and recruiter checks passed. The combined auth command stops at the pre-existing missing `supabase/templates/recovery.html`; that deleted template was not recreated as part of styling. Missing live assessment/resource/inventory fixtures prevented exhaustive populated-state screenshots and purchase/credit mutations. Browser screenshots are local verification artifacts in `.local/design/`, not product placeholder data.
 
@@ -78,7 +78,6 @@ The following files contain translated interface, accessibility, tutorial, valid
 - nextjs/src/app/(skills)/my-skills/page-client.tsx
 - nextjs/src/app/(skills)/skills/[id]/page-client.tsx
 - nextjs/src/components/AuthHeader.tsx
-- nextjs/src/components/dev-guide/tutorialSteps.ts
 - nextjs/src/components/knowledge/KnowledgeAdmin.tsx
 - nextjs/src/components/knowledge/KnowledgeDetail.tsx
 - nextjs/src/components/knowledge/KnowledgeEditor.tsx

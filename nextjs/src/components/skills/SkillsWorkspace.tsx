@@ -6,7 +6,6 @@ import { useAccount } from '@/components/AccountProvider';
 import { AccountAvatar } from '@/components/AccountAvatar';
 import { WorkspaceIcon } from './WorkspaceIcon';
 import styles from './workspace.module.css';
-import { DevGuideProvider } from '@/components/dev-guide/DevGuideProvider';
 import { useWorkspaceDialogs } from './useWorkspaceDialogs';
 export function useSkillsAccount() {
   const { account } = useAccount();
@@ -15,17 +14,19 @@ export function useSkillsAccount() {
 }
 const navigation = [
   { href: '/dashboard', label: 'Dashboard', icon: 'overview' },
-  { href: '/my-skills', label: 'Skills', icon: 'skills' },
   { href: '/discover', label: 'Technologies', icon: 'layers' },
-  { href: '/arena', label: 'Challenges', icon: 'practice' },
+  { href: '/arena', label: 'Problems', icon: 'practice' },
   { href: '/knowledge', label: 'Knowledge', icon: 'knowledge' },
+  { href: '/community', label: 'Discuss', icon: 'discuss' },
   { href: '/marketplace', label: 'Marketplace', icon: 'marketplace' },
   { href: '/duel', label: 'Battle Code', icon: 'battle' },
   { href: '/rankings', label: 'Rankings', icon: 'overview' },
 ] as const;
 const administration = [
+  { href: '/admin/problems', label: 'Problems and topics', icon: 'links' },
   { href: '/admin/marketplace', label: 'Marketplace', icon: 'marketplace' },
   { href: '/admin/knowledge', label: 'Resources', icon: 'knowledge' },
+  { href: '/admin/community', label: 'Discuss moderation', icon: 'discuss' },
   { href: '/admin/skills', label: 'Skill management', icon: 'layers' },
   { href: '/admin/skill-associations', label: 'Associations', icon: 'links' },
   { href: '/admin/users', label: 'Users', icon: 'users' },
@@ -42,6 +43,14 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
   const [failure, setFailure] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const closeDrawer = () => {
+      if (desktop.matches) setMenuOpen(false);
+    };
+    desktop.addEventListener('change', closeDrawer);
+    return () => desktop.removeEventListener('change', closeDrawer);
+  }, []);
   useEffect(() => {
     const onFailure = (event: Event) =>
       setFailure((event as CustomEvent<string>).detail);
@@ -91,7 +100,6 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
           role={menuOpen ? 'dialog' : undefined}
           aria-modal={menuOpen || undefined}
           aria-label="Main navigation"
-          data-guide-modal={menuOpen ? 'true' : undefined}
           className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''} ${menuOpen ? styles.open : ''}`}
           onKeyDown={(event) => {
             if (event.key === 'Escape') setMenuOpen(false);
@@ -127,16 +135,13 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
                 {group.links.map((link) => {
                   const active =
                     pathname === link.href ||
-                    (link.href === '/my-skills' &&
-                      pathname.startsWith('/skills/')) ||
-                    ((link.href === '/knowledge' ||
+                    ((link.href === '/community' || link.href === '/admin/community' || link.href === '/knowledge' ||
                       link.href === '/admin/knowledge') &&
                       pathname.startsWith(link.href + '/'));
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
-                      data-tour={`nav-${link.href.slice(1)}`}
                       aria-current={active ? 'page' : undefined}
                       aria-label={link.label}
                       title={link.label}
@@ -160,7 +165,6 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
             )}
             <Link
               href="/profile/settings"
-              data-tour="profile-settings"
               className={styles.link}
               onClick={() => setMenuOpen(false)}
             >
@@ -187,7 +191,7 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
             )}
           </div>
         </aside>
-        <main className={styles.main} data-tour="workspace-content">
+        <main className={styles.main}>
           {(failure || accountFailure) && (
             <div role="alert" className="workspace-alert">
               {failure || accountFailure}
@@ -233,7 +237,6 @@ export function SkillsWorkspace({ children }: { children: React.ReactNode }) {
           )}
         </main>
       </div>
-      {account && <DevGuideProvider account={account} />}
     </div>
   );
 }

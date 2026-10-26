@@ -1,0 +1,151 @@
+﻿.section {
+  --logo-height: 32px;
+  --logo-gap: 48px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 64px;
+}
+.heading {
+  max-width: 640px;
+  padding: 0 20px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+.heading h2 {
+  color: #f4f5fa;
+  font-size: clamp(26px, 3vw, 32px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+.heading p {
+  margin-top: 12px;
+  color: #a1aabd;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.viewport {
+  width: 100%;
+  overflow: hidden;
+  padding-block: 24px;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 clamp(24px, 6vw, 120px),
+    #000 calc(100% - clamp(24px, 6vw, 120px)),
+    transparent
+  );
+}
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
+  animation-direction: var(--marquee-direction, normal);
+  animation-play-state: paused;
+  will-change: transform;
+}
+.track[data-ready] {
+  animation-play-state: running;
+}
+.viewport:hover .track {
+  animation-play-state: paused;
+}
+.group,
+.sequence {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  width: max-content;
+}
+.sequence {
+  gap: var(--logo-gap);
+  padding-inline: calc(var(--logo-gap) / 2);
+}
+.link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+.logo {
+  display: block;
+  height: var(--logo-height);
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  transition: opacity 150ms ease;
+}
+.link:hover .logo,
+.link:focus-visible .logo {
+  opacity: 1;
+}
+.link:focus-visible {
+  outline: 2px solid #c4b5fd;
+  outline-offset: 8px;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Reveal all original links when tabbing, without moving focus offscreen. */
+.viewport:focus-within {
+  mask-image: none;
+}
+.viewport:focus-within .track {
+  animation: none;
+  transform: none;
+  width: 100%;
+  will-change: auto;
+}
+.viewport:focus-within .group,
+.viewport:focus-within .sequence {
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.viewport:focus-within [aria-hidden='true'] {
+  display: none;
+}
+@media (min-width: 640px) {
+  .section {
+    --logo-height: 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .section {
+    --logo-height: 56px;
+    --logo-gap: 80px;
+    margin-top: 88px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    mask-image: none;
+  }
+  .track {
+    animation: none;
+    transform: none;
+    width: 100%;
+    will-change: auto;
+  }
+  .group,
+  .sequence {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .viewport [aria-hidden='true'] {
+    display: none;
+  }
+  .logo {
+    transition: none;
+  }
+}

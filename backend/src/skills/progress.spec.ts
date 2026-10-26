@@ -29,8 +29,8 @@ describe('SkillProgress & Dynamic Scoring', () => {
     );
   });
 
-  it('ensures static applyAttemptResult method does NOT exist on SkillProgressService', () => {
-    expect((SkillProgressService.prototype as any).applyAttemptResult).toBeUndefined();
+  it('ensures applyAttemptResult delegates dynamically', () => {
+    expect(typeof (SkillProgressService.prototype as any).applyAttemptResult).toBe('function');
   });
 
   it('recordAttempt inserts attempt row and emits ATTEMPT_VALIDATED event on success', async () => {

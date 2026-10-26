@@ -1,77 +1,89 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { clearDevelopmentServiceWorker } from '@/lib/pwa/development-cleanup';
 
 export function RegisterSW() {
-  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
-
+  const [waiting, setWaiting] = useState<ServiceWorker | null>(null);
+  const [error, setError] = useState('');
   useEffect(() => {
-    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
-
-    const isEnabled =
-      process.env.NODE_ENV === 'production' ||
-      process.env.NEXT_PUBLIC_ENABLE_SW === 'true' ||
-      window.location.search.includes('sw=1') ||
-      (() => {
-        try {
-          return localStorage.getItem('devarena_enable_sw') === '1';
-        } catch {
-          return false;
-        }
-      })();
-
-    if (!isEnabled) return;
-
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!refreshing) {
-        refreshing = true;
-        window.location.reload();
-      }
-    });
-
-    navigator.serviceWorker
-      .register('/sw.js', { scope: '/', updateViaCache: 'none' })
-      .then(reg => {
-        if (reg.waiting) {
-          setWaitingWorker(reg.waiting);
-        }
-
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          if (!newWorker) return;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              setWaitingWorker(newWorker);
-            }
-          });
-        });
-      })
-      .catch(() => {
-        /* SW registration non-fatal */
+    if (process.env.NODE_ENV !== 'production') {
+      void clearDevelopmentServiceWorker().catch(() => {
+        console.warn(
+          'Unable to clear the previous DevArena worker. Unregister /sw.js in browser developer tools and reload.',
+        );
       });
-  }, []);
-
-  function handleUpdate() {
-    if (waitingWorker) {
-      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+      return;
     }
-  }
-
-  if (!waitingWorker) return null;
-
+    let cleanup = () => {};
+    let disposed = false;
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+      void navigator.serviceWorker
+        .register('/sw.js', { scope: '/', updateViaCache: 'none' })
+        .then((registration) => {
+          if (disposed) return;
+          const listeners: (() => void)[] = [];
+          function check() {
+            if (disposed) return;
+            if (registration.waiting && navigator.serviceWorker.controller)
+              setWaiting(registration.waiting);
+          }
+          const update = () => {
+            const worker = registration.installing;
+            if (!worker) return;
+            const changed = () => {
+              if (disposed) return;
+              if (worker.state === 'redundant')
+                setError(
+                  'Offline setup or update failed. Reconnect and reload to retry.',
+                );
+              check();
+            };
+            worker.addEventListener('statechange', changed);
+            listeners.push(() =>
+              worker.removeEventListener('statechange', changed),
+            );
+          };
+          check();
+          update();
+          registration.addEventListener('updatefound', update);
+          cleanup = () => {
+            registration.removeEventListener('updatefound', update);
+            listeners.forEach((remove) => remove());
+          };
+        })
+        .catch(() =>
+          setError('Offline setup failed. Reconnect and reload to retry.'),
+        );
+    }
+    return () => {
+      disposed = true;
+      cleanup();
+    };
+  }, []);
+  if (!waiting && !error) return null;
   return (
-    <aside
-      aria-label="App update available"
-      className="arena-enter fixed bottom-20 right-4 z-50 flex items-center gap-3 rounded-xl border border-primary/40 bg-card px-4 py-3 text-sm shadow-xl"
-    >
-      <span className="font-mono text-xs text-primary">$ new version ready</span>
+    <aside className="pwa-notice" aria-label="App update">
+      <p role="status">
+        {error ||
+          'An update is ready. Finish any form, purchase or battle before reloading.'}
+      </p>
       <button
-        type="button"
-        onClick={handleUpdate}
-        className="arena-btn rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-zinc-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="btn btn-secondary"
+        onClick={() => {
+          if (!waiting) {
+            window.location.reload();
+            return;
+          }
+          navigator.serviceWorker.addEventListener(
+            'controllerchange',
+            () => window.location.reload(),
+            { once: true },
+          );
+          waiting.postMessage({ type: 'ACTIVATE_UPDATE' });
+        }}
       >
-        Update Now
+        {waiting ? 'Update and reload' : 'Reload'}
       </button>
     </aside>
   );

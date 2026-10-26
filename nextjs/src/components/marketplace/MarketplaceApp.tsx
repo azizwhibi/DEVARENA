@@ -158,7 +158,6 @@ export function MarketplaceApp({
   return (
     <div
       data-marketplace
-      data-tour="marketplace-catalogue"
       className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-5 py-8 sm:py-10"
     >
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

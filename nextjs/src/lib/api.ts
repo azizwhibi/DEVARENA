@@ -7,6 +7,8 @@ import { safeNext } from '@/lib/safe-next';
 export { ApiError } from '@/lib/api-core';
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false)
+    throw new Error('You are offline. Online actions require a connection. Open the offline library for downloaded resources.');
   const supabase = createClient();
   const { data } = await supabase.auth.getSession();
   let failure: ApiError;

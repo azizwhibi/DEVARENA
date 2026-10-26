@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+/* Keep PWA notices in flow so they cannot cover navigation or modal actions. */
+.pwa-install,.pwa-notice{margin:16px auto;padding:16px;width:min(640px,calc(100% - 32px));display:flex;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid #34304b;border-radius:12px;background:#111827;font-size:14px;padding-bottom:max(16px,env(safe-area-inset-bottom))}
+.pwa-install p,.pwa-notice p{flex:1 1 240px}
+.knowledge-ai{border-style:dashed!important;border-color:#7961a6!important}
+.knowledge-ai-text{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:16px}
+
 :root {
   color-scheme: dark;
   --workspace-sidebar-width: 290px;

@@ -9,6 +9,7 @@ import { choosePracticeQuestion } from '@/lib/practice-history';
 export interface ChallengeModalProps {
   challengeId: string;
   challengeTitle?: string;
+  problemDescription?: string;
   category?: string;
   difficulty?: string;
   points?: number;

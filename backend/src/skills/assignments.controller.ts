@@ -9,13 +9,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { AdminGuard, DeveloperGuard } from '../auth/guards';
+import { AdminGuard, DeveloperGuard, UserGuard } from '../auth/guards';
 import { AssignmentsService } from './assignments.service';
 type AuthRequest = Request & { user: { id: string } };
 @Controller('admin/developers')
 @UseGuards(AdminGuard)
 export class AssignmentsController {
   constructor(private readonly assignments: AssignmentsService) {}
+  @Get(':userId/demonstrated-skills') demonstrated(
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ) {
+    return this.assignments.demonstrated(userId);
+  }
   @Get(':userId/skills') list(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.assignments.list(userId);
   }
@@ -32,6 +37,14 @@ export class AssignmentsController {
     @Param('skillId', ParseUUIDPipe) skillId: string,
   ) {
     return this.assignments.assign(req.user.id, userId, skillId, false);
+  }
+}
+@Controller('me/skills/demonstrated')
+@UseGuards(UserGuard)
+export class DemonstratedSkillsController {
+  constructor(private readonly assignments: AssignmentsService) {}
+  @Get() list(@Req() req: AuthRequest) {
+    return this.assignments.demonstrated(req.user.id);
   }
 }
 @Controller('me/skill-assignments')

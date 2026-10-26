@@ -137,7 +137,6 @@ export function ItemDialog({
 
   return (
     <dialog
-      data-guide-modal="true"
       ref={dialogRef}
       aria-labelledby={titleId}
       className="w-[min(calc(100%_-_2rem),32rem)] rounded-2xl border border-[#252C3A] bg-[#090C11] p-0 text-zinc-100 shadow-2xl backdrop:bg-[#090C11]"

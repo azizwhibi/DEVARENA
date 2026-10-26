@@ -4,6 +4,7 @@ import type { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { clearOfflineReading } from '@/lib/offline-reading';
 
 export function useAuth() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export function useAuth() {
   }, []);
 
   const signOut = useCallback(async () => {
+    await clearOfflineReading().catch(() => {});
     const { error } = await createClient().auth.signOut();
     if (error) throw error;
     router.replace('/login');

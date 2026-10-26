@@ -21,6 +21,8 @@ type RawSkill = {
   technology_id?: string | null;
   is_active?: boolean;
   challengesCount?: number;
+  solved_count?: number;
+  first_validated_at?: string;
   updated_at?: string;
 };
 type RawProgress = {
@@ -94,6 +96,8 @@ function developerSkill(skill: RawSkill, row?: RawProgress): SkillProgress {
         ? null
         : Math.round(Number(row.level_score)),
     validatedAttempts: Number(row?.validated_attempts ?? 0),
+    solvedProblems: Number(skill.solved_count ?? row?.validated_attempts ?? 0),
+    firstValidatedAt: skill.first_validated_at,
     status: row?.status ?? 'not_evaluated',
     delta30d: row?.delta30d,
     updatedAt: row?.updated_at,
@@ -141,6 +145,12 @@ export const ApiService = {
         encodeURIComponent(skillId),
       { method: active ? 'POST' : 'DELETE' },
     );
+  },
+  async getDeveloperDemonstratedSkills(id: string): Promise<SkillProgress[]> {
+    const skills = await call<RawSkill[]>(
+      '/admin/developers/' + encodeURIComponent(id) + '/demonstrated-skills',
+    );
+    return skills.map((skill) => developerSkill(skill));
   },
   replaceChallengeSkills(
     id: string,
@@ -197,7 +207,7 @@ export const ApiService = {
   async getMySkills(): Promise<SkillProgress[]> {
     const [progress, skills] = await Promise.all([
       call<RawProgress[]>('/me/skills'),
-      call<RawSkill[]>('/me/skill-assignments'),
+      call<RawSkill[]>('/me/skills/demonstrated'),
     ]);
     const rows = new Map(progress.map((row) => [row.skill_id, row]));
     const result = skills.map((skill) =>

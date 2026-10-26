@@ -32,7 +32,10 @@ export function OfflineBanner() {
       role="status"
       className="arena-enter bg-accent px-5 py-2 text-center text-sm font-medium text-zinc-950"
     >
-      You're offline. Cached assets are active; navigation will resume when you reconnect.
+      You&apos;re offline. Cached assets are active; navigation will resume when you reconnect.{' '}
+      <a href="/offline.html" className="underline font-semibold ml-2">
+        Open offline library
+      </a>
     </p>
   );
 }

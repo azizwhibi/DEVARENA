@@ -1,0 +1,159 @@
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 48px;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 1px solid #a78bfa;
+  border-radius: 10px;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.button:hover:not(:disabled) {
+  border-color: #c4b5fd;
+  background: #6d28d9;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.button svg { flex: 0 0 auto; }
+
+.button:focus-visible,
+.closeButton:focus-visible,
+.dismissButton:focus-visible {
+  outline: 2px solid #c4b5fd;
+  outline-offset: 4px;
+}
+
+.feedback,
+.error {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.feedback { color: #b5bfd1; }
+.error { color: #fda4af; }
+
+.dismissButton {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #b5bfd1;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dismissButton:hover { color: #fff; }
+
+.dialog {
+  width: min(460px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 28px;
+  overflow-y: auto;
+  border: 1px solid #403451;
+  border-radius: 20px;
+  background: #10131d;
+  color: #f4f5fa;
+  box-shadow: 0 28px 100px #0008;
+}
+
+.dialog::backdrop { background: #03050dcc; }
+
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dialogIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #6d4b92;
+  border-radius: 12px;
+  background: #7c3aed1a;
+  color: #c4b5fd;
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #30384a;
+  border-radius: 10px;
+  background: transparent;
+  color: #b5bfd1;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: #1a2030;
+  color: #fff;
+}
+
+.dialogTitle {
+  margin: 24px 0 10px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.dialogDescription,
+.dialogNote {
+  margin: 0;
+  color: #b5bfd1;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.steps {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0;
+  padding-left: 22px;
+  list-style: decimal;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.steps li { padding-left: 6px; }
+.steps li::marker { color: #c4b5fd; }
+.dialogNote { margin-bottom: 24px; font-size: 12px; }
+.spinner { animation: spin 1s linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: none; }
+  .spinner { animation: none; }
+}

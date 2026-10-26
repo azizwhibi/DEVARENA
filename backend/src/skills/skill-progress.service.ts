@@ -71,7 +71,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException("Skill not found.");
+    if (!skill) throw new NotFoundException('Skill not found.');
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')
@@ -139,7 +139,7 @@ export class SkillProgressService {
       .select('id')
       .eq('id', skillId)
       .maybeSingle();
-    if (!skill) throw new NotFoundException("Skill not found.");
+    if (!skill) throw new NotFoundException('Skill not found.');
 
     const { data: links, error: linkErr } = await this.supabase.client
       .from('challenge_skills')
@@ -237,5 +237,52 @@ export class SkillProgressService {
       if (histErr) throw histErr;
     }
     return { userId, skillId, ...result };
+  }
+
+  /** Only trusted server/admin assessments call this; browser practice never does. */
+  async applyAttemptResult(
+    userId: string,
+    challengeId: string,
+    isSuccess: boolean,
+    specificSkillId?: string,
+  ) {
+    const { data: challenge, error: challengeError } =
+      await this.supabase.client
+        .from('challenges')
+        .select('id')
+        .eq('id', challengeId)
+        .maybeSingle();
+    if (challengeError) throw challengeError;
+    if (!challenge) throw new NotFoundException('Problem not found.');
+    const { data: links, error: linkError } = await this.supabase.client
+      .from('challenge_skills')
+      .select('skill_id')
+      .eq('challenge_id', challengeId);
+    if (linkError) throw linkError;
+    const skillIds = [
+      ...new Set<string>(
+        (links ?? []).map((link: { skill_id: string }) => link.skill_id),
+      ),
+    ];
+    if (specificSkillId && !skillIds.includes(specificSkillId)) {
+      throw new NotFoundException('This skill is not linked to the problem.');
+    }
+    const { error } = await this.supabase.client.from('attempts').insert({
+      user_id: userId,
+      challenge_id: challengeId,
+      accuracy: isSuccess ? 1 : 0,
+      is_validated: isSuccess,
+      metadata: { validation_source: 'admin_assessment' },
+    });
+    if (error) throw error;
+    // Reuse the weighted, best-result-per-problem calculation. No starting score
+    // and no repeat-submit bonus. A failed result adds no verified proficiency.
+    const updated: Awaited<ReturnType<SkillProgressService['recalculate']>>[] =
+      [];
+    if (isSuccess) {
+      for (const skillId of skillIds)
+        updated.push(await this.recalculate(userId, skillId));
+    }
+    return { isSuccess, updated };
   }
 }

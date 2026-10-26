@@ -59,6 +59,7 @@ const icons = {
   play: Play,
   grid: Grid2X2,
   battle: Swords,
+  discuss: MessageSquare,
 };
 export function WorkspaceIcon({
   name,

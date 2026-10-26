@@ -1,6 +1,8 @@
 # DevArena
 
-An integrated developer workspace for skills, learning resources, practice challenges, real-time battles, and Marketplace cosmetics. One account connects the application through a shared dark, violet interface and the animated BYTE guide.
+First academic review: [audit and verification evidence](docs/suivi-1-audit.md), [presentation sequence](docs/suivi-1-demo.md).
+
+An integrated developer workspace for skills, learning resources, practice challenges, real-time battles, and Marketplace cosmetics. One account connects the application through a shared dark, violet interface.
 
 ## Modules
 
@@ -8,10 +10,12 @@ An integrated developer workspace for skills, learning resources, practice chall
 | --- | --- |
 | User management | Registration, sign-in, OAuth, recovery, profiles, avatars, account administration, and role-based access. |
 | Skills and technologies | Searchable catalogues, administrator CRUD, categories, developer assignments, weighted challenge associations, measured proficiency, and assessment history. |
+| Problems and topics | Published problem list, topic badges with real counts, URL search/difficulty/topic filters, pagination, and administrator topic management. |
 | Knowledge | Searchable, paginated learning library; courses, tutorials, articles, videos, and documentation; skill links, bookmarks, progress, and resource administration. |
+| Offline reading | Explicit downloads of published written resources, account-partitioned IndexedDB library, cold offline reopening and local deletion. |
 | Marketplace | Published products, credit wallets, purchase confirmation, permanent ownership, equipped cosmetics, protected hints, and administrator product and credit management. |
 | Battle Code | Authenticated online 1v1 matchmaking, mutual ready checks, ten timed quiz rounds, results, rematches, and local DevBot practice. |
-| BYTE | Animated Three.js onboarding guide with contextual navigation and reduced-motion support. |
+| Discuss | Posts, replies, voting, saved discussions, reports and administrator moderation using existing accounts. [Setup](docs/community-integration.md). |
 
 Skill assignments and measured proficiency are separate. Browser practice, battle points, resource completion, and Marketplace purchases do not increase verified skill scores. Verified proficiency uses the existing validated-assessment workflow. AI Coach and the Python/model recommendation service are not included in this integration.
 
@@ -20,7 +24,6 @@ Skill assignments and measured proficiency are separate. Browser practice, battl
 - **Frontend:** Next.js 16.4, React 19, TypeScript, Tailwind CSS 4, CSS modules, and lucide-react.
 - **Backend:** NestJS 11, TypeScript, REST endpoints, and native `ws` WebSockets.
 - **Data and authentication:** Supabase Auth, PostgreSQL, and Storage, using the existing shared profile identities.
-- **Guide:** Three.js, React Three Fiber, and Drei.
 
 ## Run locally with CMD
 
@@ -72,9 +75,12 @@ For an existing shared database, inspect what has already been applied and revie
 | --- | --- | --- |
 | 1 | [skills-integration.sql](db/skills-integration.sql) | Extend the existing skill, technology, category, and challenge-link schema. |
 | 2 | [skills-management.sql](db/skills-management.sql) | Add developer assignments, archival, duplicate protection, and administrator mutation functions. |
+| 2a | [problem-topics.sql](db/problem-topics.sql) | Add independent problem topics and catalogue queries. Optional examples: `db/problem-topics-seed.sql`. |
+| 2b | [problem-administration.sql](db/problem-administration.sql) | Add safe problem draft CRUD, publication, archival and atomic topic/skill edits. |
 | 3 | [knowledge-management.sql](db/knowledge-management.sql) | Add learning resources, skill links, bookmarks, progress, events, feedback, and recommendations. |
 | 4 | [marketplace-integration.sql](db/marketplace-integration.sql) | Add or reuse Marketplace products, wallets, ownership, equipment, ledger, and transactional functions. |
 | 5 | [duel-integration.sql](db/duel-integration.sql) | Store online battle results using existing profile identities. |
+| 6 | [community-integration.sql](db/community-integration.sql) | Add Musa's discussion posts, comments, votes, bookmarks, reports and moderation with service-only access. |
 
 Optional data scripts are separate: [Sirine's catalogue](db/syrine-skills-data.sql), [Knowledge examples](db/knowledge-example-resources.sql), and [Marketplace drafts](db/marketplace-seed.sql). Review them before importing. Marketplace draft examples are not visible in the developer catalogue until published by an administrator. Knowledge developers likewise see only published resources: a database containing many drafts can still have a small public library.
 
@@ -130,6 +136,24 @@ The WebSocket address is derived from `NEXT_PUBLIC_API_URL`; an optional `NEXT_P
 
 Matchmaking and active rooms use memory in one backend instance. Active matches do not resume after a server restart. Online result persistence requires `duel_matches`; live play logs persistence failures rather than claiming that a result was saved. The fixed quiz bank is practice content, not a verified assessment.
 
+## Offline reading and optional AI
+
+Run the production build (`npm run build`, then `npm start` in `nextjs`) to register the service worker. While signed in, open a published Knowledge resource with written content and choose **Download for offline reading**. `/offline.html` lists, opens and deletes copies even after a cold offline reload. Downloads are partitioned by account and cleared on sign-out/account deletion. Reconnect and return to the signed-in app to check availability and versions. External links and videos remain online; no purchases, admin changes, AI requests or grading actions are queued.
+
+PWA capabilities require HTTPS or localhost. A phone opening `http://192.168.x.x:3001` is generally outside a secure context; use trusted HTTPS for physical-device installation. Installing a PWA does not automatically download its resources. Finish forms, purchases and battles before accepting the user-controlled update/reload action.
+
+The optional **Explain this lesson** action uses only server-side `backend/.env` configuration:
+
+```dotenv
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash-lite
+AI_API_KEY=YOUR_SERVER_ONLY_KEY
+```
+
+The model is configurable. Check account access with `node backend/scripts/check-ai-provider.cjs` from the root; `--generate` additionally makes one small original-fixture request. Never use a `NEXT_PUBLIC_*` variable for the key. The feature sends bounded published lesson text, labels the answer as unreviewed AI output, and does not publish it or change scores. Limits are per backend process (5/minute, 30/day, one concurrent request per user). Normal learning and CRUD continue when Gemini is unavailable. Deterministic resource recommendations remain separate from this feature and are not described as machine learning.
+
+For production backend startup in CMD, run `set NODE_ENV=production` before `npm run start:prod`; keep `DEV_BYPASS_AUTH=false`. The frontend's `npm start` runs the production build on port 3001.
+
 ## Verification
 
 Backend, from `backend/`:
@@ -147,7 +171,6 @@ npm run test:skills
 npm run test:knowledge
 npm run test:marketplace
 npm run test:duel
-npm run test:guide
 npm run test:auth
 npm run build
 ```
@@ -158,12 +181,15 @@ Optional isolated PostgreSQL checks run from the repository root and never conne
 
 ```cmd
 npm install --prefix .local\verification --no-save @electric-sql/pglite
+node db/tests/problem-administration.cjs
+node db/tests/problem-topics.cjs
+node db/tests/knowledge-management.cjs
 node db/tests/skills-management.cjs
 node db/tests/marketplace-integration.cjs
 node db/tests/duel-integration.cjs
 ```
 
-Integration verification includes 206 backend tests across 15 suites, frontend compilation and route generation, isolated migration checks, and responsive browser checks. See the module documents for exact coverage and limits; isolated tests do not replace checks against your configured Supabase project.
+Integration verification includes 222 backend tests across 17 suites, frontend compilation and route generation, isolated migration checks, and production responsive/offline browser checks. See the [first-review audit](docs/suivi-1-audit.md) for exact evidence and manual limits; isolated tests do not replace checks against your configured Supabase project. Optional IndexedDB/Edge tools and commands are listed in the [demo guide](docs/suivi-1-demo.md).
 
 ## Repository structure
 
@@ -180,10 +206,10 @@ The redundant `FatmaGestion/` and `habibGestion/` source folders were removed af
 ## Further documentation
 
 - [Skills and technologies management](docs/skills-management.md)
+- [Problem topics setup and endpoints](docs/problem-topics.md)
 - [Knowledge management](docs/knowledge-management.md)
 - [Marketplace integration](docs/marketplace-integration.md)
 - [Battle Code integration](docs/battle-code-integration.md)
-- [BYTE guide](docs/byte-guide.md)
 - [UI redesign and route verification](docs/ui-redesign.md)
 
 ## Troubleshooting

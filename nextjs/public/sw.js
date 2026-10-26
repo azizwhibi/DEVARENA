@@ -1,90 +1,100 @@
-// DevArena service worker. Caches the offline page, shell assets, icons, workers and hashed /_next/static assets.
-// Navigations are network-first with /offline fallback and never stored; API, Supabase, auth and RSC requests are untouched.
-const CACHE = 'devarena-v2';
+// Cache only the standalone public reading shell. Next.js owns its chunk cache:
+// development chunk URLs are mutable and must never be served cache-first here.
+// Bump this version whenever the public offline shell or its scripts change.
+const CACHE = 'devarena-offline-v5';
 const PRECACHE = [
-  '/offline',
-  '/manifest.webmanifest',
-  '/favicon.ico',
-  '/apple-icon',
-  '/icons/192',
-  '/icons/512',
-  '/icons/maskable',
-  '/file.svg',
-  '/globe.svg',
-  '/next.svg',
-  '/vercel.svg',
-  '/window.svg',
-  '/workers/code-runner.worker.js',
+  '/offline.html',
+  '/offline-reader.css',
+  '/offline-store.js',
+  '/offline-reader.js',
 ];
 
-// Returns 'static' | 'navigate' | null (null = leave the request alone).
+// Returns 'shell' | 'navigate' | null (null = leave the request alone).
 function classify(request, origin) {
   const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== origin) return null;
-  if (url.pathname.startsWith('/_next/static/')) return 'static';
   if (
-    url.pathname.startsWith('/icons/') ||
-    url.pathname.startsWith('/workers/') ||
-    url.pathname === '/apple-icon' ||
-    url.pathname === '/favicon.ico' ||
-    url.pathname === '/manifest.webmanifest' ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.ico') ||
-    url.pathname.endsWith('.worker.js')
-  ) {
-    return 'static';
-  }
-  if (request.mode === 'navigate' && !url.pathname.startsWith('/auth/')) return 'navigate';
+    request.method !== 'GET' ||
+    url.origin !== origin ||
+    url.searchParams.has('_rsc') ||
+    request.headers?.get('RSC') === '1' ||
+    request.headers?.get('Next-Router-Prefetch')
+  )
+    return null;
+  if (PRECACHE.includes(url.pathname)) return 'shell';
+  if (url.pathname.startsWith('/_next/')) return null;
+  if (request.mode === 'navigate' && !/^\/(auth|api)(\/|$)/.test(url.pathname))
+    return 'navigate';
   return null;
 }
 
 if (typeof self !== 'undefined' && self.addEventListener) {
-  self.addEventListener('install', event => {
+  self.addEventListener('install', (event) => {
     event.waitUntil(
-      caches.open(CACHE).then(cache =>
-        Promise.all(
-          PRECACHE.map(url =>
-            cache.add(url).catch(() => {
-              /* non-fatal fallback for optional shell assets */
-            }),
-          ),
-        ),
-      ).then(() => self.skipWaiting()),
-    );
-  });
-
-  self.addEventListener('activate', event => {
-    event.waitUntil(
-      caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))),
-      ).then(() => self.clients.claim()),
-    );
-  });
-
-  self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
-  });
-
-  self.addEventListener('fetch', event => {
-    const kind = classify(event.request, self.location.origin);
-    if (kind === 'static') {
-      event.respondWith(
-        caches.match(event.request).then(hit =>
-          hit ||
-          fetch(event.request).then(res => {
-            if (res.ok) {
-              const copy = res.clone();
-              caches.open(CACHE).then(c => c.put(event.request, copy));
-            }
-            return res;
+      (async () => {
+        const responses = await Promise.all(
+          PRECACHE.map(async (path) => {
+            const response = await fetch(path, {
+              cache: 'reload',
+              credentials: 'omit',
+              redirect: 'error',
+            });
+            if (!response.ok || response.redirected)
+              throw new Error('Offline shell unavailable: ' + path);
+            return [path, response];
           }),
-        ),
+        );
+        const cache = await caches.open(CACHE);
+        await Promise.all(
+          responses.map(([path, response]) => cache.put(path, response)),
+        );
+      })(),
+    );
+  });
+  self.addEventListener('message', (event) => {
+    if (event.data?.type === 'ACTIVATE_UPDATE') self.skipWaiting();
+  });
+  self.addEventListener('activate', (event) => {
+    event.waitUntil(
+      caches
+        .keys()
+        .then((keys) =>
+          Promise.all(
+            keys
+              .filter((k) => k.startsWith('devarena-') && k !== CACHE)
+              .map((k) => caches.delete(k)),
+          ),
+        )
+        .then(() => self.clients.claim()),
+    );
+  });
+  self.addEventListener('fetch', (event) => {
+    const kind = classify(event.request, self.location.origin);
+    if (kind === 'shell') {
+      event.respondWith(
+        (async () => {
+          const cache = await caches.open(CACHE),
+            hit = await cache.match(event.request);
+          if (hit) return hit;
+          const response = await fetch(event.request);
+          if (response.ok && !response.redirected && response.type === 'basic')
+            event.waitUntil(cache.put(event.request, response.clone()));
+          return response;
+        })(),
       );
     } else if (kind === 'navigate') {
-      event.respondWith(fetch(event.request).catch(() => caches.match('/offline')));
+      event.respondWith(
+        fetch(event.request).catch(
+          async () =>
+            (await (await caches.open(CACHE)).match('/offline.html')) ||
+            new Response(
+              '<h1>DevArena is offline</h1><p>Reconnect once to prepare the offline library.</p>',
+              {
+                status: 503,
+                headers: { 'Content-Type': 'text/html; charset=utf-8' },
+              },
+            ),
+        ),
+      );
     }
   });
 }

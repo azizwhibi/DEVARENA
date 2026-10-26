@@ -7,6 +7,7 @@ import { KnowledgeCatalogueService } from './knowledge-catalogue.service';
 import { KnowledgeLearningService } from './knowledge-learning.service';
 import { KnowledgeRecommendationsService } from './knowledge-recommendations.service';
 import { KnowledgeImportService } from './knowledge-import.service';
+import { KnowledgeExplanationService } from './knowledge-explanation.service';
 import {
   AdminKnowledgeController,
   KnowledgeController,
@@ -25,6 +26,7 @@ import {
     KnowledgeLearningService,
     KnowledgeRecommendationsService,
     KnowledgeImportService,
+    KnowledgeExplanationService,
   ],
 })
 export class KnowledgeModule {}
