@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method -- Jest inspects these method references without invoking them. */
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { WebSocket } from 'ws';
 import { DuelRoomService } from './duel-room.service';
 import { SupabaseService } from '../supabase/supabase.service';
@@ -9,6 +10,7 @@ describe('DuelRoomService', () => {
   let roomService: DuelRoomService;
   const makeSupabase = () => ({
     client: {
+      rpc: jest.fn().mockResolvedValue({ data: { applied: false }, error: null }),
       from: jest.fn().mockReturnValue({
         insert: jest.fn().mockResolvedValue({ error: null }),
       }),
@@ -31,6 +33,7 @@ describe('DuelRoomService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DuelRoomService,
+        EventEmitter2,
         { provide: SupabaseService, useValue: mockSupabase },
       ],
     }).compile();

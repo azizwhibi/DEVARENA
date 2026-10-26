@@ -16,7 +16,7 @@ export class AttemptValidatedListener {
     private readonly progress: SkillProgressService,
   ) {}
 
-  @OnEvent(ATTEMPT_VALIDATED, { async: true })
+  @OnEvent(ATTEMPT_VALIDATED, { suppressErrors: false })
   async handle(event: AttemptValidatedEvent) {
     try {
       const { data, error } = await this.supabase.client
@@ -28,9 +28,11 @@ export class AttemptValidatedListener {
       for (const row of data ?? []) {
         await this.progress.recalculate(event.userId, row.skill_id as string);
       }
-    } catch (err) {
-      // Le recalcul ne doit jamais faire echouer la soumission.
-      this.logger.error(`Recalcul echoue : ${String(err)}`);
+      return true;
+    } catch {
+      this.logger.warn('Skill progress recalculation failed.');
+      if (event.requireSuccess)
+        throw new Error('Skill progress recalculation failed.');
     }
   }
 }

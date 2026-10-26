@@ -1,12 +1,15 @@
 import {
   Body,
+  BadRequestException,
   Controller,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Req,
+  ServiceUnavailableException,
   UseGuards,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -19,6 +22,15 @@ import {
   AttemptValidatedEvent,
 } from './events/attempt-validated.event';
 import { SkillProgressService } from './skill-progress.service';
+import {
+  RankRewardListener,
+  type RankReward,
+} from '../rankings/rank-reward.listener';
+import {
+  SubmitChallengeAnswerDto,
+  SoloPracticeDto,
+} from './dto/submit-challenge-answer.dto';
+import { getChallengeBankName, gradeChallengeAnswer } from './scoring/challenge-grading';
 
 type AuthedRequest = Request & { user?: { id: string } };
 
@@ -31,6 +43,7 @@ export class MeSkillsController {
     private readonly progress: SkillProgressService,
     private readonly supabase: SupabaseService,
     private readonly events: EventEmitter2,
+    private readonly rankRewards: RankRewardListener,
   ) {}
 
   @Get()
@@ -46,33 +59,95 @@ export class MeSkillsController {
     return this.progress.getUserHistory(req.user!.id, skillId);
   }
 
+  @Get('challenges/:challengeId/question-bank')
+  async questionBank(
+    @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
+  ) {
+    const { title, skills } = await this.loadChallenge(challengeId);
+    return { bank: getChallengeBankName(title, skills) };
+  }
+
+  private async loadChallenge(challengeId: string) {
+    const { data: challenge, error: challengeError } =
+      await this.supabase.client
+        .from('challenges')
+        .select(
+          'id, title, is_published, challenge_skills(skills(id, name, slug))',
+        )
+        .eq('id', challengeId)
+        .maybeSingle();
+    if (challengeError)
+      throw new ServiceUnavailableException(
+        'Challenge is temporarily unavailable.',
+      );
+    if (!challenge?.is_published)
+      throw new NotFoundException('Challenge not found.');
+    const linkedSkills = challenge.challenge_skills as unknown as
+      | { skills: { id: string; name: string; slug: string } | null }[]
+      | undefined;
+    const skills = (linkedSkills ?? []).map((link) =>
+      link.skills
+        ? `${link.skills.id} ${link.skills.name} ${link.skills.slug}`
+        : '',
+    );
+    return { title: challenge.title as string, skills };
+  }
+
   @Post('challenges/:challengeId/attempt')
   @HttpCode(200)
   async recordMyAttempt(
     @Req() req: AuthedRequest,
     @Param('challengeId', new ParseUUIDPipe()) challengeId: string,
-    @Body() body?: { isSuccess?: boolean; accuracy?: number },
+    @Body() body: SubmitChallengeAnswerDto,
   ) {
     const userId = req.user!.id;
-    const isSuccess = body?.isSuccess ?? true;
-    const rawAccuracy =
-      body?.accuracy != null ? Number(body.accuracy) : isSuccess ? 1.0 : 0.0;
-    const accuracy = Math.max(0, Math.min(1, rawAccuracy));
-    const isValidated = Boolean(isSuccess && accuracy > 0);
+    if (!body?.question || !body?.answerId)
+      throw new BadRequestException('Submit a challenge answer.');
+    const { title, skills } = await this.loadChallenge(challengeId);
+    const isValidated = gradeChallengeAnswer(
+      title,
+      body.question,
+      body.answerId,
+      skills,
+    );
+    const accuracy = isValidated ? 1 : 0;
+    const { data: attempt, error } = await this.supabase.client
+      .from('attempts')
+      .insert({
+        user_id: userId,
+        challenge_id: challengeId,
+        accuracy,
+        is_validated: isValidated,
+        metadata: { source: 'competitive_challenge', server_validated: true },
+      })
+      .select('id')
+      .single();
+    if (error || !attempt)
+      throw new ServiceUnavailableException('Attempt could not be saved.');
 
-    const { error } = await this.supabase.client.from('attempts').insert({
-      user_id: userId,
-      challenge_id: challengeId,
-      accuracy,
-      is_validated: isValidated,
-    });
-    if (error) throw error;
-
+    let masteryPoints = 0;
+    let rankReward: RankReward | null = null;
     if (isValidated) {
-      this.events.emit(
-        ATTEMPT_VALIDATED,
-        new AttemptValidatedEvent(userId, challengeId),
-      );
+      const { data: mastery, error: masteryError } =
+        await this.supabase.client.rpc('grant_attempt_mastery', {
+          p_attempt_id: attempt.id,
+        });
+      if (masteryError || !mastery)
+        throw new ServiceUnavailableException(
+          'Challenge rewards are temporarily unavailable.',
+        );
+      masteryPoints = Number(mastery.mastery_points ?? 0);
+      try {
+        await this.events.emitAsync(
+          ATTEMPT_VALIDATED,
+          new AttemptValidatedEvent(userId, challengeId, true),
+        );
+      } catch {
+        throw new ServiceUnavailableException(
+          'Skill progress is temporarily unavailable.',
+        );
+      }
+      rankReward = await this.rankRewards.checkAndGrant(userId);
     }
 
     return {
@@ -81,6 +156,8 @@ export class MeSkillsController {
       userId,
       isSuccess: isValidated,
       accuracy,
+      masteryPoints,
+      rankReward,
     };
   }
 
@@ -88,12 +165,7 @@ export class MeSkillsController {
   @HttpCode(200)
   async recordDuelAttempt(
     @Req() req: AuthedRequest,
-    @Body()
-    body?: {
-      correctAnswers?: number;
-      totalQuestions?: number;
-      accuracy?: number;
-    },
+    @Body() body: SoloPracticeDto,
   ) {
     const userId = req.user!.id;
     let accuracy = 0;
@@ -107,39 +179,14 @@ export class MeSkillsController {
     }
     const isValidated = accuracy >= 0.5;
 
-    // Find a challenge linked to a skill to associate this duel attempt with
-    const { data: challenges } = await this.supabase.client
-      .from('challenge_skills')
-      .select('challenge_id')
-      .limit(1);
-
-    const challengeId = challenges?.[0]?.challenge_id;
-    if (!challengeId) {
-      return { success: true, userId, accuracy, isSuccess: isValidated };
-    }
-
-    const { error } = await this.supabase.client.from('attempts').insert({
-      user_id: userId,
-      challenge_id: challengeId,
-      accuracy,
-      is_validated: isValidated,
-      metadata: { source: 'battle_duel' },
-    });
-    if (error) throw error;
-
-    if (isValidated) {
-      this.events.emit(
-        ATTEMPT_VALIDATED,
-        new AttemptValidatedEvent(userId, challengeId),
-      );
-    }
-
+    // Solo answers are resolved in the browser and cannot earn competitive rewards.
     return {
       success: true,
-      challengeId,
       userId,
       isSuccess: isValidated,
       accuracy,
+      competitive: false,
+      masteryPoints: 0,
     };
   }
 }

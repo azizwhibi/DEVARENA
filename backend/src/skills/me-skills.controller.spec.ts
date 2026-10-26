@@ -1,114 +1,69 @@
 import { MeSkillsController } from './me-skills.controller';
-import { SkillProgressService } from './skill-progress.service';
-import { ATTEMPT_VALIDATED } from './events/attempt-validated.event';
+import { validate } from 'class-validator';
+import {
+  SubmitChallengeAnswerDto,
+  SoloPracticeDto,
+} from './dto/submit-challenge-answer.dto';
 
-describe('MeSkillsController', () => {
-  let controller: MeSkillsController;
-  let mockProgress: Partial<SkillProgressService>;
-  let mockSupabase: any;
-  let mockEvents: { emit: jest.Mock };
+describe('MeSkillsController access and validation', () => {
+  const progress = {
+    getUserProgressWithDelta: jest.fn(),
+    getUserHistory: jest.fn(),
+  };
+  const controller = new MeSkillsController(
+    progress as never,
+    {} as never,
+    {} as never,
+    {} as never,
+  );
+  const req = { user: { id: 'developer' } } as never;
 
-  beforeEach(() => {
-    mockProgress = {
-      getUserProgressWithDelta: jest.fn().mockResolvedValue([]),
-      getUserHistory: jest.fn().mockResolvedValue([]),
-    };
-    mockSupabase = {
-      client: {
-        from: jest.fn().mockReturnValue({
-          insert: jest.fn().mockResolvedValue({ error: null }),
+  it('loads only the authenticated user progress and history', () => {
+    controller.list(req);
+    controller.history(req, 'skill');
+    expect(progress.getUserProgressWithDelta).toHaveBeenCalledWith('developer');
+    expect(progress.getUserHistory).toHaveBeenCalledWith('developer', 'skill');
+  });
+
+  it('requires a real question and valid answer id instead of a success flag', async () => {
+    expect(
+      await validate(
+        Object.assign(new SubmitChallengeAnswerDto(), {
+          question: 'Question',
+          answerId: 'opt-2',
         }),
-      },
-    };
-    mockEvents = { emit: jest.fn() };
-
-    controller = new MeSkillsController(
-      mockProgress as SkillProgressService,
-      mockSupabase as any,
-      mockEvents as any,
-    );
+      ),
+    ).toHaveLength(0);
+    expect(await validate(new SubmitChallengeAnswerDto())).toHaveLength(2);
+    expect(
+      await validate(
+        Object.assign(new SubmitChallengeAnswerDto(), {
+          question: 'Question',
+          answerId: 'correct',
+        }),
+      ),
+    ).not.toHaveLength(0);
   });
 
-  it('records attempt for authenticated user and emits ATTEMPT_VALIDATED on success', async () => {
-    const req = { user: { id: 'user-dev-123' } } as any;
-    const challengeId = '33333333-3333-4333-8333-333333333333';
+  it.each([NaN, Infinity, -0.1, 1.1])(
+    'rejects invalid solo accuracy %s',
+    async (accuracy) => {
+      expect(
+        await validate(Object.assign(new SoloPracticeDto(), { accuracy })),
+      ).not.toHaveLength(0);
+    },
+  );
 
-    const result = await controller.recordMyAttempt(req, challengeId, {
-      isSuccess: true,
-      accuracy: 0.85,
-    });
-
-    expect(result.success).toBe(true);
-    expect(result.userId).toBe('user-dev-123');
-    expect(result.challengeId).toBe(challengeId);
-    expect(result.isSuccess).toBe(true);
-    expect(result.accuracy).toBe(0.85);
-
-    expect(mockSupabase.client.from).toHaveBeenCalledWith('attempts');
-    expect(mockEvents.emit).toHaveBeenCalledWith(
-      ATTEMPT_VALIDATED,
-      expect.objectContaining({
-        userId: 'user-dev-123',
-        challengeId,
-      }),
-    );
-  });
-
-  it('clamps accuracy between 0 and 1', async () => {
-    const req = { user: { id: 'user-dev-123' } } as any;
-    const challengeId = '33333333-3333-4333-8333-333333333333';
-
-    const result = await controller.recordMyAttempt(req, challengeId, {
-      isSuccess: true,
-      accuracy: 1.5,
-    });
-
-    expect(result.accuracy).toBe(1.0);
-  });
-
-  it('does not emit ATTEMPT_VALIDATED if attempt failed (isSuccess false)', async () => {
-    const req = { user: { id: 'user-dev-123' } } as any;
-    const challengeId = '33333333-3333-4333-8333-333333333333';
-
-    const result = await controller.recordMyAttempt(req, challengeId, {
-      isSuccess: false,
-    });
-
-    expect(result.isSuccess).toBe(false);
-    expect(mockEvents.emit).not.toHaveBeenCalled();
-  });
-
-  it('records duel attempt and calculates accuracy from correct answers', async () => {
-    const req = { user: { id: 'user-dev-123' } } as any;
-    mockSupabase.client.from = jest.fn((table: string) => {
-      if (table === 'challenge_skills') {
-        return {
-          select: jest.fn().mockReturnValue({
-            limit: jest.fn().mockResolvedValue({
-              data: [{ challenge_id: '11111111-1111-4111-8111-111111111111' }],
-            }),
-          }),
-        };
-      }
-      return {
-        insert: jest.fn().mockResolvedValue({ error: null }),
-      };
-    });
-
+  it('keeps solo practice informational', async () => {
     const result = await controller.recordDuelAttempt(req, {
       correctAnswers: 7,
       totalQuestions: 10,
     });
-
-    expect(result.success).toBe(true);
-    expect(result.accuracy).toBe(0.7);
-    expect(result.isSuccess).toBe(true);
-    expect(mockEvents.emit).toHaveBeenCalledWith(
-      ATTEMPT_VALIDATED,
-      expect.objectContaining({
-        userId: 'user-dev-123',
-        challengeId: '11111111-1111-4111-8111-111111111111',
-      }),
-    );
+    expect(result).toMatchObject({
+      accuracy: 0.7,
+      isSuccess: true,
+      competitive: false,
+      masteryPoints: 0,
+    });
   });
 });

@@ -3,6 +3,7 @@ import type {
   PlayerStats,
   PlayerRoundResult,
   Question,
+  DuelRatingUpdatePayload,
 } from '@/types/duel';
 
 export const ROUND_TIME_MS = 10_000;
@@ -45,6 +46,7 @@ export type BattleState = {
   correctIndex: number | null;
   error: string;
   winnerId: string | null;
+  ratingUpdate: DuelRatingUpdatePayload | null;
   rounds: { player: PlayerRoundResult; opponent: PlayerRoundResult }[];
 };
 export const initialBattle = (name: string): BattleState => ({
@@ -65,6 +67,7 @@ export const initialBattle = (name: string): BattleState => ({
   correctIndex: null,
   error: '',
   winnerId: null,
+  ratingUpdate: null,
   rounds: [],
 });
 export function addResult(
@@ -87,6 +90,10 @@ export function receiveBattle(
   now: number,
 ): BattleState {
   switch (event.type) {
+    case 'DUEL_RATING_UPDATED':
+      if (state.mode !== 'online' || state.duelId !== event.payload.duelId)
+        return state;
+      return { ...state, ratingUpdate: event.payload };
     case 'DUEL_QUEUE_WAITING':
       return {
         ...state,

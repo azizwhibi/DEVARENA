@@ -3,6 +3,7 @@ import type { AddressInfo } from 'node:net';
 import { WebSocket } from 'ws';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { DuelServerEvent } from './duel.types';
 import { DuelGateway } from './duel.gateway';
 import { DuelRoomService } from './duel-room.service';
@@ -27,6 +28,7 @@ describe('Battle Code real WebSocket transport (isolated auth and persistence)',
   const insert = jest.fn().mockResolvedValue({ error: null });
   const supabase = {
     client: {
+      rpc: jest.fn().mockResolvedValue({ data: { applied: false }, error: null }),
       from: jest.fn((table: string) =>
         table === 'duel_matches'
           ? { insert }
@@ -61,7 +63,7 @@ describe('Battle Code real WebSocket transport (isolated auth and persistence)',
       }),
     };
     http = createServer();
-    rooms = new DuelRoomService(supabase as unknown as SupabaseService);
+    rooms = new DuelRoomService(supabase as unknown as SupabaseService, new EventEmitter2());
     queue = new DuelMatchmakingService(rooms);
     gateway = new DuelGateway(
       { httpAdapter: { getHttpServer: () => http } } as HttpAdapterHost,
@@ -125,6 +127,30 @@ describe('Battle Code real WebSocket transport (isolated auth and persistence)',
     await wait(ws, 'DUEL_AUTHENTICATED');
     return ws;
   }
+  it('delivers a rank promotion only to the authenticated account socket', async () => {
+    const alice = await signedIn('one');
+    const bob = await signedIn('two');
+    const guest = await connect();
+    const leaked = jest.fn();
+    bob.on('message', leaked);
+    guest.on('message', leaked);
+    const received = new Promise<Record<string, unknown>>((resolve) => alice.once('message', (raw) => resolve(JSON.parse(raw.toString()) as Record<string, unknown>)));
+    const reward = { userId: ids.one, awarded: true, tier: 'Gold', credits_awarded: 500, new_balance: 800 };
+    await gateway.onRankPromoted(reward);
+    expect(await received).toEqual({ event: 'rank_promoted', data: { awarded: true, tier: 'Gold', credits_awarded: 500, new_balance: 800 } });
+    expect(leaked).not.toHaveBeenCalled();
+  });
+  it('revalidates suspension before delivering a private promotion', async () => {
+    const alice = await signedIn('one');
+    const auth = (gateway as unknown as { auth: AuthService }).auth;
+    jest.spyOn(auth, 'authenticate').mockRejectedValueOnce(new Error('account_suspended'));
+    const received = jest.fn();
+    alice.on('message', received);
+    const closed = new Promise<number>((resolve) => alice.once('close', resolve));
+    await gateway.onRankPromoted({ userId: ids.one, awarded: true, tier: 'Gold', credits_awarded: 500, new_balance: 800 });
+    expect(await closed).toBe(4401);
+    expect(received).not.toHaveBeenCalled();
+  });
   it('rejects invalid authentication without guest fallback', async () => {
     const ws = await connect();
     const closed = new Promise<number>((r) => ws.once('close', r));

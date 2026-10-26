@@ -11,6 +11,7 @@ import {
   type BattleState,
 } from '@/lib/duelState';
 import type { DuelServerEvent, PlayerRoundResult } from '@/types/duel';
+import { parseRankPromotion } from '@/lib/rankings';
 
 function soloResult(
   index: number | null,
@@ -192,7 +193,18 @@ export function useQuizDuel(playerId: string, playerName: string) {
         try {
           const message = JSON.parse(event.data) as
             | DuelServerEvent
+            | { event: 'rank_promoted'; data: unknown }
             | { type: 'DUEL_AUTHENTICATED'; payload: { playerId: string } };
+          if ('event' in message) {
+            if (message.event === 'rank_promoted') {
+              const promotion = parseRankPromotion(message.data);
+              if (promotion)
+                window.dispatchEvent(
+                  new CustomEvent('rank_promoted', { detail: promotion }),
+                );
+            }
+            return;
+          }
           if (message.type === 'DUEL_AUTHENTICATED') {
             if (message.payload.playerId !== playerId) {
               ws.close();

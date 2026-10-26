@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { useSkillsAccount } from '@/components/skills/SkillsWorkspace';
 import { useQuizDuel } from '@/hooks/useQuizDuel';
-import { apiRequest } from '@/lib/api';
 import styles from './duel.module.css';
 
 export function DuelArena() {
@@ -38,37 +37,6 @@ export function DuelArena() {
   const win = s.winnerId === account.id,
     draw = s.winnerId === null;
   const router = useRouter();
-  const recordedRef = useRef(false);
-
-  useEffect(() => {
-    if (!finished) {
-      recordedRef.current = false;
-      return;
-    }
-    if (recordedRef.current) return;
-    recordedRef.current = true;
-
-    const totalQuestions = s.player.roundScores.length || 10;
-    const correctAnswers = s.player.correctAnswers;
-    const accuracy = totalQuestions > 0 ? correctAnswers / totalQuestions : 0;
-
-    void apiRequest('/me/skills/duel/attempt', {
-      method: 'POST',
-      body: JSON.stringify({
-        correctAnswers,
-        totalQuestions,
-        accuracy,
-      }),
-    })
-      .then(() => {
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('skill-progress-updated'));
-        }
-      })
-      .catch(() => {
-        // Offline or non-blocking
-      });
-  }, [finished, s.player.correctAnswers, s.player.roundScores.length]);
 
   useEffect(() => {
     if (account.role === 'admin') {
@@ -103,8 +71,7 @@ export function DuelArena() {
             className="btn btn-secondary"
             onClick={() => setConfirmLeave(true)}
           >
-            <X size={16} strokeWidth={1.5} />{' '}
-            Leave battle
+            <X size={16} strokeWidth={1.5} /> Leave battle
           </button>
         )}
       </header>
@@ -336,6 +303,14 @@ export function DuelArena() {
                       ? 'You win'
                       : s.opponent.name + ' wins'}
                 </h2>
+                {s.mode === 'online' && (
+                  <p role="status">
+                    {s.ratingUpdate
+                      ? `${s.ratingUpdate.delta >= 0 ? '+' : ''}${s.ratingUpdate.delta} Elo · ${s.ratingUpdate.rating.toLocaleString('en-US')} rating · ${s.ratingUpdate.competitivePoints.toLocaleString('en-US')} competitive points`
+                      : 'Competitive rating update pending.'}{' '}
+                    <a href="/rankings">View rank progress</a>
+                  </p>
+                )}
                 <dl className={styles.resultStats}>
                   {[s.player, s.opponent].map((p, i) => (
                     <div key={i}>

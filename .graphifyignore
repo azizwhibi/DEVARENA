@@ -1,0 +1,15 @@
+.env*
+**/.env*
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.next/
+**/.next/
+.git/
+.tmp/
+.temp/
+graphify-out/
+coverage/
+**/coverage/
+*.tsbuildinfo

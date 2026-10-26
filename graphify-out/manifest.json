@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "backend/src/supabase/database.types.ts": {
-    "mtime": 1792964086.611369,
-    "seen": 1792964337.0630438,
-    "ast_hash": "44bda5dbd89fa16a88f4b1cd17cf57db",
+    "mtime": 1792970565.2880135,
+    "seen": 1792972063.704433,
+    "ast_hash": "67adea151394c9e3e1d224d9f5dbd0ac",
     "semantic_hash": ""
   },
   "backend/src/supabase/supabase.module.ts": {
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "nextjs/package.json": {
-    "mtime": 1792871895.3521633,
-    "seen": 1792872380.1401331,
-    "ast_hash": "e41261c808bc824e0078eb0ad9e3a620",
+    "mtime": 1792972926.751971,
+    "seen": 1792973584.5593095,
+    "ast_hash": "d3732b9fd1f1805b93f79a2580513289",
     "semantic_hash": ""
   },
   "nextjs/scripts/check-safe-next.mjs": {
@@ -516,9 +516,9 @@
     "semantic_hash": ""
   },
   "todo.md": {
-    "mtime": 1792967502.0627804,
-    "seen": 1792967664.4340503,
-    "ast_hash": "b278b65310f395189c46a59be28322e7",
+    "mtime": 1792974013.3197584,
+    "seen": 1793007711.7108176,
+    "ast_hash": "cde5267c92f17390332978c14b7d4caa",
     "semantic_hash": ""
   },
   "nextjs/public/sw.js": {
@@ -618,9 +618,9 @@
     "semantic_hash": ""
   },
   "plan.md": {
-    "mtime": 1792357886.8682187,
-    "seen": 1792372170.6183212,
-    "ast_hash": "e2ec8661c408dddfbfd0ac8a908b4660",
+    "mtime": 1792970192.9809985,
+    "seen": 1792972063.7658782,
+    "ast_hash": "fe7ee67ec5627fcdde7f5ffab78ab73a",
     "semantic_hash": ""
   },
   "backend/src/users/dto/delete-me.dto.ts": {
@@ -984,9 +984,9 @@
     "semantic_hash": ""
   },
   "backend/src/duel/duel-matchmaking.service.spec.ts": {
-    "mtime": 1792874491.4725714,
-    "seen": 1792874981.019721,
-    "ast_hash": "77878ccb5a9246acdd0db34cfc166baf",
+    "mtime": 1792970414.8606815,
+    "seen": 1792972063.6769133,
+    "ast_hash": "847c1e5eb7fedb58c15c3c01b85165f8",
     "semantic_hash": ""
   },
   "backend/src/duel/duel-matchmaking.service.ts": {
@@ -996,15 +996,15 @@
     "semantic_hash": ""
   },
   "backend/src/duel/duel-room.service.spec.ts": {
-    "mtime": 1792874491.483254,
-    "seen": 1792874981.019721,
-    "ast_hash": "8ad40dd3363c22fb20319adc9733e4b2",
+    "mtime": 1792970412.0829358,
+    "seen": 1792972063.6771486,
+    "ast_hash": "68ea04d65bbbf613a7da754370667985",
     "semantic_hash": ""
   },
   "backend/src/duel/duel-room.service.ts": {
-    "mtime": 1792874491.4897602,
-    "seen": 1792874981.019721,
-    "ast_hash": "de67b98f273f10c839e3c81718c97c33",
+    "mtime": 1792970561.5717623,
+    "seen": 1792972063.6771507,
+    "ast_hash": "4b553248b28f02b556760331f20ef3f1",
     "semantic_hash": ""
   },
   "backend/src/duel/duel.constants.ts": {
@@ -1014,15 +1014,15 @@
     "semantic_hash": ""
   },
   "backend/src/duel/duel.gateway.spec.ts": {
-    "mtime": 1792964301.2280304,
-    "seen": 1792964337.051633,
-    "ast_hash": "81cc434821ed63622822fd46c07081c7",
+    "mtime": 1792970436.7154732,
+    "seen": 1792972063.677387,
+    "ast_hash": "416279f2eab55694911db74377deb52a",
     "semantic_hash": ""
   },
   "backend/src/duel/duel.gateway.ts": {
-    "mtime": 1792874491.5050426,
-    "seen": 1792874981.019721,
-    "ast_hash": "60f46c7d9474be9c3a3b8004ddd0aa8b",
+    "mtime": 1792970453.560687,
+    "seen": 1792972063.67739,
+    "ast_hash": "4b28b39f0b16eb8ac7ef161264580f69",
     "semantic_hash": ""
   },
   "backend/src/duel/duel.module.ts": {
@@ -1032,9 +1032,9 @@
     "semantic_hash": ""
   },
   "backend/src/duel/duel.types.ts": {
-    "mtime": 1792874491.5109053,
-    "seen": 1792874981.019721,
-    "ast_hash": "c2ae27ea7e8486b648c45d8772f59c0b",
+    "mtime": 1792970564.4662814,
+    "seen": 1792972063.6776223,
+    "ast_hash": "57185edd3c535b46b4ceddf3227a64c3",
     "semantic_hash": ""
   },
   "backend/src/knowledge/knowledge-catalogue.service.ts": {
@@ -1260,15 +1260,15 @@
     "semantic_hash": ""
   },
   "backend/src/skills/events/attempt-validated.event.ts": {
-    "mtime": 1792874491.6793106,
-    "seen": 1792874981.021736,
-    "ast_hash": "df2223adfba82ccd842b458dfecfdda9",
+    "mtime": 1792970489.087488,
+    "seen": 1792972063.6970334,
+    "ast_hash": "e722a062f80beb386988a66329e8214c",
     "semantic_hash": ""
   },
   "backend/src/skills/events/attempt-validated.listener.ts": {
-    "mtime": 1792874491.68196,
-    "seen": 1792874981.021736,
-    "ast_hash": "cdbe7fbb25bab9c7ca3777f543b99775",
+    "mtime": 1792970785.2287536,
+    "seen": 1792972063.6970382,
+    "ast_hash": "d9604cfc7f97bc9c709ea414f462bbab",
     "semantic_hash": ""
   },
   "backend/src/skills/management.spec.ts": {
@@ -1278,9 +1278,9 @@
     "semantic_hash": ""
   },
   "backend/src/skills/me-skills.controller.ts": {
-    "mtime": 1792966679.4713733,
-    "seen": 1792967058.0677152,
-    "ast_hash": "e9b6de35c143fd4963583f934727d4f7",
+    "mtime": 1792971084.5595827,
+    "seen": 1792972063.6974688,
+    "ast_hash": "3956951e0fe0bcebbdeb4a963cebb7f2",
     "semantic_hash": ""
   },
   "backend/src/skills/progress-admin.controller.ts": {
@@ -1350,9 +1350,9 @@
     "semantic_hash": ""
   },
   "backend/src/skills/skills.module.ts": {
-    "mtime": 1792874491.7305195,
-    "seen": 1792874981.021736,
-    "ast_hash": "1bdd2846bfb4543d22fcf1a05c98a88d",
+    "mtime": 1792970457.9987986,
+    "seen": 1792972063.702516,
+    "ast_hash": "6e8fc2c349947fe1019720b63169b118",
     "semantic_hash": ""
   },
   "backend/src/skills/skills.service.ts": {
@@ -1626,9 +1626,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/ApplicationShell.tsx": {
-    "mtime": 1792874523.6006396,
-    "seen": 1792874981.0298615,
-    "ast_hash": "acb1967c0e40b5fe768406428b474bb9",
+    "mtime": 1792972926.7308822,
+    "seen": 1792973584.580116,
+    "ast_hash": "1bc24891abed4b7c6446eb7cc1c5882d",
     "semantic_hash": ""
   },
   "nextjs/src/components/dev-guide/ByteCharacter.tsx": {
@@ -1722,9 +1722,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/duel/DuelArena.tsx": {
-    "mtime": 1792966745.5438719,
-    "seen": 1792967058.1026857,
-    "ast_hash": "906d8865a5f3fbb197e24c1fb38336fc",
+    "mtime": 1792972151.9333107,
+    "seen": 1792973584.58736,
+    "ast_hash": "80f4ed7bac88e1b22cbef962d1fc5eca",
     "semantic_hash": ""
   },
   "nextjs/src/components/knowledge/KnowledgeAdmin.tsx": {
@@ -1806,9 +1806,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/SkillsWorkspace.tsx": {
-    "mtime": 1792875285.188479,
-    "seen": 1792877443.8930478,
-    "ast_hash": "dedd94779d5adb20a8807a2d00af9a2c",
+    "mtime": 1792972926.7396924,
+    "seen": 1792973584.594732,
+    "ast_hash": "67156afa376ba9d1f1bcab4714e0e2b7",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/WorkspaceIcon.tsx": {
@@ -1830,9 +1830,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/arena/ChallengeModal.tsx": {
-    "mtime": 1792966911.399155,
-    "seen": 1792967058.108481,
-    "ast_hash": "6446344faa92e8564f11dbc2f0a374cd",
+    "mtime": 1792972152.1529455,
+    "seen": 1792973584.595643,
+    "ast_hash": "630d911d56877cd172bab70ec9549c40",
     "semantic_hash": ""
   },
   "nextjs/src/components/skills/profile/HistoryChart.tsx": {
@@ -1866,9 +1866,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/hooks/useQuizDuel.ts": {
-    "mtime": 1792874491.4236226,
-    "seen": 1792874981.0308754,
-    "ast_hash": "2e41a5d26d8fdb7c639235c0117449a9",
+    "mtime": 1792972151.756893,
+    "seen": 1792973584.5975518,
+    "ast_hash": "9044f9f07246e3e7b6c6f2d3eec8c170",
     "semantic_hash": ""
   },
   "nextjs/src/lib/duelQuestions.ts": {
@@ -1878,9 +1878,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/lib/duelState.ts": {
-    "mtime": 1792874491.4317198,
-    "seen": 1792874981.0318751,
-    "ast_hash": "77a8ae823d92205e8b035a3359638bf9",
+    "mtime": 1792972151.630122,
+    "seen": 1792973584.5993981,
+    "ast_hash": "b6640fa42414f9c1b89407b2499bb591",
     "semantic_hash": ""
   },
   "nextjs/src/lib/knowledge.ts": {
@@ -1920,9 +1920,9 @@
     "semantic_hash": ""
   },
   "nextjs/src/types/duel.ts": {
-    "mtime": 1792874491.4675515,
-    "seen": 1792874981.0328753,
-    "ast_hash": "ab2ffa2b025e68f8811ebebd339039db",
+    "mtime": 1792972151.532512,
+    "seen": 1792973584.604058,
+    "ast_hash": "9e947d0c9b0c3ef8ed5afb7d10af4ce0",
     "semantic_hash": ""
   },
   "README.md": {
@@ -1998,9 +1998,9 @@
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1792967493.347715,
-    "seen": 1792967664.4340484,
-    "ast_hash": "6f7e9d7cd029a20f004e9f4b363d0e56",
+    "mtime": 1792967682.5328815,
+    "seen": 1792972063.7673187,
+    "ast_hash": "26c6561f5a309cdfcb9bfe58ee8101ca",
     "semantic_hash": ""
   },
   "SPEC-account-availability.md": {
@@ -2010,9 +2010,9 @@
     "semantic_hash": ""
   },
   "backend/src/rankings/dto/rankings-query.dto.ts": {
-    "mtime": 1792963982.0835822,
-    "seen": 1792964337.0574346,
-    "ast_hash": "6d207aae0d2c26e7e1d4640d470aa074",
+    "mtime": 1792970542.3968816,
+    "seen": 1792972063.690633,
+    "ast_hash": "4613ff7d76c1abb78cb7c38c57a00d6f",
     "semantic_hash": ""
   },
   "backend/src/rankings/rankings.controller.ts": {
@@ -2022,21 +2022,21 @@
     "semantic_hash": ""
   },
   "backend/src/rankings/rankings.module.ts": {
-    "mtime": 1792963999.3679364,
-    "seen": 1792964337.0574386,
-    "ast_hash": "e5422d2ecdeb869b8de193d98f82596f",
+    "mtime": 1792970314.3440926,
+    "seen": 1792972063.6909876,
+    "ast_hash": "d3a42f04d8c8b8da4ff198d1dc3e2ba4",
     "semantic_hash": ""
   },
   "backend/src/rankings/rankings.service.spec.ts": {
-    "mtime": 1792964020.7934988,
-    "seen": 1792964337.0574403,
-    "ast_hash": "07222aaa291538d9df8c19f5e77039a1",
+    "mtime": 1793007459.3198328,
+    "seen": 1793007711.6621952,
+    "ast_hash": "709db9fb08b86204d70959f273e096f9",
     "semantic_hash": ""
   },
   "backend/src/rankings/rankings.service.ts": {
-    "mtime": 1792963990.701656,
-    "seen": 1792964337.0574417,
-    "ast_hash": "bf25792b87c700dbdd875ae27cc32f36",
+    "mtime": 1793007508.7343676,
+    "seen": 1793007711.6621966,
+    "ast_hash": "a1d911ceb8a157c967ff21b8a94d7f56",
     "semantic_hash": ""
   },
   "backend/src/skills/progress.spec.ts": {
@@ -2058,9 +2058,9 @@
     "semantic_hash": ""
   },
   "backend/src/skills/me-skills.controller.spec.ts": {
-    "mtime": 1792966688.4786372,
-    "seen": 1792967058.067712,
-    "ast_hash": "6ee3ceb98a3a8ee480ecaa2dc4dae5c4",
+    "mtime": 1792970785.1448653,
+    "seen": 1792972063.6974638,
+    "ast_hash": "e74d68066582188232c1bec83399186e",
     "semantic_hash": ""
   },
   "SPEC-developer-invitations.md": {
@@ -2085,6 +2085,120 @@
     "mtime": 1792967464.8816164,
     "seen": 1792967664.429759,
     "ast_hash": "15bd68949a8c9fb59866ff07806daba0",
+    "semantic_hash": ""
+  },
+  "backend/src/duel/duel-ranking.spec.ts": {
+    "mtime": 1792970542.4362764,
+    "seen": 1792972063.677145,
+    "ast_hash": "6664479de3a1cb812123ff9e8bfa25ce",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/dto/rankings-query.dto.spec.ts": {
+    "mtime": 1792970542.4098992,
+    "seen": 1792972063.6906278,
+    "ast_hash": "5e4f298f86012279d5197865b8208012",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rank-reward.listener.spec.ts": {
+    "mtime": 1792970542.3726087,
+    "seen": 1792972063.6906352,
+    "ast_hash": "0f1c83c0016036e059ca04ad67353737",
+    "semantic_hash": ""
+  },
+  "backend/src/rankings/rank-reward.listener.ts": {
+    "mtime": 1793007364.554065,
+    "seen": 1793007711.6618578,
+    "ast_hash": "cf4664248ed9ddc247ff322485decdf2",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/competitive-attempts.spec.ts": {
+    "mtime": 1792971841.8148768,
+    "seen": 1792972063.6938715,
+    "ast_hash": "4c23fee1fa5189af863f18448b5c70cd",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/competitive-event.integration.spec.ts": {
+    "mtime": 1792970850.5144854,
+    "seen": 1792972063.6938758,
+    "ast_hash": "98024db72908b178cc9d8272e565b4d3",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/dto/submit-challenge-answer.dto.ts": {
+    "mtime": 1792970785.206452,
+    "seen": 1792972063.696197,
+    "ast_hash": "49c13ab85a5c754399a339bda461ca59",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/events/competitive-listener.spec.ts": {
+    "mtime": 1792970881.0946045,
+    "seen": 1792972063.6970427,
+    "ast_hash": "8c403ee6ab27bc3d12f44d9efca5d733",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/scoring/challenge-grading.spec.ts": {
+    "mtime": 1792971033.0443146,
+    "seen": 1792972063.6981955,
+    "ast_hash": "d6ba2f2d8989ee737a9053536f658889",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/scoring/challenge-grading.ts": {
+    "mtime": 1792971076.0259912,
+    "seen": 1792972063.6981995,
+    "ast_hash": "50e5afd04cee751f98909a561c0c5433",
+    "semantic_hash": ""
+  },
+  "backend/src/skills/scoring/competitive-grading-catalogs.spec.ts": {
+    "mtime": 1792971838.9230757,
+    "seen": 1792972063.6982028,
+    "ast_hash": "60373077cf84db67a38f41a0f0de17e0",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-competitive-results.mjs": {
+    "mtime": 1792972152.2247112,
+    "seen": 1792973584.5603888,
+    "ast_hash": "e14490b2c871844bbf156603c8de5e41",
+    "semantic_hash": ""
+  },
+  "nextjs/scripts/check-rankings.mjs": {
+    "mtime": 1792973429.8269906,
+    "seen": 1792973584.562752,
+    "ast_hash": "59e8bdfbd6573c2c28dde73221f4d09a",
+    "semantic_hash": ""
+  },
+  "SPEC-competitive-rankings.md": {
+    "mtime": 1792970187.215343,
+    "seen": 1792972063.7591121,
+    "ast_hash": "bfa0cb28e7f8cb58d81a856e7a49cccc",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/(skills)/rankings/page-client.tsx": {
+    "mtime": 1792972894.0024705,
+    "seen": 1792973584.574613,
+    "ast_hash": "26b831044decc5ca28dba2d52cc59cc1",
+    "semantic_hash": ""
+  },
+  "nextjs/src/app/(skills)/rankings/page.tsx": {
+    "mtime": 1792972787.1928048,
+    "seen": 1792973584.574617,
+    "ast_hash": "24d2854b81cf095728236953169b59d2",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/rankings/RankPromotionToast.tsx": {
+    "mtime": 1792972787.1825373,
+    "seen": 1792973584.5944219,
+    "ast_hash": "39e719eb1767e24379c7878499d684b0",
+    "semantic_hash": ""
+  },
+  "nextjs/src/components/rankings/RankingsBoard.tsx": {
+    "mtime": 1792972728.8809843,
+    "seen": 1792973584.5944254,
+    "ast_hash": "cca2dc30d5ddd7c66a31755149f8703f",
+    "semantic_hash": ""
+  },
+  "nextjs/src/lib/rankings.ts": {
+    "mtime": 1792972395.1931098,
+    "seen": 1792973584.6014152,
+    "ast_hash": "221891260aea9c1bdac316f9c44dfc55",
     "semantic_hash": ""
   }
 }

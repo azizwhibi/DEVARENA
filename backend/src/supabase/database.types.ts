@@ -24,6 +24,7 @@ export type Database = {
           player2_score: number;
           winner_id: string | null;
           rounds_data: Json;
+          is_forfeit: boolean;
           created_at: string;
         };
         Insert: {
@@ -34,6 +35,7 @@ export type Database = {
           player2_score?: number;
           winner_id?: string | null;
           rounds_data?: Json;
+          is_forfeit?: boolean;
           created_at?: string;
         };
         Update: {
@@ -44,6 +46,7 @@ export type Database = {
           player2_score?: number;
           winner_id?: string | null;
           rounds_data?: Json;
+          is_forfeit?: boolean;
           created_at?: string;
         };
         Relationships: [];
@@ -550,6 +553,29 @@ export type Database = {
       };
     };
     Functions: {
+      competitive_rankings: {
+        Args: {
+          p_scope: string;
+          p_value: string | null;
+          p_search: string | null;
+          p_limit: number;
+          p_offset: number;
+          p_user_id: string | null;
+        };
+        Returns: Json;
+      };
+      apply_competitive_duel: {
+        Args: { p_match_id: string };
+        Returns: Json;
+      };
+      check_and_grant_rank_reward: {
+        Args: { p_user_id: string };
+        Returns: Json;
+      };
+      grant_attempt_mastery: {
+        Args: { p_attempt_id: string };
+        Returns: Json;
+      };
       leaderboard: {
         Args: {
           p_scope?: string;

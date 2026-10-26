@@ -21,6 +21,7 @@ const navigation = [
   { href: '/knowledge', label: 'Knowledge', icon: 'knowledge' },
   { href: '/marketplace', label: 'Marketplace', icon: 'marketplace' },
   { href: '/duel', label: 'Battle Code', icon: 'battle' },
+  { href: '/rankings', label: 'Rankings', icon: 'overview' },
 ] as const;
 const administration = [
   { href: '/admin/marketplace', label: 'Marketplace', icon: 'marketplace' },

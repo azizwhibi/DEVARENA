@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { WorkspaceIcon } from '@/components/skills/WorkspaceIcon';
 import { apiRequest } from '@/lib/api';
+import { parseRankPromotion } from '@/lib/rankings';
 export interface ChallengeModalProps {
   challengeId: string;
   challengeTitle?: string;
@@ -1397,6 +1398,21 @@ function pickRandom(bank: QuestionBank, exclude?: string): Question {
   const src = pool.length > 0 ? pool : bank;
   return src[Math.floor(Math.random() * src.length)];
 }
+const QUESTION_BANKS: Record<string, QuestionBank> = {
+  NESTJS_QUESTIONS,
+  TYPESCRIPT_QUESTIONS,
+  SQL_QUESTIONS,
+  SQL_CTE_QUESTIONS,
+  ALGORITHMS_QUESTIONS,
+  REACT_STATE_QUESTIONS,
+  DEBUGGING_TRACEBACK_QUESTIONS,
+  AI_CODE_REVIEW_QUESTIONS,
+  FLUTTER_QUESTIONS,
+  NODEJS_QUESTIONS,
+  PYTHON_QUESTIONS,
+  DOCKER_QUESTIONS,
+  AI_TRAP_QUESTIONS,
+};
 // ─────────────────────────────────────────────────────────────────────────────
 // Component
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1411,16 +1427,54 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
   onSuccess,
   onFailure,
 }) => {
-  const bank = resolveBank(challengeId, challengeTitle, skillId);
+  const competitive =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      challengeId,
+    );
+  const [serverBank, setServerBank] = useState<QuestionBank | null>(null);
+  const [bankReady, setBankReady] = useState(!competitive);
+  const bank = serverBank ?? resolveBank(challengeId, challengeTitle, skillId);
   const [currentQuestion, setCurrentQuestion] = useState<Question>(() =>
     pickRandom(bank),
   );
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [serverSuccess, setServerSuccess] = useState<boolean | null>(null);
   const [timeLeft, setTimeLeft] = useState(300);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiMsg, setApiMsg] = useState<string | null>(null);
   const [seenQuestions, setSeenQuestions] = useState<string[]>([]);
+  useEffect(() => {
+    if (!competitive) return;
+    const controller = new AbortController();
+    setBankReady(false);
+    void apiRequest<{ bank: string }>(
+      `/me/skills/challenges/${encodeURIComponent(challengeId)}/question-bank`,
+      { signal: controller.signal },
+    )
+      .then(({ bank: name }) => {
+        if (controller.signal.aborted) return;
+        const selectedBank = Object.hasOwn(QUESTION_BANKS, name)
+          ? QUESTION_BANKS[name]
+          : undefined;
+        if (!selectedBank) throw new Error('Question bank unavailable.');
+        setServerBank(selectedBank);
+        setCurrentQuestion(pickRandom(selectedBank));
+        setSelectedOption(null);
+        setIsSubmitted(false);
+        setServerSuccess(null);
+        setSeenQuestions([]);
+        setBankReady(true);
+        setApiMsg(null);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setApiMsg(
+            'Competitive questions are unavailable. Close and reopen to retry.',
+          );
+      });
+    return () => controller.abort();
+  }, [challengeId, competitive]);
   // Pick a new DIFFERENT random question from the same competence bank
   const handleReset = useCallback(() => {
     const pool = bank.filter(
@@ -1438,6 +1492,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
     setCurrentQuestion(next);
     setSelectedOption(null);
     setIsSubmitted(false);
+    setServerSuccess(null);
     setTimeLeft(300);
     setApiMsg(null);
   }, [bank, currentQuestion.question, seenQuestions]);
@@ -1450,34 +1505,44 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const handleSubmit = async () => {
-    if (!selectedOption || isSubmitted) return;
+    if (!selectedOption || isSubmitted || !bankReady) return;
     setIsSubmitting(true);
     setIsSubmitted(true);
     const chosen = currentQuestion.options.find((o) => o.id === selectedOption);
-    const isSuccess = chosen?.isCorrect ?? false;
+    let isSuccess = chosen?.isCorrect ?? false;
+    let masteryPoints: number | null = null;
     try {
-      const isUuid =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-          challengeId,
-        );
-      if (isUuid) {
-        await apiRequest(
-          `/me/skills/challenges/${encodeURIComponent(challengeId)}/attempt`,
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              isSuccess,
-              accuracy: isSuccess ? 1.0 : 0.0,
-            }),
-          },
-        );
+      if (competitive) {
+        const result = await apiRequest<{
+          isSuccess: boolean;
+          masteryPoints: number;
+          rankReward: { awarded: boolean } | null;
+        }>(`/me/skills/challenges/${encodeURIComponent(challengeId)}/attempt`, {
+          method: 'POST',
+          body: JSON.stringify({
+            question: currentQuestion.question,
+            answerId: selectedOption,
+          }),
+        });
+        masteryPoints = result.masteryPoints;
+        isSuccess = result.isSuccess;
+        setServerSuccess(result.isSuccess);
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('skill-progress-updated'));
+          const promotion = result.rankReward?.awarded
+            ? parseRankPromotion(result.rankReward)
+            : null;
+          if (promotion)
+            window.dispatchEvent(
+              new CustomEvent('rank_promoted', { detail: promotion }),
+            );
         }
       }
       if (isSuccess) {
         setApiMsg(
-          'Correct answer! Your skill progress and Dev Score have been updated.',
+          masteryPoints !== null
+            ? `Correct answer! +${masteryPoints} Mastery Points. Your skill progress and Dev Score have been updated.`
+            : 'Correct answer! Practice completed.',
         );
         onSuccess?.(points ?? 10);
       } else {
@@ -1488,8 +1553,9 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
       }
     } catch {
       if (isSuccess) {
-        setApiMsg('Correct answer! Practice attempt completed.');
-        onSuccess?.(points ?? 10);
+        setApiMsg(
+          'Correct answer locally. Competitive result could not be saved. Try again when the service is available.',
+        );
       } else {
         setApiMsg('Incorrect answer. Review the explanation and retry.');
         onFailure?.(0);
@@ -1501,7 +1567,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const chosenOption = currentQuestion.options.find(
     (o) => o.id === selectedOption,
   );
-  const isCorrect = chosenOption?.isCorrect ?? false;
+  const isCorrect = serverSuccess ?? chosenOption?.isCorrect ?? false;
   return (
     <div className="modal-overlay" onClick={onClose}>
       <section
@@ -1539,6 +1605,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
           </div>
         </header>
         <div className="modal-body question-body">
+          {!isSubmitted && apiMsg && <p role="alert">{apiMsg}</p>}
           <h3>{currentQuestion.question}</h3>
           {currentQuestion.codeSnippet && (
             <pre className="code-block">
@@ -1576,7 +1643,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
               );
             })}
           </div>
-          {isSubmitted && (
+          {isSubmitted && !isSubmitting && (
             <div
               className={`answer-result ${isCorrect ? 'result-correct' : 'result-incorrect'}`}
               role="status"
@@ -1591,7 +1658,9 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
           )}
         </div>
         <footer className="modal-footer">
-          {isSubmitted ? (
+          {isSubmitting ? (
+            <p role="status">Checking answer…</p>
+          ) : isSubmitted ? (
             isCorrect ? (
               <>
                 <button
@@ -1632,9 +1701,13 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 type="button"
                 className="btn btn-primary"
                 onClick={handleSubmit}
-                disabled={!selectedOption || isSubmitting}
+                disabled={!selectedOption || isSubmitting || !bankReady}
               >
-                {isSubmitting ? 'Checking…' : 'Check answer'}
+                {!bankReady
+                  ? 'Loading questions…'
+                  : isSubmitting
+                    ? 'Checking…'
+                    : 'Check answer'}
               </button>
             </>
           )}

@@ -5,6 +5,7 @@ import {
   PracticeDirectoryController,
 } from './assignments.controller';
 import { AuthModule } from '../auth/auth.module';
+import { RankingsModule } from '../rankings/rankings.module';
 import { SupabaseModule } from '../supabase/supabase.module';
 import { SupabaseService } from './skills-database.service';
 import { SkillsDirectoryController } from './skills-directory.controller';
@@ -31,7 +32,7 @@ import {
 import { SkillInsightsService } from './skill-insights.service';
 
 @Module({
-  imports: [AuthModule, SupabaseModule],
+  imports: [AuthModule, SupabaseModule, RankingsModule],
   controllers: [
     AssignmentsController,
     MyAssignmentsController,

@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { WebSocket } from 'ws';
 import {
   DEFAULT_DUEL_QUESTIONS,
@@ -31,7 +32,10 @@ export class DuelRoomService {
   private readonly playerToRoom = new Map<string, string>();
   private readonly socketToRoom = new Map<WebSocket, string>();
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(
+    private readonly supabase: SupabaseService,
+    private readonly events: EventEmitter2,
+  ) {}
 
   /**
    * Instancie une salle de duel unique avec l'état d'arbitrage initial et les 10 questions.
@@ -419,8 +423,12 @@ export class DuelRoomService {
 
     this.logger.log(`Room ${duelId} finished. Winner: ${winnerId ?? 'DRAW'}`);
 
-    // Persistance asynchrone non-bloquante du match & attribution d'XP
-    void this.persistMatchResult(room, winnerId);
+    // Store the server result before applying the atomic competitive rating update.
+    void this.persistMatchResult(
+      room,
+      winnerId,
+      Boolean(forfeitWinnerId && winnerId === forfeitWinnerId),
+    );
 
     // Nettoyage après 60s
     const cleanup = setTimeout(() => {
@@ -431,12 +439,13 @@ export class DuelRoomService {
   }
 
   /**
-   * Persiste la ligne du match dans public.duel_matches et crédite l'XP des profils authentifiés.
+   * Persists the match, then applies authoritative ratings once per stored match.
    * Gestion d'erreur non bloquante pour préserver la stabilité de la passerelle.
    */
   private async persistMatchResult(
     room: DuelRoomSession,
     winnerId: string | null,
+    isForfeit: boolean,
   ): Promise<void> {
     try {
       const roundsSummary = room.player1.roundScores.map((score, idx) => ({
@@ -452,12 +461,58 @@ export class DuelRoomService {
         player1_score: room.player1.totalScore,
         player2_score: room.player2.totalScore,
         winner_id: winnerId,
+        is_forfeit: isForfeit,
         rounds_data: roundsSummary,
       });
-      if (error)
+      if (error) {
         this.logger.warn(
           'Battle result could not be saved. Check the duel integration migration.',
         );
+        return;
+      }
+      const { data, error: ratingError } = await this.supabase.client.rpc(
+        'apply_competitive_duel',
+        { p_match_id: room.duelId },
+      );
+      if (ratingError || !data) {
+        this.logger.warn('Battle rating could not be updated.');
+        return;
+      }
+      const rating = data as unknown as {
+        applied: boolean;
+        delta_a: number;
+        delta_b: number;
+        rating_a: number;
+        rating_b: number;
+        points_a: number;
+        points_b: number;
+      };
+      if (!rating.applied) return;
+      safeSend(room.player1.socket, {
+        type: 'DUEL_RATING_UPDATED',
+        payload: {
+          duelId: room.duelId,
+          delta: rating.delta_a,
+          rating: rating.rating_a,
+          competitivePoints: rating.points_a,
+        },
+      });
+      safeSend(room.player2.socket, {
+        type: 'DUEL_RATING_UPDATED',
+        payload: {
+          duelId: room.duelId,
+          delta: rating.delta_b,
+          rating: rating.rating_b,
+          competitivePoints: rating.points_b,
+        },
+      });
+      this.events.emit('duel.finished', {
+        playerA: room.player1.id,
+        playerB: room.player2.id,
+        winnerId,
+        deltaA: rating.delta_a,
+        deltaB: rating.delta_b,
+      });
     } catch {
       this.logger.warn('Battle result could not be saved.');
     }

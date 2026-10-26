@@ -125,6 +125,13 @@ export interface DuelMatchEndPayload {
   };
 }
 
+export interface DuelRatingUpdatePayload {
+  duelId: string;
+  delta: number;
+  rating: number;
+  competitivePoints: number;
+}
+
 export interface DuelMatchFoundPayload {
   duelId: string;
   player: {
@@ -169,6 +176,7 @@ export interface DuelMatchCancelledPayload {
 }
 
 export type DuelServerEvent =
+  | { type: 'DUEL_RATING_UPDATED'; payload: DuelRatingUpdatePayload }
   | { type: 'DUEL_ROUND_START'; payload: DuelRoundStartPayload }
   | { type: 'DUEL_OPPONENT_ANSWERED'; payload: DuelOpponentAnsweredPayload }
   | { type: 'DUEL_ROUND_RESOLVE'; payload: DuelRoundResolvePayload }

@@ -1,5 +1,20 @@
 # Tasks: `identity` module
 
+## Phase 21 — Competitive rankings and reward economy (user-authorized, completed)
+
+Spec: `SPEC-competitive-rankings.md`. All tasks share Checkpoint N; no phase advancement or commit/push before review.
+- [x] T53: Service-only ranking schema, serialized Elo, attempt mastery, atomic milestone rewards; SQL assertions and replay proof.
+- [x] T54: Rankings API search/scopes/standing, event ordering, duel rating and private promotion delivery; backend tests.
+- [x] T55: Responsive /rankings, scope/search/pagination, tier badges, sticky My Standing, promotion celebration; frontend checks.
+- [x] T56: Authoritative challenge grading and mastery response; ChallengeModal/DuelArena result integration; regression tests.
+- [x] T57: Full suites/builds/typechecks, graph refresh/integrity, independent test/security/code review and structured receipt.
+
+### Checkpoint N
+- [x] Automated verification complete
+- [x] Independent review receipts complete
+- [x] Human approval received
+- [x] Approved commit pushed
+
 Plan: `tasks/plan.md` · Spec: `SPEC-identity.md`
 Paths below assume the repo root `DEVARENA/` with `backend/`, `nextjs/`, `supabase/`.
 

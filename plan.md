@@ -1,5 +1,7 @@
 # Implementation Plan: DevArena User & Auth initiative
 
+Competitive rankings extension (2026-10-26): user-authorized Phase 21, T53–T57, is governed by `SPEC-competitive-rankings.md`. Reuse existing median scores, rankings, events, duel gateway and wallets. SQL provides atomic Elo/rewards; Next displays authoritative results. Checkpoint N requires verification and human review before commit/push or another phase.
+
 Map: `CAPABILITY-MAP.md` (D1–D13) · Spec: `SPEC-identity.md` · Tasks: `tasks/todo.md`
 Repo: `D:\5SIM4\PWA\app\DEVARENA` (fresh start, Path B) · Supabase: separate dev project
 Status: identity plan **approved**, T0 done · modules profile → pwa **DRAFT, awaiting review** (2026-10-18)

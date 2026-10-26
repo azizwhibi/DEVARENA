@@ -1,6 +1,7 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
 import type { Server, IncomingMessage } from 'node:http';
 import type { Duplex } from 'node:stream';
 import { WebSocketServer, WebSocket } from 'ws';
@@ -9,6 +10,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { DuelMatchmakingService } from './duel-matchmaking.service';
 import { DuelRoomService } from './duel-room.service';
 import { safeSend } from './duel.constants';
+import type { RankPromotion } from '../rankings/rank-reward.listener';
 
 type Session = { id: string; name: string; token: string };
 
@@ -239,6 +241,21 @@ export class DuelGateway implements OnModuleInit, OnModuleDestroy {
   }
   private fail(ws: WebSocket, code: string, message: string) {
     safeSend(ws, { type: 'DUEL_ERROR', payload: { code, message } });
+  }
+  @OnEvent('rank.promoted')
+  async onRankPromoted({ userId, ...reward }: RankPromotion): Promise<void> {
+    const ws = this.accounts.get(userId);
+    const session = ws && this.sessions.get(ws);
+    if (!ws || !session || ws.readyState !== WebSocket.OPEN) return;
+    try {
+      const current = await this.auth.authenticate('Bearer ' + session.token);
+      if (current.id !== userId || current.role !== 'developer') throw new Error();
+      if (ws.readyState === WebSocket.OPEN && this.sessions.get(ws) === session) {
+        ws.send(JSON.stringify({ event: 'rank_promoted', data: reward }));
+      }
+    } catch {
+      ws.close(4401, 'Session unavailable. Sign in again.');
+    }
   }
   onModuleDestroy() {
     this.stopping = true;

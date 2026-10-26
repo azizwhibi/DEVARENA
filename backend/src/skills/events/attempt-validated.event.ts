@@ -4,5 +4,6 @@ export class AttemptValidatedEvent {
   constructor(
     public readonly userId: string,
     public readonly challengeId: string,
+    public readonly requireSuccess = false,
   ) {}
 }
