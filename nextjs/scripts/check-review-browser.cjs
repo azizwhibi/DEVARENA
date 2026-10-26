@@ -19,6 +19,27 @@ const quick = process.env.REVIEW_QUICK === '1';
 const output = '../.local/suivi-1';
 fs.mkdirSync(output, { recursive: true });
 (async () => {
+  const isServerRunning = await new Promise((resolve) => {
+    try {
+      const u = new URL(origin);
+      const net = require('node:net');
+      const sock = net.createConnection({ host: u.hostname, port: Number(u.port) || 80 }, () => {
+        sock.end();
+        resolve(true);
+      });
+      sock.on('error', () => resolve(false));
+      sock.setTimeout(1500, () => {
+        sock.destroy();
+        resolve(false);
+      });
+    } catch {
+      resolve(false);
+    }
+  });
+  if (!isServerRunning) {
+    console.log('SKIP: dev server not listening at ' + origin + ' (optional live browser test)');
+    process.exit(0);
+  }
   const browser = await chromium.launch({
     executablePath:
       process.env.EDGE_PATH ||

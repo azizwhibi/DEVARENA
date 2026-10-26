@@ -10,42 +10,42 @@ Spec: [`SPEC-platform-merge.md`](file:///D:/5SIM4/PWA/app/DEVARENA/SPEC-platform
 - Files: `SPEC-platform-merge.md`, `todo.md`
 
 ### T79: Core Git Merge & Governance Preservation (Checkpoint Q)
-- [ ] Acceptance: Merge `origin/feature/devarena-integrated-platform` into `user-integrated` without deleting governance files (`AGENTS.md`, `plan.md`, `todo.md`, `SPEC-*.md`, `graphify-out/*`). Reconcile `app.module.ts`, `skills.module.ts`, `proxy.ts`, `ApplicationShell.tsx`.
+- [x] Acceptance: Merge `origin/feature/devarena-integrated-platform` into `user-integrated` without deleting governance files (`AGENTS.md`, `plan.md`, `todo.md`, `SPEC-*.md`, `graphify-out/*`). Reconcile `app.module.ts`, `skills.module.ts`, `proxy.ts`, `ApplicationShell.tsx`.
 - Verify: Zero merge conflict markers; `git diff --check`.
 - Files: Core merge conflict files.
 
 ### T80: Checkpoint Q Verification Gate
-- [ ] Acceptance: Clean build and baseline test pass after core merge.
+- [x] Acceptance: Clean build and baseline test pass after core merge.
 - Verify: `npm --prefix backend test`, `npm --prefix nextjs run test:auth`.
 - Files: `todo.md`.
 
 ### T81: Database Migration & Backend Community Module Verification (Checkpoint R)
-- [ ] Acceptance: `20261025000001_community_forum.sql` migration registered and verified. `backend/src/community/` passes unit tests (`community.spec.ts`).
+- [x] Acceptance: `20261025000001_community_forum.sql` migration registered and verified. `backend/src/community/` passes unit tests (`community.spec.ts`).
 - Verify: `npm --prefix backend test -- community`.
 - Files: `backend/src/community/*`, `supabase/migrations/20261025000001_community_forum.sql`.
 
 ### T82: Frontend Discuss Forum & Admin Moderation Integration
-- [ ] Acceptance: `/community` feed, post details, comments, and `/admin/community` routes fully functional with role isolation.
+- [x] Acceptance: `/community` feed, post details, comments, and `/admin/community` routes fully functional with role isolation.
 - Verify: `npx tsc -p nextjs --noEmit`.
 - Files: `nextjs/src/app/(skills)/community/*`, `nextjs/src/components/community/*`.
 
 ### T83: Backend Problems, Question Bank & Gemini Code Review Integration (Checkpoint S)
-- [ ] Acceptance: `problems.controller.ts`, `problems.service.ts`, `practice.service.ts`, and `gemini-code-review.service.ts` pass all unit specs (`problems-admin.spec.ts`, `problems-service.spec.ts`, `code-review.spec.ts`, `practice.spec.ts`).
+- [x] Acceptance: `problems.controller.ts`, `problems.service.ts`, `practice.service.ts`, and `gemini-code-review.service.ts` pass all unit specs (`problems-admin.spec.ts`, `problems-service.spec.ts`, `code-review.spec.ts`, `practice.spec.ts`).
 - Verify: `npm --prefix backend test -- problems code-review practice`.
 - Files: `backend/src/skills/problems.*`, `backend/src/skills/practice/*`, `backend/src/skills/code-review/*`.
 
 ### T84: Frontend Problems Solver, Editor & Harmonization with Practice History
-- [ ] Acceptance: `/arena` renders unified Problem catalogue while preserving role protections for recruiter/admin. `ChallengeModal.tsx` supports both practice questions and dynamic challenge evaluations without regressions in `check-practice-loading.mjs`.
+- [x] Acceptance: `/arena` renders unified Problem catalogue while preserving role protections for recruiter/admin. `ChallengeModal.tsx` supports both practice questions and dynamic challenge evaluations without regressions in `check-practice-loading.mjs`.
 - Verify: `npm --prefix nextjs run test:auth`, `npm --prefix nextjs run test:review:browser`.
 - Files: `nextjs/src/components/skills/Problems.tsx`, `nextjs/src/components/skills/arena/ChallengeModal.tsx`.
 
 ### T85: Landing Showcase & PWA Unified Install / Offline Reader Integration (Checkpoint T)
-- [ ] Acceptance: `MobileShowcase.tsx` and `PartnerCarousel.tsx` integrated on landing page (`/`). PWA `InstallProvider.tsx` and `InstallButton.tsx` wired into header/layout. `public/sw.js` precaches offline reading shell and handles runner worker. Both `check-pwa.mjs` and `check-offline.cjs` pass.
+- [x] Acceptance: `MobileShowcase.tsx` and `PartnerCarousel.tsx` integrated on landing page (`/`). PWA `InstallProvider.tsx` and `InstallButton.tsx` wired into header/layout. `public/sw.js` precaches offline reading shell and handles runner worker. Both `check-pwa.mjs` and `check-offline.cjs` pass.
 - Verify: `npm --prefix nextjs run test:auth`, `npm --prefix nextjs run test:offline`.
 - Files: `nextjs/src/app/page.tsx`, `nextjs/src/components/landing/*`, `nextjs/src/components/pwa/*`, `nextjs/public/sw.js`.
 
 ### T86: Full Verification Gate (Checkpoint T Final)
-- [ ] Acceptance: All 37+ backend test suites green, backend build clean, all 17+ frontend test scripts in `test:auth` green, frontend typecheck clean, Graphify knowledge graph refreshed (`graphify update .`), review receipt emitted.
+- [x] Acceptance: All 37+ backend test suites green, backend build clean, all 17+ frontend test scripts in `test:auth` green, frontend typecheck clean, Graphify knowledge graph refreshed (`graphify update .`), review receipt emitted.
 - Verify: `npm --prefix backend test`, `npm --prefix backend run build`, `npm --prefix nextjs run test:auth`, `npx tsc -p nextjs --noEmit`.
 - Files: All touched files, `todo.md`.
 
